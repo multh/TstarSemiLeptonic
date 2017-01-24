@@ -1,0 +1,29 @@
+imax 1 number of channels
+jmax * number of backgrounds
+kmax * number of nuisancse parameters
+-----------------------------------------------------------------------
+observation 6786
+-----------------------------------------------------------------------
+shapes * * mH125.0_SMThesis_GGFTight_8TeV.root Workspace:$PROCESS
+-----------------------------------------------------------------------
+bin                GGFTight_8TeV      GGFTight_8TeV      GGFTight_8TeV      GGFTight_8TeV      GGFTight_8TeV      GGFTight_8TeV
+process                   GluGlu                VBF                 WH                 ZH         Background            FitBias_GGFTight_8TeV
+process                       -3                 -2                 -1                  0                  1                  2   
+rate                        3.69               1.16               0.51               0.34            6754.06               1.00 
+---------------------------------------------------------------------------------------------
+Lumi_8TeV     lnN         1.0260             1.0260             1.0260             1.0260                  -                  - 
+Trigger_8TeV  lnN         1.0001             1.0001             1.0001             1.0001                  -                  - 
+MuonID_8TeV   lnN         1.0082             1.0082             1.0101             1.0099                  -                  - 
+PUID_8TeV     lnN         1.0078             1.0048             1.0020             1.0015                  -                  - 
+Pile-Up_8TeV  lnN         1.0144             1.0123             1.0115             1.0109                  -                  - 
+JES_8TeV      lnN         1.0175             1.0116             1.0113             1.0095                  -                  - 
+CrossSection  lnN         1.1470             1.0300             1.0410             1.0510                  -                  - 
+JER           lnN         1.1139             1.0885             1.0563             1.0476                  -                  - 
+PDF           lnN         1.0423             1.0359             1.0467             1.0431                  -                  - 
+AlphaS        lnN         1.0082             1.0047             1.0026             1.0024                  -                  - 
+bkgN_GGFTight_8TeV lnU     -                 -                 -                 -                  2.0               -   
+Gamma_GGFTight_8TeV param 4.285669 0.013477
+Lambda_GGFTight_8TeV param 0.001000 0.000994
+MZ_GGFTight_8TeV param 90.793766 0.005797
+Delta_GGFTight_8TeV param 0.039498 0.004784
+n_exp_binGGFTight_8TeV_proc_FitBias_GGFTight_8TeV param 0.0  9.65000

@@ -343,6 +343,12 @@
 	    <Item Name="pileup_directory_data" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/MyDataPileupHistogram_Silver.root" />
 	    <Item Name="pileup_directory" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/MyMCPileupHistogram.root" />
 
+
+	    <Item Name="jecsmear_direction" Value="nominal" />
+	    <Item Name="jersmear_direction" Value="nominal" />
+	    <Item Name="sys_muonID" Value="nominal" />
+	    <Item Name="sys_muonTrig" Value="nominal" />
+
         </UserConfig>
 
     </Cycle>

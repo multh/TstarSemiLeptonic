@@ -1,0 +1,180 @@
+<?xml version="1.0" ?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head><title>theta-auto Report</title>
+    <script type="text/javascript" src="js/prototype.js"></script>
+    <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
+    <script type="text/javascript" src="js/lightbox.js"></script>
+    <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
+    <style type="text/css">
+    body {margin: 30px; font-family: Verdana, Arial, sans-serif; font-size: 12px; background:#eee;}
+    h1, h2, h3 { padding: 0.2ex; padding-left:.8ex;}
+    h1 {font-size: 150%%; background: #d44;}
+    h2 {font-size: 110%%; background: #f88; padding-left:1.3ex;}
+    h3 {font-size: 100%%; background: #aaa; padding-left:1.3ex;}
+    .inner {padding-left: 3ex;}
+    a img{ border: none;}
+    p {margin:0 0 0 0; margin-top: 1.3ex;}
+    ul {margin:0 0 0 0;}
+    </style>
+    </head><body>
+    <p>Hint: click on top-level headers to toggle visibility of that section.</p>
+    <h1 onclick=$('div1').toggle()>1. General Model Info</h1><div class="inner" id="div1">
+<p>Observables (xmin, xmax, nbins):</p>
+<ul>
+<li>Tstarcomb (0, 2000, 30)</li>
+</ul>
+<p>Background processes:</p>
+<ul>
+<li>Diboson</li>
+<li>QCD</li>
+<li>SingleTop</li>
+<li>TTbar</li>
+<li>WJets</li>
+<li>ZJets</li>
+</ul>
+<p>Signal processes:</p><ul>
+<li>Tstar_M1000</li>
+<li>Tstar_M1100</li>
+<li>Tstar_M1200</li>
+<li>Tstar_M1300</li>
+<li>Tstar_M1400</li>
+<li>Tstar_M1500</li>
+<li>Tstar_M1600</li>
+<li>Tstar_M700</li>
+<li>Tstar_M800</li>
+<li>Tstar_M900</li>
+</ul>
+<p>Nuisance parameters (includes only those which apply to the background-only model):</p>
+<ul>
+<li>diboson_rate (rate only)</li>
+<li>lumi (rate only)</li>
+<li>qcd_rate (rate only)</li>
+<li>singletop_rate (rate only)</li>
+<li>ttbar_rate (rate only)</li>
+<li>wj_rate (rate only)</li>
+<li>zj_rate (rate only)</li>
+</ul>
+
+</div>
+<h1 onclick=$('div2').toggle()>2. Rate Summary</h1><div class="inner" id="div2">
+<p>Rates for all observables and processes as given by the 'nominal' templates. If errors are given, they are MC stat. uncertainties.</p>
+<table cellpadding="2" border="1">
+<tr><th>process / observable</th><th>Tstarcomb</th></tr>
+<tr><td>Diboson</td><td>3.2289</td></tr>
+<tr><td>QCD</td><td>202.75</td></tr>
+<tr><td>SingleTop</td><td>156.99</td></tr>
+<tr><td>TTbar</td><td>3148.3</td></tr>
+<tr><td>WJets</td><td>200.17</td></tr>
+<tr><td>ZJets</td><td>43.282</td></tr>
+<tr><td><b>total background</b></td><td>3754.8</td></tr>
+<tr><td>Tstar_M1000</td><td>165.61</td></tr>
+<tr><td>Tstar_M1100</td><td>170.6</td></tr>
+<tr><td>Tstar_M1200</td><td>158.39</td></tr>
+<tr><td>Tstar_M1300</td><td>158.41</td></tr>
+<tr><td>Tstar_M1400</td><td>153.4</td></tr>
+<tr><td>Tstar_M1500</td><td>148.16</td></tr>
+<tr><td>Tstar_M1600</td><td>146.5</td></tr>
+<tr><td>Tstar_M700</td><td>158.92</td></tr>
+<tr><td>Tstar_M800</td><td>154.31</td></tr>
+<tr><td>Tstar_M900</td><td>158.94</td></tr>
+<tr><td><b>DATA</b></td><td>---</td></tr>
+</table>
+
+
+</div>
+<h1 onclick=$('div3').toggle()>3. Rate Impact of Systematic Uncertainties</h1><div class="inner" id="div3">
+<p>The table below summarises the impact of an nuisance parameter on the rate prediction of a process.</p>
+    <p>For a nuisance parameter, (gauss) indicates that this nuisance parameter has a gaussian prior, (gamma) that it has a gamma prior.</p>
+    <p>For the individual cells, (r) indicates the 'rate only' part of the uncertainty, (s) indicates the effect on the rate of an uncertainty
+    treated via template morphing (i.e., the <em>rate</em> effect of an uncertainty treated as part of the
+    template morphing; even if this is zero, the shape effect is still taken into account). Note that both effects are applied seperatly, so
+    the total rate change is about the linear sum of these two.<br/>
+    The rate change in 'plus' direction of the uncertainty is written as superscript,
+    the 'minus' direction as subscript.<br/>All numbers are in percent.</p>
+<h2>Observable 'Tstarcomb'</h2>
+<table cellpadding="2" border="1">
+<tr><th>process / nuisance parameter</th><th>diboson_rate (gauss)</th><th>lumi (gauss)</th><th>qcd_rate (gauss)</th><th>singletop_rate (gauss)</th><th>ttbar_rate (gauss)</th><th>wj_rate (gauss)</th><th>zj_rate (gauss)</th></tr>
+<tr><td>Diboson</td><td>&#xb1;50.00 (r)</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>QCD</td><td>---</td><td>&#xb1;2.70 (r)</td><td>&#xb1;100.00 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>SingleTop</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>&#xb1;50.00 (r)</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>TTbar</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>&#xb1;50.00 (r)</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1000</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1100</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1200</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1300</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1400</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1500</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M1600</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M700</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M800</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>Tstar_M900</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>WJets</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>&#xb1;50.00 (r)</td><td>---</td></tr>
+<tr><td>ZJets</td><td>---</td><td>&#xb1;2.70 (r)</td><td>---</td><td>---</td><td>---</td><td>---</td><td>&#xb1;50.00 (r)</td></tr>
+</table>
+
+
+</div>
+<h1 onclick=$('div4').toggle()>4. Nuisance Parameter Priors</h1><div class="inner" id="div4">
+
+    <p>The priors for the nuisance parameters are either Gaussian or gamma distributions. As limit cases, these can have with=0 or width=inf
+    which makes them delta or flat distributions, respectively.</p>
+    <div class="inner"><h3>Prior Parameters</h3>
+<table cellpadding="2" border="1">
+<tr><th>parameter</th><th>distribution type</th><th>distribution parameters</th></tr>
+<tr><td>qcd_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>ttbar_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>diboson_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>lumi</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>singletop_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>wj_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+<tr><td>zj_rate</td><td>gauss</td><td>width = 1.0; range = [-inf, inf]; mean = 0.0</td></tr>
+</table>
+
+</div>
+    </div>
+</div>
+<h1 onclick=$('div5').toggle()>5. Basic Model Plots</h1><div class="inner" id="div5">
+<h2>Stackplots</h2>
+<p>Everything normalized to expectation, i.e., to the normalization in the template input file, possibly scaled via the python script file.</p>
+<p>Color Code:</p><ul>
+<li><span style="background: #edd400;">&nbsp;&nbsp;&nbsp;</span> Diboson</li>
+<li><span style="background: #f57900;">&nbsp;&nbsp;&nbsp;</span> QCD</li>
+<li><span style="background: #c17d11;">&nbsp;&nbsp;&nbsp;</span> SingleTop</li>
+<li><span style="background: #73d216;">&nbsp;&nbsp;&nbsp;</span> TTbar</li>
+<li><span style="background: #ef2929;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1000</li>
+<li><span style="background: #cc0000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1100</li>
+<li><span style="background: #a40000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1200</li>
+<li><span style="background: #ef2929;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1300</li>
+<li><span style="background: #cc0000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1400</li>
+<li><span style="background: #a40000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1500</li>
+<li><span style="background: #ef2929;">&nbsp;&nbsp;&nbsp;</span> Tstar_M1600</li>
+<li><span style="background: #cc0000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M700</li>
+<li><span style="background: #a40000;">&nbsp;&nbsp;&nbsp;</span> Tstar_M800</li>
+<li><span style="background: #ef2929;">&nbsp;&nbsp;&nbsp;</span> Tstar_M900</li>
+<li><span style="background: #3465a4;">&nbsp;&nbsp;&nbsp;</span> WJets</li>
+<li><span style="background: #75507b;">&nbsp;&nbsp;&nbsp;</span> ZJets</li>
+</ul>
+<p>Observable 'Tstarcomb':<br /><img src="plots/Tstarcomb_stack.png" /></p>
+
+</div>
+<h1 onclick=$('div6').toggle()>6. Limits Asymptotic CLs</h1><div class="inner" id="div6">
+<p><table cellpadding="2" border="1">
+<tr><th>signal process</th><th>expected limit</th><th>expected limit (central 1sigma)</th><th>expected limit (central 2sigma)</th></tr>
+<tr><td>700</td><td>0.464</td><td>0.331--0.655</td><td>0.247--0.886</td></tr>
+<tr><td>800</td><td>0.382</td><td>0.272--0.54</td><td>0.203--0.733</td></tr>
+<tr><td>900</td><td>0.305</td><td>0.217--0.432</td><td>0.162--0.588</td></tr>
+<tr><td>1000</td><td>0.232</td><td>0.164--0.329</td><td>0.122--0.448</td></tr>
+<tr><td>1100</td><td>0.197</td><td>0.14--0.281</td><td>0.104--0.384</td></tr>
+<tr><td>1200</td><td>0.18</td><td>0.128--0.257</td><td>0.0946--0.353</td></tr>
+<tr><td>1300</td><td>0.148</td><td>0.104--0.212</td><td>0.0773--0.292</td></tr>
+<tr><td>1400</td><td>0.132</td><td>0.0925--0.19</td><td>0.0683--0.264</td></tr>
+<tr><td>1500</td><td>0.114</td><td>0.0799--0.166</td><td>0.0587--0.233</td></tr>
+<tr><td>1600</td><td>0.0995</td><td>0.069--0.146</td><td>0.0505--0.206</td></tr>
+</table>
+</p>
+<p><p><img src="plots/limit_band_plot-acls.png" /></p></p>
+<p><p><img src="plots/limit_band_plot-log-acls.png" /></p></p>
+
+</div>
+<hr /><p>This page was generated at 2016-10-30 16:08:34.413660 for workdir '/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/TstarSemiLeptonic/limit/analysis'.</p></body></html>

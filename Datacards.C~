@@ -1,0 +1,55 @@
+  TString BaseName = "datacards.txt";
+  TString rootFileName = "datacards.root";
+  TFile * fileInputs = new TFile(rootFileName,"recreate"); 
+  histData->Write("data_obs");
+  Tstar_M700->Write("Tstar_M700");
+  TT->Write("TT");
+  QCD->Write("QCD");
+  WJets->Write("WJets");
+  ZJets->Write("ZJets");
+  SingleTop->Write("SingleTop");
+  Diboson->Write("Diboson");
+  fileInputs->Close();
+
+  ostringstream str;
+  str << BaseName;
+  string nn = str.str();
+  const char * p = nn.c_str();
+
+  std::ofstream textFile(p);
+  textFile << "imax 1   number of channels" << std::endl;
+  textFile << "jmax *   number of backgrounds" << std::endl;
+  textFile << "kmax *   number of nuisance parameters" << std::endl;
+  textFile << "-----------------" << std::endl;
+  textFile << "observation " << histData->GetSumOfWeights() << std::endl;
+  textFile << "-----------------" << std::endl;
+  textFile << "shapes * * " << rootFileName << " $PROCESS    " << std::endl;
+  textFile << "-----------------" << std::endl;
+  textFile << "bin                                mt         mt     mt     mt     mt     mt     mt" << std::endl;
+  textFile << "process                         Tstar_M700    TT     W      Z  SingleTop QCD   Diboson" << std::endl;
+  textFile << "process                             0         1      2      3      4      5       6" << std::endl;
+  textFile << "rate                           "
+           << Tstar_M700->GetSumOfWeights() << "  "
+           << TT->GetSumOfWeights() << "  "
+           << WJets->GetSumOfWeights() << "  "
+           << ZJets->GetSumOfWeights() << "  "
+           << SingleTop->GetSumOfWeights()<<" "
+           << QCD->GetSumOfWeights()<<" "
+           << Diboson->GetSumOfWeights()  << std::endl;
+  textFile << "-----------------------------" << std::endl;
+  textFile << "CMS_eff_m_trig              lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_eff_m_ID                lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_JEC                     lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_JER                     lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_ScaleVar                lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_PileUp                  lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "CMS_PDF                     lnN   1.03   1.03   1.03   1.03   1.03   1.03    1.03 "  << std::endl;
+  textFile << "lumi_13TeV                  lnN   1.027  1.027  1.027  1.027  1.027  1.027   1.027"  << std::endl;
+  textFile << "xs_ttbar                    lnN     -    1.50    -       -      -      -       -  "  << std::endl;
+  textFile << "xs_WJets                    lnN     -      -    1.5      -      -      -       -  "  << std::endl;
+  textFile << "xs_ZJets                    lnN     -      -     -     1.5      -      -       -  "  << std::endl;
+  textFile << "xs_SingleTop                lnN     -      -     -       -    1.5      -       -  "  << std::endl;
+  textFile << "xs_QCD                      lnN     -      -     -       -      -      2       -  "  << std::endl;
+  textFile << "xs_Diboson                  lnN     -      -     -       -      -      -      1.5 "  << std::endl;
+  textFile << std::endl;
+   

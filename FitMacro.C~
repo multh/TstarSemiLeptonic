@@ -1,0 +1,56 @@
+//FitMacro.C
+
+
+void FitMacro() {
+  gStyle->SetOptFit(0111);
+
+ // open a file and get a histogram
+ TFile *data = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root");
+
+ TFile *b1 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.TTbar.root");
+ TFile *b2 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.WJets.root");
+ TFile *b3 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.ZJets.root");
+ TFile *b4 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.QCD.root");
+ TFile *b5 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.Diboson.root");
+ TFile *b6 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/TopTag/uhh2.AnalysisModuleRunner.MC.SingleTop.root");
+
+ TH1F *hdata  = (TH1F*)data->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h1    = (TH1F*)b1->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h2    = (TH1F*)b2->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h3    = (TH1F*)b3->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h4    = (TH1F*)b4->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h5    = (TH1F*)b5->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h6    = (TH1F*)b6->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+
+
+ TH1F* histos[6]={h1,h2,h3,h4,h5,h6};
+for (int i=0;i<6;++i){
+         histos[i]->Sumw2(); // *Very* Important
+        }
+
+
+TList *list = new TList; 
+list->Add(h1); 
+list->Add(h2);
+ list->Add(h3);
+list->Add(h4);
+list->Add(h5);
+list->Add(h6);
+
+TH1F *h = (TH1F*)h1->Clone("h"); 
+h->Reset(); 
+h->Merge(list); 
+
+
+ TF1 *fit = new TF1("fit","[0]/(1+exp((x-[1])/[2]))",400,2000);
+ fit->SetParLimits(0,1000,10000);
+ fit->SetParLimits(1,0,1000);
+ fit->SetParLimits(2,0,1000);
+
+ hdata->Fit("fit","","",500,2000);
+
+ hdata->SetMarkerStyle(20);
+
+ h->Draw();
+ hdata->Draw("same");
+}

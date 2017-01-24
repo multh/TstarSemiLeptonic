@@ -1,0 +1,53 @@
+//EffMacro.C
+// define a function with 3 parameters
+//Now we use the function:
+// this function used fitf to fit a histogram
+void EffMacro() {
+ // open a file and get a histogram
+ TFile *s = new TFile("/nfs/dust/cms/user/multh/RunII_25ns_v1/TstarSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root");
+ TFile *b = new TFile("/nfs/dust/cms/user/multh/RunII_25ns_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root");
+ 
+TH1F *input    = (TH1F*)b->Get("input_Event/N_PrimVertices");
+
+ TH1F *trigger  = (TH1F*)s->Get("trigger_Event/N_PrimVertices");
+ TH1F *lep1     = (TH1F*)s->Get("lep1_Event/N_PrimVertices");
+ TH1F *jet2     = (TH1F*)s->Get("jet2_Event/N_PrimVertices");
+ TH1F *jet1     = (TH1F*)s->Get("jet1_Event/N_PrimVertices");
+ TH1F *bTag     = (TH1F*)s->Get("bTag_Event/N_PrimVertices");
+ TH1F *twodcut  = (TH1F*)s->Get("twodcut_Event/N_PrimVertices");
+
+ TH1F *h_Eff      = new TH1F("Signal Efficiency", "Signal Efficiency",7,0,7);
+
+ Double_t n_input   = input->GetEntries();
+ Double_t n_trigger = trigger->GetEntries();
+ Double_t n_lep1    = lep1->GetEntries();
+ Double_t n_jet2    = jet2->GetEntries();
+ Double_t n_jet1    = jet1->GetEntries();
+ Double_t n_bTag    = bTag->GetEntries();
+ Double_t n_twodcut = twodcut->GetEntries();
+
+ Double_t Eff1 = n_trigger/n_input;
+ Double_t Eff2 = n_lep1/n_input;
+ Double_t Eff3 = n_jet2/n_input;
+ Double_t Eff4 = n_jet1/n_input;
+ Double_t Eff5 = n_bTag/n_input;
+ Double_t Eff6 = n_twodcut/n_input;
+
+ h_Eff->SetBinContent(1,Eff1);
+ h_Eff->SetBinContent(2,Eff2);
+ h_Eff->SetBinContent(3,Eff3);
+ h_Eff->SetBinContent(4,Eff4);
+ //h_Eff->SetBinContent(5,Eff5);
+ h_Eff->SetBinContent(5,Eff6);
+
+ h_Eff->GetXaxis()->SetBinLabel(1,"Trigger");
+ h_Eff->GetXaxis()->SetBinLabel(2,"Lepton");
+ h_Eff->GetXaxis()->SetBinLabel(3,"# Jets");
+ h_Eff->GetXaxis()->SetBinLabel(4,"Leading Jet");
+ //h_Eff->GetXaxis()->SetBinLabel(5,"b-Tag");
+ h_Eff->GetXaxis()->SetBinLabel(5,"2D-Cut");
+
+ h_Eff->Draw();
+
+
+}

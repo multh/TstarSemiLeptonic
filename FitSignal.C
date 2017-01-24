@@ -1,0 +1,148 @@
+//Fitting signal/background and Data
+
+
+#include "TH1.h"
+#include "TMath.h"
+#include "TF1.h"
+#include "TLegend.h"
+#include "TCanvas.h"
+
+// Quadratic background function
+Double_t background(Double_t *x, Double_t *par) {
+   return par[0] + par[1]*x[0] + par[2]*x[0]*x[0];
+}
+
+//Different Signal Functions
+Double_t BreitWigner(Double_t *x, Double_t *par){
+  return (1/(2*TMath::Pi()))* par[0]/((x[0]-par[1])*(x[0]-par[1]) + par[0]*par[0]/4);
+}
+
+Double_t LandauPeak(Double_t *x, Double_t *par){
+return par[0]*TMath::Landau(x[0],par[1],par[2]);
+}
+
+// Lorenzian Peak function
+Double_t lorentzianPeak(Double_t *x, Double_t *par) {
+  return (0.5*par[0]*par[1]/TMath::Pi()) /
+    TMath::Max( 1.e-10,(x[0]-par[2])*(x[0]-par[2])
+   + .25*par[1]*par[1]);
+}
+Double_t GausPeak(Double_t *x, Double_t *par){
+  return par[0] / sqrt(2.0 * TMath::Pi()) / par[2] * exp(-(x[0]-par[1])*(x[0]-par[1])/2./par[2]/par[2]);
+  }
+
+
+// Sum of background and peak function
+Double_t fitFunction(Double_t *x, Double_t *par) {
+  return background(x,par) + lorentzianPeak(x,&par[3]);
+}
+
+//For Data: Exponential Function
+Double_t Data(Double_t *x, Double_t *par){
+  return exp(-(par[0]+par[1]*x[0]));
+}
+Double_t fitFunction_data(Double_t *x, Double_t *par) {
+  return Data(x,par);
+}
+
+
+void FitSignal() {
+ //Bevington Exercise by Peter Malzacher, modified by Rene Brun
+ TFile *Signal = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1300.root");
+ TFile *Data   = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root");
+
+
+ TH1F *h_signal    = (TH1F*)Signal->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h_data      = (TH1F*)Data  ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+
+
+    TCanvas *c1 = new TCanvas("c1","Fitting Demo",10,10,700,500);
+  c1->Divide(1,2);
+ c1->cd(1);
+ 
+   TH1F *histo = (TH1F*)h_signal->Clone("histo");
+   histo->SetMarkerStyle(21);
+   histo->SetMarkerSize(0.8);
+   histo->SetStats(0);
+   // histo->SetOptFit(1);
+  
+   // create a TF1 with the range from 0 to 3 and 6 parameters
+   TF1 *fitFcn = new TF1("fitFcn",fitFunction,200,2000,6);
+   fitFcn->SetNpx(500);
+   fitFcn->SetLineWidth(4);
+   fitFcn->SetLineColor(kMagenta);
+
+   // first try without starting values for the parameters
+    fitFcn->SetParameters(1,1,1,1,1,1);
+   histo->Fit("fitFcn","R");
+
+   // second try: set start values for some parameters
+   fitFcn->SetParameter(4,100); // width
+   fitFcn->SetParameter(5,1300);   // peak
+
+   histo->Fit("fitFcn","R");
+
+   // improve the picture:
+   TF1 *backFcn = new TF1("backFcn",background,0,3,3);
+   backFcn->SetLineColor(kRed);
+   TF1 *signalFcn = new TF1("signalFcn",lorentzianPeak,0,3,3);
+   signalFcn->SetLineColor(kBlue);
+   signalFcn->SetNpx(500);
+   Double_t par[6];
+
+   // writes the fit results into the par array
+   fitFcn->GetParameters(par);
+
+   backFcn->SetParameters(par);
+   backFcn->Draw("same");
+
+   signalFcn->SetParameters(&par[3]);
+   signalFcn->Draw("same");
+
+   // draw the legend
+   TLegend *legend=new TLegend(0.6,0.65,0.88,0.85);
+   legend->SetTextFont(72);
+   legend->SetTextSize(0.04);
+   legend->AddEntry(histo,"Data","lpe");
+   legend->AddEntry(fitFcn,"Global Fit","l");
+   legend->Draw();
+
+
+//############## For Data ################################################################
+ c1->cd(2);
+
+
+  TH1F *histo_data = (TH1F*)h_data->Clone("histo_data");
+   histo_data->SetMarkerStyle(21);
+   histo_data->SetMarkerSize(0.8);
+   histo_data->SetStats(0);
+  
+   // create a TF1 with the range from 0 to 3 and 6 parameters
+   TF1 *fitFcn_data = new TF1("fitFcn_data",fitFunction_data,400,2000,2);
+   fitFcn_data->SetNpx(500);
+   fitFcn_data->SetLineWidth(4);
+   fitFcn_data->SetLineColor(kMagenta);
+
+   // first try without starting values for the parameters
+   // This defaults to 1 for each param.
+
+   fitFcn_data->SetParameters(1,1);
+   histo_data->Fit("fitFcn_data","R");
+
+   // second try: set start values for some parameters
+   fitFcn_data->SetParameter(0,5); // width
+   fitFcn_data->SetParameter(1,0);   // peak
+
+   histo_data->Fit("fitFcn_data","R");
+
+  // draw the legend
+   TLegend *legend_data=new TLegend(0.6,0.65,0.88,0.85);
+   legend_data->SetTextFont(72);
+   legend_data->SetTextSize(0.04);
+   legend_data->AddEntry(histo_data,"Data","lpe");
+   legend_data->AddEntry(fitFcn_data,"Global Fit","l");
+   legend_data->Draw();
+
+   
+
+}

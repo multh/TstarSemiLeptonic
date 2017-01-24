@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd" [
+
+<!ENTITY NEVT "-1">
+
+<!ENTITY PROOFdir "/nfs/dust/cms/user/multh/RunII_76X_v1/">
+<!ENTITY SELECdir "/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/">
+]>
+
+<!--
+   <ConfigParse NEventsBreak="10000" FileSplit="0"  MaxJobsPerProcess="150" />
+   <ConfigSGE RAM ="3" DISK ="2" Mail="Jens.Multhaup@desy.de" Notification="as" Workdir="workdir_sel_v1"/>
+-->
+
+
+
+<JobConfiguration JobName="TstarSelectionJob" OutputLevel="INFO">
+
+    <Library Name="libSUHH2TstarSemiLeptonic"/>
+    <Package Name="SUHH2TstarSemiLeptonic.par" />
+
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELECdir;" PostFix="" TargetLumi="2690.707" >
+<!--
+    <Cycle Name="uhh2::AnalysisModuleRunner"  RunMode="PROOF" ProofServer="lite://"  ProofWorkDir="&PROOFdir;" ProofNodes="15" OutputDirectory="&SELECdir;" PostFix="" TargetLumi="2690.707" >
+-->
+<!--
+
+                <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="SingleMuDATA" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData> 
+
+
+		<InputData Lumi="34556" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M700" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData> 
+
+		<InputData Lumi="34304" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M800" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M800.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="34532" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M900" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M900.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="33681" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1000" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1000.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="33454" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1100" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1100.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="32445" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1200" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1200.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="33629" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1300" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1300.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="24527" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1400" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1400.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="34318" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1500" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1500.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="34086" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1600" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Tstar_M1600.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+-->
+
+		<InputData Lumi="117767.68" NEventsMax="&NEVT;" Type="MC" Version="TTbar" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.TTbar.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+<!--
+		<InputData Lumi="10.7" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-20to30" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-20to30_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="18.117" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-30to50" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-30to50_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+		<InputData Lumi="46.579" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-50to80" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-50to80_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="129.67" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-80to120" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-80to120_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="316.4" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-120to170" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-120to170_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="913.997" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-170to300" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-170to300_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="9790.74" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-300to470" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-300to470_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="48607.86" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-470to600" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-470to600_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="158792.13" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-600to800" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-600to800_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="778802.46" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-800to1000" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-800to1000_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+	        <InputData Lumi="2429372" NEventsMax="&NEVT;" Type="MC" Version="QCD_Pt-1000toINF" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.QCD_Pt-1000toINF_MuEnriched.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>                
+
+
+                <InputData Lumi="1001494" NEventsMax="&NEVT;" Type="MC" Version="SingleTop_s" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.SingleTop_s.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="18992240" NEventsMax="&NEVT;" Type="MC" Version="SingleTop_t" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.SingleTop_t.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+                
+                <InputData Lumi="28073.03" NEventsMax="&NEVT;" Type="MC" Version="SingleTopneg_tW" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.SingleTopneg_tW.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="28089.89" NEventsMax="&NEVT;" Type="MC" Version="SingleToppos_tW" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.SingleToppos_tW.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+
+                <InputData Lumi="6264.6" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT100To200" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT100To200.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="10958.6" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT200To400" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT200To400.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="32842.6" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT400To600" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT400To600.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+                
+                <InputData Lumi="258411.3" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT600To800" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT600To800.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="235611.1" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT800To1200" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT800To1200.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="153125.1" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT1200To2500" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT1200To2500.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="6475422" NEventsMax="&NEVT;" Type="MC" Version="WJets_HT2500ToInf" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.WJets_HT2500ToInf.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+
+                <InputData Lumi="14645.7" NEventsMax="&NEVT;" Type="MC" Version="ZJets_HT100to200" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.ZJets_HT100to200.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="19084.47" NEventsMax="&NEVT;" Type="MC" Version="ZJets_HT200to400" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.ZJets_HT200to400.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+                <InputData Lumi="153065.9" NEventsMax="&NEVT;" Type="MC" Version="ZJets_HT400to600" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.ZJets_HT400to600.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="381390.0" NEventsMax="&NEVT;" Type="MC" Version="ZJets_HT600toINF" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.ZJets_HT600toINF.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="8327.026" NEventsMax="&NEVT;" Type="MC" Version="Diboson_WW" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Diboson_WW.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="21217.91" NEventsMax="&NEVT;" Type="MC" Version="Diboson_WZ" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Diboson_WZ.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+
+                <InputData Lumi="59650.18" NEventsMax="&NEVT;" Type="MC" Version="Diboson_ZZ" Cacheable="False">
+		        <In FileName="/nfs/dust/cms/user/multh/RunII_76X_v1/PreSelection/uhh2.AnalysisModuleRunner.MC.Diboson_ZZ.root" Lumi="0.0"/> 
+			<InputTree Name="AnalysisTree" /> 
+			<OutputTree Name="AnalysisTree" />  
+		</InputData>
+-->
+
+        <UserConfig>
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" /> 
+            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />  <!-- New NTuples need USER -->
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" /> <!-- New NTuples need USER -->
+            <Item Name="TauCollection" Value="slimmedTaus" />
+            <Item Name="JetCollection" Value="slimmedJets" />  <!--New NTuples need slimmedJets-->
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="METName" Value="slimmedMETs" />  <!-- New NTuples need NoHF -->
+	    <Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" /> <!--  slimmedJetsAK8_CMSTopTag -->
+            
+            <Item Name="GenParticleCollection" Value="GenParticles" /> 
+	    <Item Name="GenInfoName" Value="genInfo" /> 
+
+            <Item Name="use_sframe_weight" Value="false" />
+	    <Item Name="channel" Value="muon"/> <!--(muon/electron Set Channel for SelectionModule-->	 
+            <Item Name="AnalysisModule" Value="TstarSelectionModule" /> 
+
+            <Item Name="MCBtagEfficiencies" Value="/nfs/dust/cms/user/multh/RunII_76X_v1/BTagMCEfficiencyHists/BTagMCEfficiencyHists_medium.root" />
+	    <Item Name="BTagCalibration" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/CSVv2.csv" />
+	    
+	    <Item Name="lumi_file" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_Silver.root"/>
+	    
+
+	    <Item Name="pileup_directory_data" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/MyDataPileupHistogram_Silver.root" />
+	    <Item Name="pileup_directory" Value="/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/common/data/MyMCPileupHistogram.root" />
+
+	    <Item Name="b_PDFUncertainties" Value="true" />
+	    <Item Name="ScaleVariationMuR" Value="none" />
+	    <Item Name="ScaleVariationMuF" Value="none" />
+	    <Item Name="sys_muonID" Value="nominal" />
+	    <Item Name="sys_muonTrigger" Value="nominal" />
+	    <Item Name="sys_bTag" Value="central" />
+	    <Item Name="sys_PU" Value="central" />
+
+        </UserConfig>
+
+    </Cycle>
+</JobConfiguration>

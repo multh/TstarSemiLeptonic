@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE JobConfiguration PUBLIC "" "JobConfig.dtd" [
+
+  <!ENTITY NEVT "-1">
+
+  <!ENTITY PROOFdir  "/nfs/dust/cms/user/multh/RunII_25ns_v1/Prooftmp/">
+  <!ENTITY PRESELdir "/nfs/dust/cms/user/multh/RunII_25ns_v1/PreSelection/">
+ 
+
+  <!ENTITY Tstar_M700            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M700.xml">
+  <!ENTITY Tstar_M800            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M800.xml">
+  <!ENTITY Tstar_M900            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M900.xml">
+  <!ENTITY Tstar_M1000            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1000.xml">
+  <!ENTITY Tstar_M1100            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1100.xml">
+  <!ENTITY Tstar_M1200            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1200.xml">
+  <!ENTITY Tstar_M1300            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1300.xml">
+  <!ENTITY Tstar_M1400            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1400.xml">
+  <!ENTITY Tstar_M1500            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1500.xml">
+  <!ENTITY Tstar_M1600            SYSTEM "/afs/desy.de/user/m/multh/CMSSW_7_4_9/src/UHH2/common/datasets/RunII_25ns_v1/MC_TstarTstarTgluonTgluon_M1600.xml">
+
+
+
+<JobConfiguration JobName="ZprimePreSelectionJob" OutputLevel="INFO">
+    <Library Name="libSUHH2ZprimeSemiLeptonic"/>
+    <Package Name="SUHH2ZprimeSemiLeptonic.par" />
+
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="1" >
+<!--
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="1" RunMode="PROOF" ProofServer="lite://" ProofWorkDir="&PROOFdir;/" ProofNodes="15" >
+
+    <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="1" RunMode="PROOF" ProofServer="pod://" ProofWorkDir="&PROOFdir;/" >
+-->
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M700" Cacheable="True">
+          &Tstar_M700;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+<!--
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M800" Cacheable="True">
+          &Tstar_M800;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M900" Cacheable="True">
+          &Tstar_M900;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1000" Cacheable="True">
+          &Tstar_M1000;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1100" Cacheable="True">
+          &Tstar_M1100;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1200" Cacheable="True">
+          &Tstar_M1200;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1300" Cacheable="True">
+          &Tstar_M1300;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1400" Cacheable="True">
+          &Tstar_M1400;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1500" Cacheable="True">
+          &Tstar_M1500;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+        <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M1600" Cacheable="True">
+          &Tstar_M1600;
+          <InputTree Name="AnalysisTree" />
+          <OutputTree Name="AnalysisTree" />
+        </InputData>
+
+
+
+
+        <UserConfig>
+            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
+            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
+            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
+            <Item Name="TauCollection" Value="slimmedTaus" />
+            <Item Name="JetCollection" Value="slimmedJets" />
+            <Item Name="GenJetCollection" Value="slimmedGenJets" />
+            <Item Name="METName" Value="slimmedMETsNoHF" />
+            <Item Name="TopJetCollection" Value="slimmedJetsAK8_CMSTopTag" />
+            <Item Name="GenParticleCollection" Value="GenParticles" />
+
+            <Item Name="use_sframe_weight" Value="false" />
+
+            <Item Name="channel" Value="lepton" />
+
+            <Item Name="AnalysisModule" Value="ModuleTStarGen" />
+        </UserConfig>
+
+    </Cycle>
+</JobConfiguration>

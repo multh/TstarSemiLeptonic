@@ -1,0 +1,23 @@
+<p>Rates for all observables and processes as given by the 'nominal' templates. If errors are given, they are MC stat. uncertainties.</p>
+<table cellpadding="2" border="1">
+<tr><th>process / observable</th><th>Tstarcomb</th></tr>
+<tr><td>Diboson</td><td>3.2289</td></tr>
+<tr><td>QCD</td><td>202.75</td></tr>
+<tr><td>SingleTop</td><td>156.99</td></tr>
+<tr><td>TTbar</td><td>3148.3</td></tr>
+<tr><td>WJets</td><td>200.17</td></tr>
+<tr><td>ZJets</td><td>43.282</td></tr>
+<tr><td><b>total background</b></td><td>3754.8</td></tr>
+<tr><td>Tstar_M1000</td><td>165.61</td></tr>
+<tr><td>Tstar_M1100</td><td>170.6</td></tr>
+<tr><td>Tstar_M1200</td><td>158.39</td></tr>
+<tr><td>Tstar_M1300</td><td>158.41</td></tr>
+<tr><td>Tstar_M1400</td><td>153.4</td></tr>
+<tr><td>Tstar_M1500</td><td>148.16</td></tr>
+<tr><td>Tstar_M1600</td><td>146.5</td></tr>
+<tr><td>Tstar_M700</td><td>158.92</td></tr>
+<tr><td>Tstar_M800</td><td>154.31</td></tr>
+<tr><td>Tstar_M900</td><td>158.94</td></tr>
+<tr><td><b>DATA</b></td><td>---</td></tr>
+</table>
+

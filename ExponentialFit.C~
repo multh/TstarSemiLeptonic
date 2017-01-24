@@ -1,0 +1,370 @@
+// make a simple Gaussian Fit in ROOT and RooFit
+
+
+using namespace RooFit; 
+
+void ExponentialFit() { 
+  //TFile *TTbar       = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.TTbar.root");
+TFile *Tstar_M700  = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root");
+TFile *Tstar_M800  = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M800.root");
+
+TFile *Tstar_M900  = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M900.root");
+TFile *Tstar_M1000 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1000.root");
+TFile *Tstar_M1100 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1100.root");
+TFile *Tstar_M1200 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1200.root");
+TFile *Tstar_M1300 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1300.root");
+TFile *Tstar_M1400 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1400.root");
+TFile *Tstar_M1500 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1500.root");
+TFile *Tstar_M1600 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1600.root");
+
+TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root");
+
+ TFile *b1 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.TTbar.root");
+ TFile *b2 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.WJets.root");
+ TFile *b3 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.ZJets.root");
+ TFile *b4 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.QCD.root");
+ TFile *b5 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Diboson.root");
+ TFile *b6 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.SingleTop.root");
+
+ TH1F *h1    = (TH1F*)b1->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h2    = (TH1F*)b2->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h3    = (TH1F*)b3->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h4    = (TH1F*)b4->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h5    = (TH1F*)b5->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h6    = (TH1F*)b6->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+
+
+ TH1F* histos[6]={h1,h2,h3,h4,h5,h6};
+for (int i=0;i<6;++i){
+         histos[i]->Sumw2(); // *Very* Important
+        }
+
+
+TList *list = new TList; 
+list->Add(h1); 
+list->Add(h2);
+ list->Add(h3);
+list->Add(h4);
+list->Add(h5);
+list->Add(h6);
+
+TH1D *bkg = (TH1D*)h1->Clone("h"); 
+bkg->Reset(); 
+bkg->Merge(list); 
+
+
+// TH1D *h_TTbar        = (TH1D*)TTbar->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_700    = (TH1D*)Tstar_M700->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_800    = (TH1D*)Tstar_M800->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_900    = (TH1D*)Tstar_M900->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1000   = (TH1D*)Tstar_M1000->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1100   = (TH1D*)Tstar_M1100->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1200   = (TH1D*)Tstar_M1200->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1300   = (TH1D*)Tstar_M1300->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1400   = (TH1D*)Tstar_M1400->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1500   = (TH1D*)Tstar_M1500->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1600   = (TH1D*)Tstar_M1600->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ 
+ TH1D *h_Data         = (TH1D*)Data->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+
+ cout<<"Data SumWeight: "<< h_Data->GetSumOfWeights() <<endl;
+ cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
+ cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
+
+ TF1 * f1  = new TF1("f1","([0]*TMath::Exp(-x*[1]))",400,2000);
+   f1->SetLineColor(kBlue);
+   f1->SetParameters(100,0,1);
+
+   // Neyman chi2 fit
+   TFitResultPtr r1 = bkg->Fit(f1,"S","",400,2000);
+
+   TF1 * f2  = new TF1("f2","([0]*TMath::Exp(-x*[1]))",400,2000);
+   f2->SetLineColor(kBlue-3);
+   f2->SetParameters(100,0,1);
+
+   // Pearson chi2 fit
+   TFitResultPtr r2 = bkg->Fit(f2,"P + S","",400,2000);
+
+  TF1 * f3  = new TF1("f3","([0]*TMath::Exp(-x*[1]))",400,2000);
+   f3->SetLineColor(kRed);
+   f3->SetParameters(100,0,1);
+
+   // Binnel likelihood fit
+   TFitResultPtr r3 = bkg->Fit(f3,"L + S","",400,2000);
+
+
+   TLegend * l = new TLegend(0.65,0.55,0.88,0.7);
+   l->AddEntry(f1,"Neyman chi2","l");
+   l->AddEntry(f2,"Person chi2","l");
+   l->AddEntry(f3,"Binned ML  ","l");
+   // l->Draw();
+
+   // do now the fit with RooFit
+   RooWorkspace cms_workspace("cms_workspace");
+ 
+   // define a pdf
+   
+   // cms_workspace.factory("RooExponential:expo(InvMass[400,2000],lambda[-0.007,-0.001])");
+    //cms_workspace.factory("RooPolynomial:c1(InvMass[400,2000])");
+    //cms_workspace.factory("RooProdPdf:expo(e1*c1)");
+   
+   RooRealVar InvMass("InvMass","M_{T^{*} [GeV/c^{2}]}",1000,400,2000);
+   // RooRealVar norm("norm","norm",2000,90000);
+   RooRealVar lambda("lambda","lambda",-7,10);
+   RooRealVar lambda2("lambda2","lambda2",-5,5);
+
+   RooGenericPdf expo("expo","expo","TMath::Power(InvMass/100, (lambda+lambda2*log(InvMass/100)))",RooArgSet(InvMass,lambda,lambda2));
+   
+   
+   cms_workspace.factory("RooGaussian:gx_700(InvMass[400,2000],gaus_mean_700[500,800],gaus_sigma_700[50,200])");
+   cms_workspace.factory("RooLandau:lx_700(InvMass[400,2000],land_mean_700[500,2000],land_sigma_700[50,200])");
+   cms_workspace.factory("SUM:Tstar_700(g1frac_700[0.6]*gx_700,p1frac_700[0.4]*lx_700)");
+   
+   cms_workspace.factory("RooGaussian:gx_800(InvMass[400,2000],gaus_mean_800[600,900],gaus_sigma_800[50,200])");
+   cms_workspace.factory("RooLandau:lx_800(InvMass[400,2000],land_mean_800[500,2000],land_sigma_800[50,200])");
+   cms_workspace.factory("SUM:Tstar_800(g1frac_800[0.3]*gx_800,p1frac_800[0.7]*lx_800)");
+   
+   cms_workspace.factory("RooGaussian:gx_900(InvMass[400,2000],gaus_mean_900[650,1000],gaus_sigma_900[150,250])");
+   cms_workspace.factory("RooLandau:lx_900(InvMass[400,2000],land_mean_900[500,1000],land_sigma_900[50,200])");
+   cms_workspace.factory("SUM:Tstar_900(g1frac_900[0.3]*gx_900,p1frac_900[0.7]*lx_900)");
+   
+   cms_workspace.factory("RooGaussian:gx_1000(InvMass[400,2000],gaus_mean_1000[600,1200],gaus_sigma_1000[150,250])");
+   cms_workspace.factory("RooLandau:lx_1000(InvMass[400,2000],land_mean_1000[500,2000],land_sigma_1000[50,200])");
+   cms_workspace.factory("SUM:Tstar_1000(g1frac_1000[0.4]*gx_1000,p1frac_1000[0.6]*lx_1000)");
+ 
+   cms_workspace.factory("RooGaussian:gx_1100(InvMass[400,2000],gaus_mean_1100[900,1100],gaus_sigma_1100[50,250])");
+   cms_workspace.factory("RooLandau:lx_1100(InvMass[400,2000],land_mean_1100[800,1000],land_sigma_1100[50,250])");
+   cms_workspace.factory("SUM:Tstar_1100(g1frac_1100[0.4]*gx_1100,p1frac_1100[0.6]*lx_1100)");
+ 
+   cms_workspace.factory("RooGaussian:gx_1200(InvMass[400,2000],gaus_mean_1200[900,1400],gaus_sigma_1200[150,350])");
+   cms_workspace.factory("RooLandau:lx_1200(InvMass[400,2000],land_mean_1200[500,2000],land_sigma_1200[50,200])");
+   cms_workspace.factory("SUM:Tstar_1200(g1frac_1200[0.35]*gx_1200,p1frac_1200[0.65]*lx_1200)");
+ 
+   cms_workspace.factory("RooGaussian:gx_1300(InvMass[400,2000],gaus_mean_1300[400,2000],gaus_sigma_1300[50,350])");
+   cms_workspace.factory("RooLandau:lx_1300(InvMass[400,2000],land_mean_1300[1000,2000],land_sigma_1300[50,350])");
+   cms_workspace.factory("SUM:Tstar_1300(g1frac_1300[0.35]*gx_1300,p1frac_1300[0.65]*lx_1300)");
+
+   cms_workspace.factory("RooGaussian:gx_1400(InvMass[400,2000],gaus_mean_1400[1200,1600],gaus_sigma_1400[50,350])");
+   cms_workspace.factory("RooLandau:lx_1400(InvMass[400,2000],land_mean_1400[500,2000],land_sigma_1400[50,380])");
+   cms_workspace.factory("SUM:Tstar_1400(g1frac_1400[0.4]*gx_1400,p1frac_1400[0.6]*lx_1400)");
+
+   cms_workspace.factory("RooGaussian:gx_1500(InvMass[400,2000],gaus_mean_1500[1300,1700],gaus_sigma_1500[50,350])");
+   cms_workspace.factory("RooLandau:lx_1500(InvMass[400,2000],land_mean_1500[500,2000],land_sigma_1500[200,500])");
+   cms_workspace.factory("SUM:Tstar_1500(g1frac_1500[0.4]*gx_1500,p1frac_1500[0.6]*lx_1500)");
+
+   cms_workspace.factory("RooGaussian:gx_1600(InvMass[400,2000],gaus_mean_1600[1400,1800],gaus_sigma_1600[50,350])");
+   cms_workspace.factory("RooLandau:lx_1600(InvMass[400,2000],land_mean_1600[500,2000],land_sigma_1600[50,600])");
+   cms_workspace.factory("SUM:Tstar_1600(g1frac_1600[0.4]*gx_1600,p1frac_1600[0.6]*lx_1600)");
+
+   cms_workspace.import(expo);
+   RooAbsPdf * pdf_expo = cms_workspace.pdf("expo");   // access object from workspace
+     pdf_expo->Print();
+
+   RooAbsPdf * pdf_Tstar_700 = cms_workspace.pdf("Tstar_700");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_800 = cms_workspace.pdf("Tstar_800");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_900 = cms_workspace.pdf("Tstar_900");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1000 = cms_workspace.pdf("Tstar_1000");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1100 = cms_workspace.pdf("Tstar_1100");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1200 = cms_workspace.pdf("Tstar_1200");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1300 = cms_workspace.pdf("Tstar_1300");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1400 = cms_workspace.pdf("Tstar_1400");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1500 = cms_workspace.pdf("Tstar_1500");   // access object from workspace
+   RooAbsPdf * pdf_Tstar_1600 = cms_workspace.pdf("Tstar_1600");   // access object from workspace
+    RooRealVar * InvMass1       = cms_workspace.var("InvMass");   // access object from workspace
+    // create dataset
+
+   RooDataHist * data_obs    = new RooDataHist("data_obs","data_obs",*InvMass1,h_Data); 
+   RooDataHist * bkg_h       = new RooDataHist("bkg_h","bkg_h",*InvMass1,h1);
+   RooDataHist * merge_h     = new RooDataHist("merge_h","merge_h",*InvMass1,bkg);
+   RooDataHist * Tstar_700_h = new RooDataHist("Tstar_700_h","Tstar_700_h",*InvMass1,h_Tstar_700);
+   RooDataHist * Tstar_800_h = new RooDataHist("Tstar_800_h","Tstar_800_h",*InvMass1,h_Tstar_800); 
+   RooDataHist * Tstar_900_h = new RooDataHist("Tstar_900_h","Tstar_900_h",*InvMass1,h_Tstar_900); 
+   RooDataHist * Tstar_1000_h = new RooDataHist("Tstar_1000_h","Tstar_1000_h",*InvMass1,h_Tstar_1000); 
+   RooDataHist * Tstar_1100_h = new RooDataHist("Tstar_1100_h","Tstar_1100_h",*InvMass1,h_Tstar_1100); 
+   RooDataHist * Tstar_1200_h = new RooDataHist("Tstar_1200_h","Tstar_1200_h",*InvMass1,h_Tstar_1200); 
+   RooDataHist * Tstar_1300_h = new RooDataHist("Tstar_1300_h","Tstar_1300_h",*InvMass1,h_Tstar_1300); 
+   RooDataHist * Tstar_1400_h = new RooDataHist("Tstar_1400_h","Tstar_1400_h",*InvMass1,h_Tstar_1400); 
+   RooDataHist * Tstar_1500_h = new RooDataHist("Tstar_1500_h","Tstar_1500_h",*InvMass1,h_Tstar_1500); 
+   RooDataHist * Tstar_1600_h = new RooDataHist("Tstar_1600_h","Tstar_1600_h",*InvMass1,h_Tstar_1600); 
+   
+
+ 
+   new TCanvas(); 
+   // RooFit plotting capabilities 
+   RooPlot * plot = InvMass1->frame(Title(" "));
+   plot->GetXaxis()->SetTitleOffset(1.2);
+   plot->GetYaxis()->SetTitleOffset(1.2);
+   plot->SetXTitle("M_{T*} [GeV/c^{2}]");
+   plot->SetYTitle("Ereignisse");
+ 
+   //data_obs->plotOn(plot);
+   //merge_h->plotOn(plot);
+   //merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
+   //plot->Draw(); 
+   //w.var("sigma")->setVal(1);
+   //w.var("mu")->setVal(0);
+    // now fit the data set 
+     RooFitResult * r4 = pdf_expo->fitTo(*merge_h,Minimizer("Minuit2","Migrad"), Save(1) );
+     
+   RooFitResult * r5  = pdf_Tstar_700->fitTo(*Tstar_700_h, Minimizer("Minuit2","Migrad"), Save(1) );
+   RooFitResult * r6  = pdf_Tstar_800->fitTo(*Tstar_800_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r7  = pdf_Tstar_900->fitTo(*Tstar_900_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r8  = pdf_Tstar_1000->fitTo(*Tstar_1000_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r9  = pdf_Tstar_1100->fitTo(*Tstar_1100_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r10 = pdf_Tstar_1200->fitTo(*Tstar_1200_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r11 = pdf_Tstar_1300->fitTo(*Tstar_1300_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r12 = pdf_Tstar_1400->fitTo(*Tstar_1400_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r13 = pdf_Tstar_1500->fitTo(*Tstar_1500_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+   RooFitResult * r14 = pdf_Tstar_1600->fitTo(*Tstar_1600_h, Minimizer("Minuit2","Migrad"), Save(1) ); 
+  
+
+   // plot the pdf on the same RooPlot object we have plotted the data 
+   //pdf_expo->plotOn(plot,VisualizeError(*r4,1),FillColor(kGray),Name("error"));
+   //pdf_expo->paramOn(plot, Layout(0.6,0.9,0.85));
+   //Tstar_700_h->plotOn(plot);
+   //pdf_Tstar_700->plotOn(plot);
+
+    //pdf_Tstar_700->Print();
+
+   // Tstar_800_h->plotOn(plot);
+   // pdf_Tstar_800->plotOn(plot);
+
+   /*Tstar_900_h->plotOn(plot,MarkerColor(kBlue+1),Name("Tstar_900_p"));
+    pdf_Tstar_900->plotOn(plot,VisualizeError(*r7,1),FillColor(kGray),Name("error_900"));
+    pdf_Tstar_900->plotOn(plot,LineColor(kRed),Name("Tstar_900"));
+   Tstar_900_h->plotOn(plot,MarkerColor(kBlue+1));
+   */
+   //Tstar_1000_h->plotOn(plot);
+   //pdf_Tstar_1000->plotOn(plot);
+
+   //    Tstar_1100_h->plotOn(plot,MarkerColor(kBlack));
+   // pdf_Tstar_1100->plotOn(plot,VisualizeError(*r9,1),FillColor(kGray),Name("error_1100"));
+   // pdf_Tstar_1100->plotOn(plot,LineColor(kBlue),Name("Tstar_1100"));
+   // Tstar_1100_h->plotOn(plot,MarkerColor(kBlack));
+   // Tstar_1200_h->plotOn(plot);
+   // pdf_Tstar_1200->plotOn(plot);
+ 
+   // Tstar_1300_h->plotOn(plot);
+   // pdf_Tstar_1300->plotOn(plot);
+ 
+   // Tstar_1400_h->plotOn(plot);
+   // pdf_Tstar_1400->plotOn(plot);
+
+   // Tstar_1500_h->plotOn(plot);
+   //pdf_Tstar_1500->plotOn(plot);
+   /*
+   Tstar_1500_h->plotOn(plot,MarkerColor(kBlack),Name("Tstar_1500_p"));
+   pdf_Tstar_1500->plotOn(plot,VisualizeError(*r13,1),FillColor(kGray),Name("error_1500"));
+   pdf_Tstar_1500->plotOn(plot,LineColor(kBlue),Name("Tstar_1500"));
+   Tstar_1500_h->plotOn(plot,MarkerColor(kBlack));
+   */
+   //data_obs->plotOn(plot);
+     merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
+     // merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
+   pdf_expo->plotOn(plot,VisualizeError(*r4,1),FillColor(kGray),Name("error"));
+   pdf_expo->plotOn(plot,RooFit::Name("pdf"));
+   merge_h->plotOn(plot,Name("Simul"));
+    // data_obs->plotOn(plot,RooFit::Name("daten"));
+    //merge_h->plotOn(plot,MarkerColor(kRed));
+  leg = new TLegend(0.1,0.7,0.48,0.9);
+   leg->AddEntry(plot->findObject("Simul"),"summierter MC-Untergrund","pel");
+   leg->AddEntry(plot->findObject("pdf"),"Fit-Funktion","l");
+   // leg->AddEntry(plot->findObject("Tstar_1100"),"T* (1100 GeV/c^{2})","l");
+   //  leg->AddEntry(plot->findObject("Tstar_1500_p"),"T* (1500 GeV/c^{2})","pel");
+   leg->AddEntry(plot->findObject("error"),"#pm 1 #sigma Fehlerband","f");
+   // leg->AddEntry(plot->findObject("Tstar"),"T*-Signal (700 GeV/c^{2})","l");
+    
+   plot->Draw();
+  leg->Draw("same");
+ 
+   // import data in workspace (IMPORTANT for saving it )
+   cms_workspace.import(*data_obs); 
+
+  // write workspace in the file (recreate file if already existing)
+   cms_workspace.writeToFile("datacards.root");
+ cout << "model written to file " << endl;
+ /*
+   std::cout << "\nResult of Neyman chi2 \n";
+   r1->Print();
+   std::cout << "\nResult of Pearson chi2 \n";
+   r2->Print();
+   std::cout << "\nResult of Binned Likelihood \n";
+   r3->Print();
+   std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+ */    
+r4->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+  //   r5->Print();
+  // r6->Print();
+  /*   r7->Print();
+     
+    r8->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+    r9->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+   r10->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+    r11->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+    r12->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+   r13->Print();
+  std::cout << "\nResult of Binned Likelihood fit with ROOTFIT\n";
+  r14->Print();
+ */
+ cout<<" Fit chi square/dof = "<<plot->chiSquare(2)<<endl; 
+
+ //********************************* SETUP DATACARD.TXT ************************************************************************************
+  
+   RooRealVar * gaus_mean_1600  = cms_workspace.var("gaus_mean_1600");   // access object from workspace
+   RooRealVar * gaus_sigma_1600 = cms_workspace.var("gaus_sigma_1600");   // access object from workspace
+   RooRealVar * land_mean_1600  = cms_workspace.var("land_mean_1600");   // access object from workspace
+   RooRealVar * land_sigma_1600 = cms_workspace.var("land_sigma_1600");   // access object from workspace
+   // RooRealVar * norm_fit       = cms_workspace.var("norm");   // access object from workspace
+   RooRealVar * lambda_fit     = cms_workspace.var("lambda");   // access object from workspace
+   RooRealVar * lambda2_fit    = cms_workspace.var("lambda2");   // access object from workspace
+
+ TString BaseName = "datacards_1600.txt";
+  ostringstream str;
+  str << BaseName;
+  string nn = str.str();
+  const char * p = nn.c_str();
+
+  std::ofstream textFile(p);
+  textFile << "imax 1   number of channels" << std::endl;
+  textFile << "jmax *   number of backgrounds" << std::endl;
+  textFile << "kmax *   number of nuisance parameters" << std::endl;
+  textFile << "-----------------" << std::endl;
+  textFile << "bin            mTstar                                                                         "  << std::endl;
+  textFile << "observation "<< data_obs->sum(false)<< std::endl;
+  textFile << "-----------------" << std::endl;
+  textFile << "shapes * * datacards.root cms_workspace:$PROCESS"                           << std::endl;
+   textFile << "---------------------------------------------------------------------------------------------"  << std::endl;
+  textFile << "bin                          mTstar      mTstar                                               "  << std::endl;
+  textFile << "process                      Tstar_1600   expo                                             "  << std::endl;
+  textFile << "process                      0           1                                                    "  << std::endl;
+  textFile << "rate     "
+           << "                  " <<Tstar_1600_h->sum(false)<< "     "<<merge_h->sum(false)<<"              "  << std::endl;
+  textFile << "----------------------------------------------------------------------------------------------"  << std::endl;
+  
+  textFile << "CMS_bTag_bc           lnN    1.05     -                                                       "  << std::endl;
+  textFile << "CMS_bTag_udsg_bc      lnN    1.04     -                                                       "  << std::endl;
+  textFile << "CMS_JEC               lnN    1.4     -                                                       "  << std::endl;
+  textFile << "CMS_JER               lnN    1.1     -                                                       "  << std::endl;
+  textFile << "CMS_MuonID            lnN    1.015     -                                                       "  << std::endl;
+  textFile << "CMS_MuonTrigger       lnN    1.01     -                                                       "  << std::endl;
+  textFile << "CMS_PU                lnN    1.05     -                                                       "  << std::endl;
+  textFile << "lumi_13TeV            lnN   1.027     -                                                       "  << std::endl;
+  textFile << "----------------------------------------------------------------------------------------------"  << std::endl;
+  //textFile << "norm                  param  " <<norm_fit      ->getVal()<< "     "<<norm_fit      ->getError()<<"    "  << std::endl;
+  textFile << "lambda                param  " <<lambda_fit    ->getVal()<< "   "<<lambda_fit    ->getError()<<"    "  << std::endl;
+  textFile << "lambda2               param  " <<lambda2_fit   ->getVal()<< "   "<<lambda2_fit   ->getError()<<"    "  << std::endl;
+  textFile << "gaus_mean_1600         param  " <<gaus_mean_1600 ->getVal()<< "     "<<gaus_mean_1600 ->getError()<<"    "  << std::endl;
+  textFile << "gaus_sigma_1600        param  " <<gaus_sigma_1600->getVal()<< "     "<<gaus_sigma_1600 ->getError()<<"    "  << std::endl;
+  textFile << "land_mean_1600         param  " <<land_mean_1600 ->getVal()<< "     "<<land_mean_1600 ->getError()<<"    "  << std::endl;
+  textFile << "land_sigma_1600        param  " <<land_sigma_1600->getVal()<< "     "<<land_sigma_1600 ->getError()<<"    "  << std::endl;
+  textFile << std::endl;
+
+  // *******************************************
+
+}

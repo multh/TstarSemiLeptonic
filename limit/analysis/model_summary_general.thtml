@@ -1,0 +1,35 @@
+<p>Observables (xmin, xmax, nbins):</p>
+<ul>
+<li>Tstarcomb (0, 2000, 30)</li>
+</ul>
+<p>Background processes:</p>
+<ul>
+<li>Diboson</li>
+<li>QCD</li>
+<li>SingleTop</li>
+<li>TTbar</li>
+<li>WJets</li>
+<li>ZJets</li>
+</ul>
+<p>Signal processes:</p><ul>
+<li>Tstar_M1000</li>
+<li>Tstar_M1100</li>
+<li>Tstar_M1200</li>
+<li>Tstar_M1300</li>
+<li>Tstar_M1400</li>
+<li>Tstar_M1500</li>
+<li>Tstar_M1600</li>
+<li>Tstar_M700</li>
+<li>Tstar_M800</li>
+<li>Tstar_M900</li>
+</ul>
+<p>Nuisance parameters (includes only those which apply to the background-only model):</p>
+<ul>
+<li>diboson_rate (rate only)</li>
+<li>lumi (rate only)</li>
+<li>qcd_rate (rate only)</li>
+<li>singletop_rate (rate only)</li>
+<li>ttbar_rate (rate only)</li>
+<li>wj_rate (rate only)</li>
+<li>zj_rate (rate only)</li>
+</ul>

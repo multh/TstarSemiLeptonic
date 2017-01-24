@@ -1,0 +1,428 @@
+#include <iostream>
+#include <memory>
+
+#include <UHH2/core/include/AnalysisModule.h>
+#include <UHH2/core/include/Event.h>
+#include <UHH2/common/include/EventHists.h>
+#include <UHH2/core/include/Selection.h>
+
+#include <UHH2/common/include/MCWeight.h>
+#include <UHH2/common/include/CleaningModules.h>
+#include <UHH2/common/include/NSelections.h>
+#include <UHH2/common/include/LumiSelection.h>
+#include <UHH2/common/include/TriggerSelection.h>
+#include <UHH2/common/include/JetCorrections.h>
+#include <UHH2/common/include/ObjectIdUtils.h>
+#include <UHH2/common/include/MuonIds.h>
+#include <UHH2/common/include/MuonHists.h>
+#include <UHH2/common/include/ElectronIds.h>
+#include <UHH2/common/include/ElectronHists.h>
+#include <UHH2/common/include/JetIds.h>
+#include <UHH2/common/include/JetHists.h>
+#include <UHH2/common/include/TopJetIds.h>
+#include <UHH2/common/include/TTbarGen.h>
+#include <UHH2/common/include/TTbarReconstruction.h>
+#include <UHH2/common/include/ReconstructionHypothesis.h>
+#include <UHH2/common/include/ReconstructionHypothesisDiscriminators.h>
+#include <UHH2/common/include/HypothesisHists.h>
+#include <UHH2/common/include/Utils.h>
+#include "UHH2/common/include/PrintingModules.h"
+
+
+#include <UHH2/ZprimeSemiLeptonic/include/TStarGen.h>
+#include <UHH2/ZprimeSemiLeptonic/include/TStarGenHists.h>
+#include <UHH2/ZprimeSemiLeptonic/include/HypothesisHistsOwn.h>
+
+#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicSelections.h>
+#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSemiLeptonicUtils.h>
+#include <UHH2/ZprimeSemiLeptonic/include/ZprimeSelectionHists.h>
+
+/** \brief module to produce "Selection" ntuples for the T*->t gluon tbar gluon semileptonic analysis
+ *
+ *  -- GOALS:
+ *   * complete object reconstruction (pt/eta cuts, IDs, jet-lepton cleaning, JER smearing)
+ *   * apply (most of) the kinematic cuts for the lepton+jets SR. current cutflow:
+ *     * HLT
+ *     * ==1 lepton (w/ pt+eta+ID cuts)
+ *     * >=2 AK4 jets w/ pt> 50 |eta|<2.4
+ *     * >=1 AK4 jets w/ pt>200 |eta|<2.4
+ *     * MET > 50 GeV
+ *     * MET+lepton.pt > 150 GeV
+ *     * lepton-2D-cut [DR>0.4 || pTrel>25 GeV] (wrt AK4 jets w/ pt>25 GeV)
+ *     * (electron-only) triangular cuts
+ *   * perform ttbar kinematical reconstruction (hyps stored in output ntuple)
+ *
+ * -- ITEMS TO BE IMPLEMENTED:
+ *   * JER smearing for TopJet collection
+ *   * update 2D cut values (validation ongoing)
+ *
+ */
+
+class ZprimeSelectionModule : public uhh2::AnalysisModule {
+
+ public:
+  explicit ZprimeSelectionModule(uhh2::Context&);
+  virtual bool process(uhh2::Event&) override;
+
+ private:
+  enum lepton { muon, elec };
+  lepton channel_;
+
+
+
+  uhh2::Event::Handle<int> h_flag_toptagevent;
+  // common modules
+  std::unique_ptr<AnalysisModule>mc_lumi;
+
+  std::unique_ptr<AnalysisModule> Muon_printer, Electron_printer, Jet_printer, GenParticles_printer;
+
+  // cleaners
+  std::unique_ptr<MuonCleaner>               muo_cleaner;
+  std::unique_ptr<ElectronCleaner>           ele_cleaner;
+  std::unique_ptr<JetCleaner>                jet_IDcleaner;
+  std::unique_ptr<JetCorrector>              jet_corrector;
+  //std::unique_ptr<JetResolutionSmearer>       jetER_smearer;
+  std::unique_ptr<JetLeptonCleaner>          jetlepton_cleaner;
+  std::unique_ptr<JetCleaner>                jet_cleaner1;
+  std::unique_ptr<JetCleaner>                jet_cleaner2;
+  std::unique_ptr<JetCleaner>                topjet_IDcleaner;
+  std::unique_ptr<TopJetCorrector>           topjet_corrector;
+  // std::unique_ptr<TopJetResolutionSmearer>   topjetER_smearer;
+  std::unique_ptr<TopJetLeptonDeltaRCleaner> topjetlepton_cleaner;
+  std::unique_ptr<TopJetCleaner>             topjet_cleaner;
+
+ 
+  // selections
+  std::unique_ptr<uhh2::Selection> trigger_sel;
+  std::unique_ptr<uhh2::AndSelection> lep1_sel;
+  std::unique_ptr<uhh2::Selection> jet2_sel;
+  std::unique_ptr<uhh2::Selection> jet1_sel;
+  std::unique_ptr<uhh2::Selection> met_sel;
+  std::unique_ptr<uhh2::Selection> htlep_sel;
+  std::unique_ptr<uhh2::Selection> twodcut_sel;
+  std::unique_ptr<uhh2::Selection> triangc_sel;
+  std::unique_ptr<uhh2::Selection> toptagevt_sel;
+
+  // ttbar reconstruction
+  std::unique_ptr<uhh2::AnalysisModule> ttgenprod;
+  // std::unique_ptr<uhh2::Selection>      genmttbar_sel;
+  std::unique_ptr<uhh2::AnalysisModule> reco_primlep;
+  std::unique_ptr<uhh2::AnalysisModule> ttbar_reco;
+  std::unique_ptr<uhh2::AnalysisModule> ttbar_chi2;
+  std::unique_ptr<uhh2::AnalysisModule> ttbar_match;
+  
+  //T*T*  reconstruction
+  std::unique_ptr<uhh2::AnalysisModule> tstargenprod;
+  // std::unique_ptr<uhh2::AnalysisModule> tstar_reco__ttag0, tstar_reco__ttag1;  
+  // std::unique_ptr<uhh2::AnalysisModule> tstar_chi2__ttag0, tstar_chi2__ttag1;
+  // std::unique_ptr<uhh2::AnalysisModule> tstar_match__ttag0, tstar_match__ttag1;
+
+  uhh2::Event::Handle<std::vector<ReconstructionHypothesis>> h_ttbar_hyps;
+  // uhh2::Event::Handle<std::vector<ReconstructionHypothesis>> h_tstar_hyps;
+ 
+  // hists
+  std::unique_ptr<uhh2::Hists> input_h;
+  std::unique_ptr<uhh2::Hists> trigger_h;
+  std::unique_ptr<uhh2::Hists> lep1_h;
+  std::unique_ptr<uhh2::Hists> jet2_h;
+  std::unique_ptr<uhh2::Hists> jet1_h;
+  std::unique_ptr<uhh2::Hists> met_h;
+  std::unique_ptr<uhh2::Hists> htlep_h;
+  std::unique_ptr<uhh2::Hists> twodcut_h;
+  std::unique_ptr<uhh2::Hists> triangc_h;
+  std::unique_ptr<uhh2::Hists> toptagevt_h;
+  std::unique_ptr<uhh2::Hists> chi2min_h;
+  std::unique_ptr<uhh2::Hists> corrmatch_h;
+  std::unique_ptr<uhh2::Hists> match_h;
+
+  std::unique_ptr<Hists> input_h_event, input_h_jet, input_h_ele, input_h_muo, input_h_topjet;
+  std::unique_ptr<Hists> output_h_event, output_h_jet, output_h_ele, output_h_muo, output_h_topjet;
+};
+
+ZprimeSelectionModule::ZprimeSelectionModule(uhh2::Context& ctx){
+  
+  std::cout << "Hello World from TStarSelectionModule!" << std::endl;
+
+  ///PRINTER MODULES
+    Jet_printer.reset(new JetPrinter("Jet-Printer", 0));
+    Electron_printer.reset(new ElectronPrinter("Electron-Printer"));
+    Muon_printer.reset(new MuonPrinter("Muon-Printer"));
+    GenParticles_printer.reset(new GenParticlesPrinter(ctx));
+
+  const std::string& channel = ctx.get("channel", "");
+  if     (channel == "muon") channel_ = muon;
+  else if(channel == "elec") channel_ = elec;
+  else throw std::runtime_error("ZprimeSelectionModule -- undefined argument for 'channel' key in xml file (must be 'muon' or 'elec'): "+channel);
+
+  const bool isMC = (ctx.get("dataset_type") == "MC");
+
+  //// COMMON MODULES
+  mc_lumi.reset(new MCLumiWeight(ctx));
+
+  //// OBJ CLEANING
+  muo_cleaner.reset(new MuonCleaner    (AndId<Muon>    (PtEtaCut  (50., 2.1), MuonIDMedium())));
+  ele_cleaner.reset(new ElectronCleaner(AndId<Electron>(PtEtaSCCut(50., 2.5), ElectronID_MVAnotrig_Spring15_25ns_loose)));
+  const JetId jetID(JetPFID(JetPFID::WP_LOOSE));
+
+  std::vector<std::string> JEC_AK4, JEC_AK8;
+  if(isMC){
+    JEC_AK4 = JERFiles::Summer15_25ns_L123_AK4PFchs_MC;
+    JEC_AK8 = JERFiles::Summer15_25ns_L123_AK8PFchs_MC;
+  }
+  else {
+    JEC_AK4 = JERFiles::Summer15_25ns_L123_AK4PFchs_DATA;
+    JEC_AK8 = JERFiles::Summer15_25ns_L123_AK8PFchs_DATA;
+  }
+  
+  jet_IDcleaner.reset(new JetCleaner(jetID));
+  jet_corrector.reset(new JetCorrector(JEC_AK4));
+//!!  jetER_smearer.reset(new JetResolutionSmearer(ctx));
+  jetlepton_cleaner.reset(new JetLeptonCleaner(JEC_AK4));
+  jetlepton_cleaner->set_drmax(.4);
+  jet_cleaner1.reset(new JetCleaner(25., uhh2::infinity));
+  jet_cleaner2.reset(new JetCleaner(30., 2.4));
+
+  topjet_IDcleaner.reset(new JetCleaner(jetID));
+  topjet_corrector.reset(new TopJetCorrector(JEC_AK8));
+//!!  topjetER_smearer.reset(new TopJetResolutionSmearer(ctx));
+  topjetlepton_cleaner.reset(new TopJetLeptonDeltaRCleaner(.8));
+  topjet_cleaner.reset(new TopJetCleaner(TopJetId(PtEtaCut(400., 2.4))));
+  ///
+
+  //// EVENT SELECTION
+  const std::string& trigger = ctx.get("trigger", "NULL");
+
+  lep1_sel.reset(new uhh2::AndSelection(ctx));
+  if(channel_ == muon){
+
+    lep1_sel->add<NMuonSelection>    ("muoN == 1", 1, 1);
+    lep1_sel->add<NElectronSelection>("eleN == 0", 0, 0);
+
+    if(trigger != "NULL") trigger_sel = make_unique<TriggerSelection>(trigger);
+    else                  trigger_sel = make_unique<TriggerSelection>("HLT_Mu45_eta2p1_v*");
+  }
+  else if(channel_ == elec){
+
+    lep1_sel->add<NMuonSelection>    ("muoN == 0", 0, 0);
+    lep1_sel->add<NElectronSelection>("eleN == 1", 1, 1);
+
+    if(trigger != "NULL") trigger_sel = make_unique<TriggerSelection>(trigger);
+    else                  trigger_sel = make_unique<TriggerSelection>("HLT_Ele45_CaloIdVT_GsfTrkIdT_PFJet200_PFJet50_v*");
+  }
+
+  jet2_sel.reset(new NJetSelection(4, -1, JetId(PtEtaCut( 50., 2.4))));
+  jet1_sel.reset(new NJetSelection(1, -1, JetId(PtEtaCut(200., 2.4))));
+  
+  met_sel  .reset(new METCut  ( 50., uhh2::infinity));
+  htlep_sel.reset(new HTlepCut(150., uhh2::infinity));
+  
+  twodcut_sel.reset(new TwoDCut(.4, 25.));
+
+  if     (channel_ == elec) triangc_sel.reset(new TriangularCuts(1.5, 75.));
+  else if(channel_ == muon) triangc_sel.reset(new uhh2::AndSelection(ctx)); // always true (no triangular cuts for muon channel)
+
+  /* t-tagging */
+  const TopJetId topjetID = AndId<TopJet>(CMSTopTag(CMSTopTag::MassType::groomed), Tau32());
+  const float minDR_topjet_jet(1.2);
+
+  toptagevt_sel.reset(new TopTagEventSelection(topjetID, minDR_topjet_jet));
+  h_flag_toptagevent = ctx.declare_event_output<int>("flag_toptagevent");
+  /**/
+
+  /* TTBAR KINEMATICAL RECO */
+  const std::string ttbar_gen_label ("ttbargen");
+  const std::string ttbar_hyps_label("TTbarReconstruction");
+  const std::string ttbar_match_label("CorrectMatch");
+  const std::string ttbar_chi2_label("Chi2");
+
+  const std::string tstar_gen_label ("tstargen");
+
+  ttgenprod.reset(new TTbarGenProducer(ctx, ttbar_gen_label, false));
+  tstargenprod.reset(new TStarGenProducer(ctx, tstar_gen_label, false));
+
+  reco_primlep.reset(new PrimaryLepton(ctx));
+
+  ttbar_reco.reset(new HighMassTTbarReconstruction(ctx, NeutrinoReconstruction, ttbar_hyps_label));
+  ttbar_reco.reset(new        TopTagReconstruction(ctx, NeutrinoReconstruction, ttbar_hyps_label, topjetID, minDR_topjet_jet));
+ 
+  ttbar_chi2.reset(new Chi2Discriminator      (ctx, ttbar_hyps_label));
+  ttbar_chi2.reset(new Chi2DiscriminatorTTAG  (ctx, ttbar_hyps_label));
+
+  ttbar_match.reset(new CorrectMatchDiscriminator    (ctx, ttbar_hyps_label));
+
+  h_ttbar_hyps = ctx.get_handle<std::vector<ReconstructionHypothesis>>(ttbar_hyps_label);
+  /**/
+
+  //// HISTS
+  input_h    .reset(new ZprimeSelectionHists(ctx, "input"));
+  trigger_h  .reset(new ZprimeSelectionHists(ctx, "trigger"));
+  lep1_h     .reset(new ZprimeSelectionHists(ctx, "lep1"));
+  jet2_h     .reset(new ZprimeSelectionHists(ctx, "jet2"));
+  jet1_h     .reset(new ZprimeSelectionHists(ctx, "jet1"));
+  met_h      .reset(new ZprimeSelectionHists(ctx, "met"));
+  htlep_h    .reset(new ZprimeSelectionHists(ctx, "htlep"));
+  twodcut_h  .reset(new ZprimeSelectionHists(ctx, "twodcut"));
+  triangc_h  .reset(new ZprimeSelectionHists(ctx, "triangc"));
+  toptagevt_h.reset(new ZprimeSelectionHists(ctx, "toptagevent"));
+  chi2min_h.reset(new HypothesisHists(ctx, "chi2min__HypHists", ttbar_hyps_label, ttbar_chi2_label));
+ 
+ 
+  corrmatch_h.reset(new HypothesisHists(ctx, "corrmatch__HypHists", ttbar_hyps_label, ttbar_match_label));
+  match_h.reset(new HypothesisHists(ctx, "match__HypHists", ttbar_hyps_label, ttbar_match_label));
+
+
+
+  // set up Hists classes
+  input_h_event.reset(new EventHists(ctx, "input_Event"));
+  input_h_jet.reset(new JetHists(ctx, "input_Jets"));
+  input_h_ele.reset(new ElectronHists(ctx, "input_Electrons"));
+  input_h_muo.reset(new MuonHists(ctx, "input_Muons"));
+  input_h_topjet.reset(new TopJetHists(ctx, "input_TopJets"));
+
+  output_h_event.reset(new EventHists(ctx, "output_Event"));
+  output_h_jet.reset(new JetHists(ctx, "output_Jets"));
+  output_h_ele.reset(new ElectronHists(ctx, "output_Electrons"));
+  output_h_muo.reset(new MuonHists(ctx, "output_Muons"));
+  output_h_topjet.reset(new TopJetHists(ctx, "output_TopJets"));
+  ////
+}
+
+
+bool ZprimeSelectionModule::process(uhh2::Event& event){
+  // COMMON MODULES
+  mc_lumi->process(event);
+
+  //dump input content
+  input_h->fill(event);
+  input_h_event->fill(event);
+  input_h_jet->fill(event);
+  input_h_ele->fill(event);
+  input_h_muo->fill(event);
+  input_h_topjet->fill(event);
+
+  // OBJ CLEANING
+  muo_cleaner->process(event);
+  sort_by_pt<Muon>(*event.muons);
+  ele_cleaner->process(event);
+  sort_by_pt<Electron>(*event.electrons);
+  jet_IDcleaner->process(event);
+  jet_corrector->process(event);
+//!!  jetER_smearer->process(event);
+  jetlepton_cleaner->process(event);
+  jet_cleaner1->process(event); // jet collection for lepton-2Dcut
+  sort_by_pt<Jet>(*event.jets);
+  jet_cleaner2->process(event);
+  topjet_IDcleaner->process(event);
+  topjet_corrector->process(event);
+//!!  topjetER_smearer->process(event);
+  topjetlepton_cleaner->process(event);
+  topjet_cleaner->process(event);
+  sort_by_pt<TopJet>(*event.topjets);
+
+
+    ///Printmodules
+      /* Electron_printer->process(event);
+         Muon_printer->process(event);
+         Jet_printer->process(event);
+	 GenParticles_printer->process(event);*/
+     ///
+
+  //// HLT selection
+  const bool pass_trigger = trigger_sel->passes(event);
+  if(!pass_trigger) return false;
+  trigger_h->fill(event);
+  ////
+
+
+  //// LEPTON selection
+  const bool pass_lep1 = lep1_sel->passes(event);
+  if(!pass_lep1) return false;
+  lep1_h->fill(event);
+  ////
+
+
+  //// JET selection
+  /* lepton-2Dcut boolean */
+  const bool pass_twodcut = twodcut_sel->passes(event);
+
+
+  sort_by_pt<Jet>(*event.jets);
+
+  /* 2nd AK4 jet selection */
+  const bool pass_jet2 = jet2_sel->passes(event);
+  if(!pass_jet2) return false;
+  jet2_h->fill(event);
+
+  /* 1st AK4 jet selection */
+  /*  const bool pass_jet1 = jet1_sel->passes(event);
+  if(!pass_jet1) return false;
+  jet1_h->fill(event);*/
+  ////
+
+  //// MET selection
+  /* const bool pass_met = met_sel->passes(event);
+  if(!pass_met) return false;
+  met_h->fill(event);*/
+
+  /* HT_lep selection */
+  /*  const bool pass_htlep = htlep_sel->passes(event);
+  if(!pass_htlep) return false;
+  htlep_h->fill(event);*/
+  ////
+
+  //// LEPTON-2Dcut selection
+  if(!pass_twodcut) return false;
+  twodcut_h->fill(event);
+  ////
+
+  //// TRIANGULAR-CUTS selection [e+jets only]
+  const bool pass_triangc = triangc_sel->passes(event);
+  if(!pass_triangc) return false;
+  triangc_h->fill(event);
+  ////
+
+  ////TTBAR 
+  reco_primlep->process(event);
+  ttgenprod->process(event);
+  //tstargenprod->process(event);
+
+  //// TTBAR KIN RECO
+   ttbar_reco->process(event);
+
+   //// TTBAR CHI2 selection
+   ttbar_chi2->process(event);
+
+  ////Correct Match selection ////
+   ttbar_match->process(event);
+
+ ////Hypothesis selection ////
+    std::vector<ReconstructionHypothesis> hyps = event.get(h_ttbar_hyps);
+    const ReconstructionHypothesis* hyp = get_best_hypothesis( hyps, "CorrectMatch" );
+  
+    if(hyp->discriminator("CorrectMatch")<=1.7){ corrmatch_h->fill(event);}
+    else { match_h->fill(event);}
+    
+    //chi2min_toptag0_h->fill(event);
+   //chi2min_toptag1_h->fill(event);
+     
+
+  /* TOPTAG-EVENT boolean */
+  const bool pass_ttagevt = toptagevt_sel->passes(event);
+  if(pass_ttagevt) toptagevt_h->fill(event);
+
+  /* add flag_toptagevent to output ntuple */
+  event.set(h_flag_toptagevent, int(pass_ttagevt));
+  ////    
+ 
+
+  // dump output content
+  output_h_event->fill(event);
+  output_h_jet->fill(event);
+  output_h_ele->fill(event);
+  output_h_muo->fill(event);
+  output_h_topjet->fill(event);
+
+  return true;
+}
+
+UHH2_REGISTER_ANALYSIS_MODULE(ZprimeSelectionModule)
