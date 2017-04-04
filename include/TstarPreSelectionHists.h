@@ -9,7 +9,7 @@ namespace uhh2examples {
 
 class TstarPreSelectionHists : public uhh2::Hists {
  public:
-  explicit TstarPreSelectionHists(uhh2::Context & ctx, const std::string & dirname);
+  TstarPreSelectionHists(uhh2::Context & ctx, const std::string & dirname);
 
   virtual void fill(const uhh2::Event & ev) override;
 
@@ -17,3 +17,4 @@ class TstarPreSelectionHists : public uhh2::Hists {
 };
 
 }
+

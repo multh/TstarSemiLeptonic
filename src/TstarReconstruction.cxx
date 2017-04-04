@@ -10,6 +10,14 @@
 using namespace uhh2;
 using namespace std;
 
+//**********************************************************************************
+// Module for Mass Reconstruction of T* in SemiLeptonic Channel
+//
+//**********************************************************************************
+
+
+
+
 HighMassTstarReconstruction::HighMassTstarReconstruction(Context & ctx, const NeutrinoReconstructionMethod & neutrinofunction, const string & label): m_neutrinofunction(neutrinofunction) {
   h_recohyps = ctx.declare_event_output<vector<TstarReconstructionHypothesis>>(label);
     h_primlep = ctx.get_handle<FlavorParticle>("PrimaryLepton");
@@ -29,8 +37,8 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
     std::vector<LorentzVector> neutrinos = m_neutrinofunction( lepton.v4(), event.met->v4());
 
     unsigned int n_jets = event.jets->size();
-	if(n_jets>7) n_jets = 7;
-    const unsigned int max_j = pow(5, n_jets);
+    if(n_jets>7) n_jets = 7;                    //Limit Number of Jets for Computation Time 
+    const unsigned int max_j = pow(5, n_jets);  
  
     // idea: loop over 5^Njet possibilities and write the current loop
     // index j in the 5-base system. The Njets digits represent whether
@@ -65,13 +73,12 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
                     hyp.add_tophad_jet(event.jets->at(k));
 		    hadjets++;
                 }
+
                 if(num%5==1) {
                     toplep_v4 = toplep_v4 + event.jets->at(k).v4();
                     hyp.add_toplep_jet(event.jets->at(k));
 		    lepjets++;
                 }
-
-
 	    
 		if(num%5==2) {
 		  gluonlep_v4 = gluonlep_v4 + event.jets->at(k).v4();
@@ -79,7 +86,6 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
 		    gluonlepjets++;
                 }
 		
-	
 		if(num%5==3) {
 		  gluonhad_v4 = gluonhad_v4 + event.jets->at(k).v4();
 		  hyp.add_gluonhad_jet(event.jets->at(k));
@@ -88,9 +94,9 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
 
                 //in case num%5==4 do not take this jet at all
                 //shift the trigits of num to the right:
+
                 num /= 5;
 	       }
-
 
 	    //search jet with highest pt assigned to leptonic top
             int blep_idx(-1);
@@ -100,15 +106,11 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
                 maxptlep = hyp.toplep_jets().at(i).pt();
                 blep_idx = i;
               }
-	   
-
-            }
+	    }
             if(blep_idx != -1){ 
-	      hyp.set_blep_v4(hyp.toplep_jets().at(blep_idx).v4());
+	      hyp.set_blep_v4(hyp.toplep_jets().at(blep_idx).v4());  //Handle Jet with highest pt as leptonic b-Jet
 	      hyp.add_blep_jet(hyp.toplep_jets().at(blep_idx));
 	    }
-
-
 
 	    //search jet with highest pt assigned to hadronic top
             int bhad_idx(-1);
@@ -119,13 +121,11 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
                 bhad_idx = i;
               }
 	    }
-
             if(bhad_idx != -1){
-	      hyp.set_bhad_v4(hyp.tophad_jets().at(bhad_idx).v4());
+	      hyp.set_bhad_v4(hyp.tophad_jets().at(bhad_idx).v4());  //Handle Jet with highest pt as hadronic b-Jets
 	      hyp.add_bhad_jet(hyp.tophad_jets().at(bhad_idx));
 	    }
 	    
-
             //fill only hypotheses with at least one jet assigned to each top quark
 	    if( hadjets>0 && lepjets>0 && gluonhadjets>0 && gluonlepjets>0) { 
 	        hyp.set_tophad_v4(tophad_v4);
@@ -143,6 +143,8 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
 }
 
 
+//***************************** Mass Reconstruction with Top-Tag *******************************************
+ 
 TstarTopTagReconstruction::TstarTopTagReconstruction(Context & ctx, const NeutrinoReconstructionMethod & neutrinofunction, const string & label, TopJetId tjetid, float minDR_tj_j):
   m_neutrinofunction(neutrinofunction), topjetID_(tjetid), minDR_topjet_jet_(minDR_tj_j) {
   h_recohyps = ctx.declare_event_output<vector<TstarReconstructionHypothesis>>(label);
@@ -157,7 +159,7 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
   std::vector<TstarReconstructionHypothesis> recoHyps;
 
   const Particle& lepton = event.get(h_primlep);
-  std::vector<LorentzVector> neutrinos = m_neutrinofunction(lepton.v4(), event.met->v4());
+  std::vector<LorentzVector> neutrinos = m_neutrinofunction(lepton.v4(), event.met->v4());   //Neutrion Solutions
 
   for(const auto& tj : *event.topjets){
     if(!topjetID_(tj, event)) continue;
@@ -165,7 +167,8 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
     // jet candidates for leptonic-top (not overlapping with top-tagged jet)
     std::vector<const Jet*> tlep_jets;
     tlep_jets.reserve(event.jets->size());
-
+   
+    //Make sure Jets not overlap with Top-Jets  
     for(const auto & jet : *event.jets)
     if(deltaR(tj, jet) > minDR_topjet_jet_) tlep_jets.push_back(&jet);
     
@@ -174,6 +177,8 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
     if(n_jets<3) return false;
     if(n_jets>7) n_jets=7;
 
+  // idea: loop over ^Njet possibilities and write the current loop
+ 
     const unsigned int jet_combs = pow(4, n_jets);
 
     for(const auto& neutrino_p4 : neutrinos){
@@ -194,19 +199,23 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
         hyp.add_tophad_jet(tj);
         hyp.set_tophad_topjet_ptr(&tj);
 
+	//Combine Lepton and Neutrino LorentzVector
         LorentzVector toplep_v4(lepton.v4() + neutrino_p4);
 	int num = i;
+  
+ // index j in the 4-base system. The Njets digits represent whether
+    // to assign each jet to the leptonic top (0),
+    // to leptonic gluon (1), hadronic gluon (2)
+    // or none of them (3).
 
 	////Fill TopLep and Gluon Hypothese
         for(unsigned int j=0; j<n_jets; ++j){
-          // index for jet assignment to top leg (0=none, 1=leptonic-top, 2=leptonic gluon, 3=hadronic gluon)
-          
+
           if(num%4==0){
             toplep_v4 += tlep_jets.at(j)->v4();
             hyp.add_toplep_jet(*tlep_jets.at(j));
 	    lepjets++;
 	  }
-	 
 	    
 	  if(num%4==1){
             gluonlep_v4 += tlep_jets.at(j)->v4();
@@ -222,7 +231,6 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
           num/=4;
         }
 
-
 	int blep_idx(-1);
             float maxptlep(-1.);
             for(unsigned int i=0; i<hyp.toplep_jets().size(); ++i){
@@ -230,15 +238,11 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
                 maxptlep = hyp.toplep_jets().at(i).pt();
                 blep_idx = i;
               }
-	   
-
             }
             if(blep_idx != -1){ 
-	      hyp.set_blep_v4(hyp.toplep_jets().at(blep_idx).v4());
+	      hyp.set_blep_v4(hyp.toplep_jets().at(blep_idx).v4()); //Handle Jet with highest pt as leptonic b-Jets
 	      hyp.add_blep_jet(hyp.toplep_jets().at(blep_idx));
 	    }
-
-
 
 	    //search jet with highest pt assigned to hadronic top
             int bhad_idx(-1);
@@ -248,14 +252,11 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
                 maxpthad = hyp.tophad_jets().at(i).pt();
                 bhad_idx = i;
               }
-	    
             }
-
             if(bhad_idx != -1){
 	      hyp.set_bhad_v4(hyp.tophad_jets().at(bhad_idx).v4());
-	      hyp.add_bhad_jet(hyp.tophad_jets().at(bhad_idx));
+	      hyp.add_bhad_jet(hyp.tophad_jets().at(bhad_idx));     //Handle Jet with highest pt as hadronic b-Jets
 	    }
-
 
        ////Fill Hypothese
         if(lepjets>0 && gluonhadjets>0 && gluonlepjets>0) {
@@ -273,7 +274,9 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
   return true;
 }
 
-////Neutrino Reconstruction
+
+//**************************** Neutrino Reconstruction ************************************************************
+
 std::vector<LorentzVector> TstarNeutrinoReconstruction(const LorentzVector & lepton, const LorentzVector & met) {
     TVector3 lepton_pT = toVector(lepton);
     lepton_pT.SetZ(0);

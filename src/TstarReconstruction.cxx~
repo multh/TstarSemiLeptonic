@@ -29,7 +29,7 @@ bool HighMassTstarReconstruction::process(uhh2::Event & event) {
     std::vector<LorentzVector> neutrinos = m_neutrinofunction( lepton.v4(), event.met->v4());
 
     unsigned int n_jets = event.jets->size();
-	if(n_jets>8) n_jets = 8;
+	if(n_jets>7) n_jets = 7;
     const unsigned int max_j = pow(5, n_jets);
  
     // idea: loop over 5^Njet possibilities and write the current loop
@@ -172,7 +172,7 @@ bool TstarTopTagReconstruction::process(uhh2::Event & event) {
     unsigned int n_jets = tlep_jets.size();
 
     if(n_jets<3) return false;
-    if(n_jets>8) n_jets=8;
+    if(n_jets>7) n_jets=7;
 
     const unsigned int jet_combs = pow(4, n_jets);
 

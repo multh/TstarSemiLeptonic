@@ -1,6 +1,14 @@
 //MassMacro.C
 
 
+//***************************************************************************************
+//
+//Small Macro for Signal Shapes Normalized to Integral and showed in one Canvas
+//
+//****************************************************************************************
+
+
+
 void MassMacro() {
  // open a file and get a histogram
  TFile *s1 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root");

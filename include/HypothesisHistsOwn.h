@@ -12,7 +12,7 @@
 class HypothesisHistsOwn: public uhh2::Hists {
 public:
     HypothesisHistsOwn(uhh2::Context & ctx, const std::string & dirname, const std::string & hyps_name, const std::string & discriminator_name);
-
+    bool is_data;
     virtual void fill(const uhh2::Event & ev) override;
 
 protected:

@@ -11,7 +11,6 @@ using namespace std;
 using namespace uhh2;
 using namespace uhh2examples;
 
-
 TstarPreSelectionHists::TstarPreSelectionHists(uhh2::Context& ctx, const std::string& dirname): Hists(ctx, dirname){
   book<TH1D>("N_jets", "N_{jets}", 20, 0, 20);  
   book<TH1D>("eta_jet1", "#eta^{jet 1}", 40, -2.5, 2.5);
@@ -33,6 +32,11 @@ TstarPreSelectionHists::TstarPreSelectionHists(uhh2::Context& ctx, const std::st
   book<TH1D>("H_T", "H_{T}", 100, 0, 5000);
   book<TH1D>("sum_event_weights", "BinContent = sum(eventweights)", 1, 0.5, 1.5);
   book<TH1D>("mindr_mujet", "min(#Delta R) between a muon and a jet", 50,0,5);
+
+  book<TH1F>("NbJetsL", "Number of bjets loose", 7, -0.5,6.5);
+  book<TH1F>("NbJetsM", "Number of bjets medium", 7, -0.5,6.5);
+  book<TH1F>("NbJetsT", "Number of bjets tight", 7, -0.5,6.5);
+
 
 }
 
@@ -100,6 +104,32 @@ void TstarPreSelectionHists::fill(const uhh2::Event& event){
     }
     hist("mindr_mujet")->Fill(mindr_mujet,weight);
   }
+
+
+  vector<Jet> bjetsL, bjetsM, bjetsT;
+  for (unsigned int i =0; i<jets->size(); ++i) {
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.423) {
+      bjetsL.push_back(jets->at(i));
+    }
+  }
+  for (unsigned int i =0; i<jets->size(); ++i) {
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.814) {
+      bjetsM.push_back(jets->at(i));
+    }
+  }
+  for (unsigned int i =0; i<jets->size(); ++i) {
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.941) {
+      bjetsT.push_back(jets->at(i));
+    }
+  }
+  int NbJetsL = bjetsL.size();
+  int NbJetsM = bjetsM.size();
+  int NbJetsT = bjetsT.size();
+  hist("NbJetsL")-> Fill(NbJetsL,weight);
+  hist("NbJetsM")-> Fill(NbJetsM,weight);
+  hist("NbJetsT")-> Fill(NbJetsT,weight);
+
+
 
 
 }

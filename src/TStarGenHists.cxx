@@ -1,8 +1,11 @@
 #include "UHH2/TstarSemiLeptonic/include/TStarGenHists.h"
+#include "UHH2/common/include/Utils.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include <iostream>
 
 using namespace uhh2;
+using namespace std;
 
 TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): Hists(ctx, dirname){
 
@@ -37,7 +40,6 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
     deltaR_top_decays = book<TH1F>( "deltaR_top_decays", "#DeltaR(t decay prod.)",1000,0,5);
     deltaR_antitop_decays = book<TH1F>( "deltaR_antitop_decays", "#DeltaR(#bar{t} decay prod.)",1000,0,5);  
     
-    
     Pt_top = book<TH1F>( "Pt_top","P_{T,t} [GeV/c]",1000,0,1000);
     Pt_antitop = book<TH1F>( "Pt_antitop","P_{T,#bar{t}} [GeV/c]",1000,0,1000);
     eta_top = book<TH1F>( "eta_top","#eta_{t}",1000,-5,5);
@@ -48,10 +50,10 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
     eta_gluon = book<TH1F>( "eta_gluon_TStar","#eta_{g}",1000,-5,5);
     eta_antigluon = book<TH1F>( "eta_gluon_AntiTStar","#eta_{g}",1000,-5,5);
 
-     M_tTStar_reco = book< TH1F>("M_tTStar_reco", "M_{W b} [GeV/c^{2}]", 1000, 150, 2000) ;
-     M_tAntiTStar_reco = book< TH1F>("M_tAntiTStar", "M_{W #bar{b}} [GeV/c^{2}]", 1000, 150, 2000) ;
+    M_tTStar_reco = book< TH1F>("M_tTStar_reco", "M_{W b} [GeV/c^{2}]", 1000, 150, 2000) ;
+    M_tAntiTStar_reco = book< TH1F>("M_tAntiTStar", "M_{W #bar{b}} [GeV/c^{2}]", 1000, 150, 2000) ;
 
-    
+     
     h_tstargen = ctx.get_handle<TStarGen>("tstargen");
 }
 
@@ -112,6 +114,7 @@ void TStarGenHists::fill(const uhh2::Event & e){
     deltaR_top_decays->Fill(deltaR_top,e.weight);
     deltaR_antitop_decays->Fill(deltaR_antitop,e.weight);
 
+  
     LorentzVector top = tstargen.tTStar().v4();
     LorentzVector gluon = tstargen.gTStar().v4();
  

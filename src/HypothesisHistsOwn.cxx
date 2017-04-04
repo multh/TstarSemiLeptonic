@@ -104,6 +104,10 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     h_hyps = ctx.get_handle<std::vector<TstarReconstructionHypothesis>>(hyps_name);
     h_tstargen = ctx.get_handle<TStarGen>("tstargen");
     m_discriminator_name = discriminator_name;
+
+    auto dataset_type = ctx.get("dataset_type");
+    is_data = dataset_type == "DATA";
+
 }
 
 
@@ -157,11 +161,13 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
   double m_TstarAntiTstar_gen = 0;
   double m_TstarhadTstarlep_rec = 0;
 
+
+                                                                   
   if(hyp->Tstarlep_v4().isTimelike()) m_Tstarlep = hyp->Tstarlep_v4().M();
   else {m_Tstarlep = sqrt( -(hyp->Tstarlep_v4()).mass2());}
   if(hyp->Tstarhad_v4().isTimelike()) m_Tstarhad = hyp->Tstarhad_v4().M();
   else {m_Tstarhad = sqrt( -(hyp->Tstarhad_v4()).mass2());}
-
+  
   if(hyp->toplep_v4().isTimelike()) m_toplep = hyp->toplep_v4().M();
   if(hyp->tophad_v4().isTimelike()) m_tophad = hyp->tophad_v4().M();
 

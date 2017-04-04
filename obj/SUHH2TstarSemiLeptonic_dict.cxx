@@ -58,7 +58,7 @@ namespace ROOT {
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::TstarReconstructionHypothesis));
       static ::ROOT::TGenericClassInfo 
          instance("TstarReconstructionHypothesis", "include/TstarReconstructionHypothesis.h", 18,
-                  typeid(::TstarReconstructionHypothesis), DefineBehavior(ptr, ptr),
+                  typeid(::TstarReconstructionHypothesis), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &TstarReconstructionHypothesis_Dictionary, isa_proxy, 4,
                   sizeof(::TstarReconstructionHypothesis) );
       instance.SetNew(&new_TstarReconstructionHypothesis);
@@ -124,7 +124,7 @@ namespace ROOT {
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<TstarReconstructionHypothesis>));
       static ::ROOT::TGenericClassInfo 
          instance("vector<TstarReconstructionHypothesis>", -2, "vector", 214,
-                  typeid(vector<TstarReconstructionHypothesis>), DefineBehavior(ptr, ptr),
+                  typeid(vector<TstarReconstructionHypothesis>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlETstarReconstructionHypothesisgR_Dictionary, isa_proxy, 4,
                   sizeof(vector<TstarReconstructionHypothesis>) );
       instance.SetNew(&new_vectorlETstarReconstructionHypothesisgR);
@@ -153,10 +153,10 @@ namespace ROOT {
 namespace ROOT {
    // Wrappers around operator new
    static void *new_vectorlETstarReconstructionHypothesisgR(void *p) {
-      return  p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<TstarReconstructionHypothesis> : new vector<TstarReconstructionHypothesis>;
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<TstarReconstructionHypothesis> : new vector<TstarReconstructionHypothesis>;
    }
    static void *newArray_vectorlETstarReconstructionHypothesisgR(Long_t nElements, void *p) {
-      return p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<TstarReconstructionHypothesis>[nElements] : new vector<TstarReconstructionHypothesis>[nElements];
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<TstarReconstructionHypothesis>[nElements] : new vector<TstarReconstructionHypothesis>[nElements];
    }
    // Wrapper around operator delete
    static void delete_vectorlETstarReconstructionHypothesisgR(void *p) {
@@ -187,7 +187,7 @@ namespace ROOT {
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >));
       static ::ROOT::TGenericClassInfo 
          instance("vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >", -2, "vector", 214,
-                  typeid(vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >), DefineBehavior(ptr, ptr),
+                  typeid(vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEROOTcLcLMathcLcLLorentzVectorlEROOTcLcLMathcLcLPtEtaPhiE4DlEDouble32_tgRsPgRsPgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >) );
       instance.SetNew(&new_vectorlEROOTcLcLMathcLcLLorentzVectorlEROOTcLcLMathcLcLPtEtaPhiE4DlEDouble32_tgRsPgRsPgR);
@@ -216,10 +216,10 @@ namespace ROOT {
 namespace ROOT {
    // Wrappers around operator new
    static void *new_vectorlEROOTcLcLMathcLcLLorentzVectorlEROOTcLcLMathcLcLPtEtaPhiE4DlEDouble32_tgRsPgRsPgR(void *p) {
-      return  p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > > : new vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >;
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > > : new vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >;
    }
    static void *newArray_vectorlEROOTcLcLMathcLcLLorentzVectorlEROOTcLcLMathcLcLPtEtaPhiE4DlEDouble32_tgRsPgRsPgR(Long_t nElements, void *p) {
-      return p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >[nElements] : new vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >[nElements];
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >[nElements] : new vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<Double32_t> > >[nElements];
    }
    // Wrapper around operator delete
    static void delete_vectorlEROOTcLcLMathcLcLLorentzVectorlEROOTcLcLMathcLcLPtEtaPhiE4DlEDouble32_tgRsPgRsPgR(void *p) {
@@ -250,7 +250,7 @@ namespace ROOT {
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<Jet>));
       static ::ROOT::TGenericClassInfo 
          instance("vector<Jet>", -2, "vector", 214,
-                  typeid(vector<Jet>), DefineBehavior(ptr, ptr),
+                  typeid(vector<Jet>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEJetgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<Jet>) );
       instance.SetNew(&new_vectorlEJetgR);
@@ -279,10 +279,10 @@ namespace ROOT {
 namespace ROOT {
    // Wrappers around operator new
    static void *new_vectorlEJetgR(void *p) {
-      return  p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<Jet> : new vector<Jet>;
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<Jet> : new vector<Jet>;
    }
    static void *newArray_vectorlEJetgR(Long_t nElements, void *p) {
-      return p ? ::new((::ROOT::TOperatorNewHelper*)p) vector<Jet>[nElements] : new vector<Jet>[nElements];
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<Jet>[nElements] : new vector<Jet>[nElements];
    }
    // Wrapper around operator delete
    static void delete_vectorlEJetgR(void *p) {
@@ -313,7 +313,7 @@ namespace ROOT {
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(map<string,float>));
       static ::ROOT::TGenericClassInfo 
          instance("map<string,float>", -2, "map", 96,
-                  typeid(map<string,float>), DefineBehavior(ptr, ptr),
+                  typeid(map<string,float>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &maplEstringcOfloatgR_Dictionary, isa_proxy, 0,
                   sizeof(map<string,float>) );
       instance.SetNew(&new_maplEstringcOfloatgR);
@@ -342,10 +342,10 @@ namespace ROOT {
 namespace ROOT {
    // Wrappers around operator new
    static void *new_maplEstringcOfloatgR(void *p) {
-      return  p ? ::new((::ROOT::TOperatorNewHelper*)p) map<string,float> : new map<string,float>;
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) map<string,float> : new map<string,float>;
    }
    static void *newArray_maplEstringcOfloatgR(Long_t nElements, void *p) {
-      return p ? ::new((::ROOT::TOperatorNewHelper*)p) map<string,float>[nElements] : new map<string,float>[nElements];
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) map<string,float>[nElements] : new map<string,float>[nElements];
    }
    // Wrapper around operator delete
    static void delete_maplEstringcOfloatgR(void *p) {
@@ -367,14 +367,14 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/afs/desy.de/user/m/multh/SFrame_2",
-"/afs/desy.de/user/m/multh/CMSSW_7_6_3/src",
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc493/lcg/root/6.02.12-kpegke4/include",
-"/afs/desy.de/user/m/multh/CMSSW_7_6_3/src/UHH2/TstarSemiLeptonic/",
+"/nfs/dust/cms/user/multh/SFrame_JEC",
+"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed5/include",
+"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/TstarSemiLeptonic/",
 0
     };
-    static const char* fwdDeclCode = 
-R"DICTFWDDCLS(
+    static const char* fwdDeclCode = R"DICTFWDDCLS(
+#line 1 "SUHH2TstarSemiLeptonic_dict dictionary forward declarations' payload"
 #pragma clang diagnostic ignored "-Wkeyword-compat"
 #pragma clang diagnostic ignored "-Wignored-attributes"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
@@ -384,6 +384,7 @@ namespace std{template <typename _Tp> class __attribute__((annotate("$clingAutol
 }
 )DICTFWDDCLS";
     static const char* payloadCode = R"DICTPAYLOAD(
+#line 1 "SUHH2TstarSemiLeptonic_dict dictionary payload"
 
 #ifndef G__VECTOR_HAS_CLASS_ITERATOR
   #define G__VECTOR_HAS_CLASS_ITERATOR 1

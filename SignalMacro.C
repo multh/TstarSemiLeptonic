@@ -1,5 +1,7 @@
 //SignalMacro.C
 
+//Small Script for combining different Signal Shapes 
+
 
 void SignalMacro() {
  // open a file and get a histogram

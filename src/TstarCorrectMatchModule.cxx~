@@ -614,7 +614,7 @@ tstar_reco->process(event); tstar_chi2->process(event); }
   
  const TstarReconstructionHypothesis* hyp_c = get_best_hypothesis(hyps, "CorrectMatch");
   if(!hyp_c) std::runtime_error("TstarSelectionModule::process -- best hypothesis for tstar-reconstruction not found");
-   if(hyp_c->discriminator("CorrectMatch")<2.4){
+   if(hyp_c->discriminator("CorrectMatch")<3){
 
     corrmatch_h->fill(event);
 

@@ -1,5 +1,6 @@
 obj/*
 *~
+*.eps
 *.root
 *.png
 *.gif
@@ -9,3 +10,4 @@ obj/*
 *.d
 *.txt
 *.log
+*.pdf

@@ -74,7 +74,7 @@ bool TstarChi2Discriminator::process(uhh2::Event & event){
 	double mass_Tstar_lep_rec = inv_mass(hyp.Tstarlep_v4());
 	double mass_Tstar_mean_rec = (mass_Tstar_had_rec + mass_Tstar_lep_rec)/2;
 
-	double deltaPhi_Tstar_rec     = deltaPhi(hyp.Tstarhad_v4(),hyp.Tstarlep_v4());
+	double deltaPhi_Tstar_rec     = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
 	
         double chi2_thad = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
         double chi2_tlep = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
@@ -173,7 +173,7 @@ auto & hyps = event.get(h_hyps);
     double mass_Tstar_lep_rec = inv_mass(hyp.Tstarlep_v4());
     double mass_Tstar_mean_rec = (mass_Tstar_had_rec + mass_Tstar_lep_rec)/2;
 
-    double deltaPhi_Tstar_rec     = deltaPhi(hyp.Tstarhad_v4(),hyp.Tstarlep_v4());
+    double deltaPhi_Tstar_rec     = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
 
   
     const double chi2_thad = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
