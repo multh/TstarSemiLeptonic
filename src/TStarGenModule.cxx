@@ -40,8 +40,8 @@ TStarGenModule::TStarGenModule(Context & ctx){
 bool TStarGenModule::process(Event & event) {
   //printer->process(event);
     tstargenprod->process(event);
-    //const auto & tstargen = event.get(h_tstargen);
-    //cout << "Decay channel is " << int(tstargen.DecayChannel()) << endl;
+    const auto & tstargen = event.get(h_tstargen);
+    cout << "Decay channel is " << int(tstargen.DecayChannel()) << endl;
 
      h_tstargenhists->fill(event);
     

@@ -17,7 +17,7 @@ public:
 
 protected:
     TH1F *Discriminator, *Discriminator_2, *Discriminator_3, *Discriminator_4;
-    TH1F * M_TstarhadTstarlep_rec,  *M_Tstarlep_rec, *M_Tstarhad_rec, *M_Tstar_comb, *Pt_Tstarlep_rec, *Pt_Tstarhad_rec, *Pt_TstarhadTstarlep_rec,  *M_TstarAntiTstar_resolution, *M_Tstar_resolution, *Pt_toplep_rec, *Pt_tophad_rec, *M_toplep_rec, *M_tophad_rec, *M_TstarhadTstarlep_Diff, *M_TstarhadTstarlep_Diff_rel;
+    TH1F * M_TstarhadTstarlep_rec,  *M_Tstarlep_rec, *M_Tstarhad_rec, *M_Tstar_comb, *Pt_Tstarlep_rec, *Pt_Tstarhad_rec, *Pt_TstarhadTstarlep_rec,  *M_TstarAntiTstar_resolution, *M_Tstar_resolution, *Pt_toplep_rec, *Pt_tophad_rec, *M_toplep_rec, *M_tophad_rec, *M_TstarhadTstarlep_Diff, *M_TstarhadTstarlep_Diff_rel, * M_Wlep_rec, *M_toplep_Wlep, *M_Tstarlep_Wlep, *M_Tstar_comb_Wlep, *DeltaR_Lepton, *DeltaR_Neutrino;
 
 TH1F * M_TstarAntiTstar_gen, *Pt_TstarAntiTstar_gen;
 

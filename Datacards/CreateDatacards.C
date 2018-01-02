@@ -16,38 +16,46 @@ void CreateDatacards() {
 //******************* Read in Data/MC Files *******************************************
 
 //Read in Data File 
-TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuData.root");
+TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.DATA.SingleMuData.root");
 
 //Read in Signal Files 
-TFile *Tstar_M700  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root");
-TFile *Tstar_M800  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-800.root");
-TFile *Tstar_M900  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-900.root");
-TFile *Tstar_M1000 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1000.root");
-TFile *Tstar_M1100 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1100.root");
-TFile *Tstar_M1200 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1200.root");
-TFile *Tstar_M1300 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1300.root");
-TFile *Tstar_M1400 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1400.root");
-TFile *Tstar_M1500 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root");
-TFile *Tstar_M1600 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1600.root");
+TFile *Tstar_M700  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root");
+TFile *Tstar_M800  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-800.root");
+TFile *Tstar_M900  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-900.root");
+TFile *Tstar_M1000 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1000.root");
+TFile *Tstar_M1100 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1100.root");
+TFile *Tstar_M1200 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1200.root");
+TFile *Tstar_M1300 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1300.root");
+TFile *Tstar_M1400 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1400.root");
+TFile *Tstar_M1500 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root");
+TFile *Tstar_M1600 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1600.root");
 
-TFile *TTbar     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.TTbar_Tune.root");
-TFile *WJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.WJets_Pt.root");
-TFile *ZJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.ZJets.root");
-TFile *QCD       = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.QCD.root");
-//TFile *Diboson   = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Diboson.root");
-TFile *SingleTop = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.SingleT.root");
+TFile *TTbar     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.TTbar_Tune.root");
+TFile *WJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.WJets_Pt.root");
+TFile *ZJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.ZJets_HT.root");
+TFile *QCD       = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.QCD.root");
+TFile *Diboson   = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Diboson.root");
+TFile *SingleTop = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.SingleT.root");
 
+/*
  TH1F *h1    = (TH1F*)TTbar     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
  TH1F *h2    = (TH1F*)WJets     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
  TH1F *h3    = (TH1F*)ZJets     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
  TH1F *h4    = (TH1F*)QCD       ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- // TH1F *h5    = (TH1F*)Diboson   ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1F *h5    = (TH1F*)Diboson   ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
  TH1F *h6    = (TH1F*)SingleTop ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+*/
 
+ TH1F *h1    = (TH1F*)TTbar     ->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h2    = (TH1F*)WJets     ->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h3    = (TH1F*)ZJets     ->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h4    = (TH1F*)QCD       ->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h5    = (TH1F*)Diboson   ->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h6    = (TH1F*)SingleTop ->Get("chi2min__HypHists/M_Tstar_comb");
 
 //Create Vector for BKG Hists
- TH1F* histos[5]={h1,h2,h3,h4,h6};
-for (int i=0;i<5;++i){
+ TH1F* histos[6]={h1,h2,h3,h4,h5,h6};
+for (int i=0;i<6;++i){
          histos[i]->Sumw2(); // *Very* Important
         }
 
@@ -57,7 +65,7 @@ list->Add(h1);
 list->Add(h2);
  list->Add(h3);
 list->Add(h4);
-//list->Add(h5);
+list->Add(h5);
 list->Add(h6);
 
 TH1D *bkg = (TH1D*)h1->Clone("h"); 
@@ -66,18 +74,18 @@ bkg->Merge(list);
 
 
 // TH1D *h_TTbar        = (TH1D*)TTbar->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_700    = (TH1D*)Tstar_M700->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_800    = (TH1D*)Tstar_M800->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_900    = (TH1D*)Tstar_M900->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1000   = (TH1D*)Tstar_M1000->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1100   = (TH1D*)Tstar_M1100->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1200   = (TH1D*)Tstar_M1200->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1300   = (TH1D*)Tstar_M1300->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1400   = (TH1D*)Tstar_M1400->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1500   = (TH1D*)Tstar_M1500->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1600   = (TH1D*)Tstar_M1600->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_700    = (TH1D*)Tstar_M700->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_800    = (TH1D*)Tstar_M800->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_900    = (TH1D*)Tstar_M900->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1000   = (TH1D*)Tstar_M1000->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1100   = (TH1D*)Tstar_M1100->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1200   = (TH1D*)Tstar_M1200->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1300   = (TH1D*)Tstar_M1300->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1400   = (TH1D*)Tstar_M1400->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1500   = (TH1D*)Tstar_M1500->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1D *h_Tstar_1600   = (TH1D*)Tstar_M1600->Get("chi2min__HypHists/M_Tstar_comb");
  
- TH1D *h_Data         = (TH1D*)Data->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
+ TH1D *h_Data         = (TH1D*)Data->Get("chi2min_ttag__HypHists/M_Tstar_comb");
 
  cout<<"Data SumWeight: "<< h_Data->GetSumOfWeights() <<endl;
  cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
@@ -98,41 +106,41 @@ bkg->Merge(list);
 
 
    //PDF for Background 
-  RooGenericPdf Background("Background","Background","TMath::Power(InvMass/350, lambda+lambda2*log(InvMass/350)+lambda3*log(InvMass/350)*log(InvMass/350))",RooArgSet(InvMass,lambda,lambda2, lambda3));
+  RooGenericPdf Background("Background","Background","TMath::Power(InvMass/25, lambda+lambda2*log(InvMass/25)+lambda3*log(InvMass/25)*log(InvMass/25))",RooArgSet(InvMass,lambda,lambda2, lambda3));
   
    // RooGenericPdf Background("Background","Background","TMath::Power(InvMass/100, (lambda+lambda2*log(InvMass/100)))",RooArgSet(InvMass,lambda,lambda2));
     
    //Add PDFs for Signals to workspace  
    cms_workspace.factory("RooGaussian:gx_700(InvMass[400,2000],gaus_mean_700[500,800],gaus_sigma_700[50,200])");
-   cms_workspace.factory("RooLandau:lx_700(InvMass[400,2000],land_mean_700[500,2000],land_sigma_700[50,200])");
-   cms_workspace.factory("SUM:Tstar_700(g1frac_700[0.3]*gx_700,p1frac_700[0.7]*lx_700)");
+   cms_workspace.factory("RooLandau:lx_700(InvMass[400,2000],land_mean_700[500,2000],land_sigma_700[50,300])");
+   cms_workspace.factory("SUM:Tstar_700(g1frac_700[0.45]*gx_700,p1frac_700[0.55]*lx_700)");
    
-   cms_workspace.factory("RooGaussian:gx_800(InvMass[400,2000],gaus_mean_800[600,1000],gaus_sigma_800[50,200])");
+   cms_workspace.factory("RooGaussian:gx_800(InvMass[400,2000],gaus_mean_800[600,1300],gaus_sigma_800[50,200])");
    cms_workspace.factory("RooLandau:lx_800(InvMass[400,2000],land_mean_800[500,2000],land_sigma_800[50,600])");
    cms_workspace.factory("SUM:Tstar_800(g1frac_800[0.4]*gx_800,p1frac_800[0.6]*lx_800)");
    
-   cms_workspace.factory("RooGaussian:gx_900(InvMass[400,2000],gaus_mean_900[650,1000],gaus_sigma_900[150,450])");
+   cms_workspace.factory("RooGaussian:gx_900(InvMass[400,2000],gaus_mean_900[650,1000],gaus_sigma_900[150,600])");
    cms_workspace.factory("RooLandau:lx_900(InvMass[400,2000],land_mean_900[500,1100],land_sigma_900[50,200])");
-   cms_workspace.factory("SUM:Tstar_900(g1frac_900[0.4]*gx_900,p1frac_900[0.6]*lx_900)");
+   cms_workspace.factory("SUM:Tstar_900(g1frac_900[0.75]*gx_900,p1frac_900[0.25]*lx_900)");
    
-   cms_workspace.factory("RooGaussian:gx_1000(InvMass[400,2000],gaus_mean_1000[600,1200],gaus_sigma_1000[150,250])");
+   cms_workspace.factory("RooGaussian:gx_1000(InvMass[400,2000],gaus_mean_1000[600,1200],gaus_sigma_1000[150,650])");
    cms_workspace.factory("RooLandau:lx_1000(InvMass[400,2000],land_mean_1000[500,2000],land_sigma_1000[50,200])");
-   cms_workspace.factory("SUM:Tstar_1000(g1frac_1000[0.4]*gx_1000,p1frac_1000[0.6]*lx_1000)");
+   cms_workspace.factory("SUM:Tstar_1000(g1frac_1000[0.3]*gx_1000,p1frac_1000[0.7]*lx_1000)");
  
-   cms_workspace.factory("RooGaussian:gx_1100(InvMass[400,2000],gaus_mean_1100[900,2000],gaus_sigma_1100[50,450])");
-   cms_workspace.factory("RooLandau:lx_1100(InvMass[400,2000],land_mean_1100[800,2000],land_sigma_1100[50,350])");
-   cms_workspace.factory("SUM:Tstar_1100(g1frac_1100[0.4]*gx_1100,p1frac_1100[0.6]*lx_1100)");
+   cms_workspace.factory("RooGaussian:gx_1100(InvMass[400,2000],gaus_mean_1100[400,2000],gaus_sigma_1100[50,950])");
+   cms_workspace.factory("RooLandau:lx_1100(InvMass[400,2000],land_mean_1100[800,2000],land_sigma_1100[50,950])");
+   cms_workspace.factory("SUM:Tstar_1100(g1frac_1100[0.35]*gx_1100,p1frac_1100[0.65]*lx_1100)");
  
-   cms_workspace.factory("RooGaussian:gx_1200(InvMass[400,2000],gaus_mean_1200[800,1400],gaus_sigma_1200[150,350])");
+   cms_workspace.factory("RooGaussian:gx_1200(InvMass[400,2000],gaus_mean_1200[800,2000],gaus_sigma_1200[150,950])");
    cms_workspace.factory("RooLandau:lx_1200(InvMass[400,2000],land_mean_1200[500,2000],land_sigma_1200[50,200])");
-   cms_workspace.factory("SUM:Tstar_1200(g1frac_1200[0.35]*gx_1200,p1frac_1200[0.65]*lx_1200)");
+   cms_workspace.factory("SUM:Tstar_1200(g1frac_1200[0.55]*gx_1200,p1frac_1200[0.45]*lx_1200)");
  
    cms_workspace.factory("RooGaussian:gx_1300(InvMass[400,2000],gaus_mean_1300[400,2000],gaus_sigma_1300[50,550])");
    cms_workspace.factory("RooLandau:lx_1300(InvMass[400,2000],land_mean_1300[1000,2000],land_sigma_1300[50,350])");
-   cms_workspace.factory("SUM:Tstar_1300(g1frac_1300[0.35]*gx_1300,p1frac_1300[0.65]*lx_1300)");
+   cms_workspace.factory("SUM:Tstar_1300(g1frac_1300[0.7]*gx_1300,p1frac_1300[0.3]*lx_1300)");
 
    cms_workspace.factory("RooGaussian:gx_1400(InvMass[400,2000],gaus_mean_1400[1000,1600],gaus_sigma_1400[50,550])");
-   cms_workspace.factory("RooLandau:lx_1400(InvMass[400,2000],land_mean_1400[500,2000],land_sigma_1400[50,380])");
+   cms_workspace.factory("RooLandau:lx_1400(InvMass[400,2000],land_mean_1400[500,2000],land_sigma_1400[50,980])");
    cms_workspace.factory("SUM:Tstar_1400(g1frac_1400[0.4]*gx_1400,p1frac_1400[0.6]*lx_1400)");
 
    cms_workspace.factory("RooGaussian:gx_1500(InvMass[400,2000],gaus_mean_1500[1300,1700],gaus_sigma_1500[50,350])");
@@ -205,47 +213,46 @@ bkg->Merge(list);
    // plot PDFs on the same RooPlot object we have plotted the data 
    /*
    data_obs ->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
-   // merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
+   //merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
 
    pdf_Background ->plotOn(plot,VisualizeError(*r_bkg,1),FillColor(kGray),Name("error"));
    pdf_Background ->plotOn(plot,RooFit::Name("pdf"));
   
    data_obs->plotOn(plot,RooFit::Name("daten"));
-   //bkg_h->plotOn(plot);
+   //merge_h->plotOn(plot,RooFit::Name("daten"));
 
  //Create Legend for RooPlot
   leg = new TLegend(0.1,0.7,0.48,0.9);
-   leg->AddEntry(plot->findObject("daten"),"MC","pel");
-   leg->AddEntry(plot->findObject("pdf"),"Fit-Funktion des Untergrundes","l");
-   leg->AddEntry(plot->findObject("error"),"#pm 1 #sigma Fehlerband","f");
+   leg->AddEntry(plot->findObject("daten"),"MC-Background","pel");
+   leg->AddEntry(plot->findObject("pdf"),"Fit-Function","l");
+   leg->AddEntry(plot->findObject("error"),"#pm 1 #sigma Error band","f");
    */
    
  // plot PDFs on the same RooPlot object we have plotted the data 
-    Tstar_800_h     ->plotOn(plot,MarkerColor(kBlack));
-   //Tstar_1500_h    ->plotOn(plot,MarkerColor(kBlack));
-   pdf_Tstar_800   ->plotOn(plot,VisualizeError(*r_Tstar800,1),FillColor(kGray),Name("error"));
-   // pdf_Tstar_1500  ->plotOn(plot,VisualizeError(*r_Tstar1500,1),FillColor(kGray),Name("error"));
+   
+     Tstar_1100_h     ->plotOn(plot,MarkerColor(kBlack));
+      Tstar_1500_h    ->plotOn(plot,MarkerColor(kBlue));
+        pdf_Tstar_1100   ->plotOn(plot,VisualizeError(*r_Tstar1100,1),FillColor(kGray),Name("error"));
+      pdf_Tstar_1500  ->plotOn(plot,VisualizeError(*r_Tstar1500,1),FillColor(kGray),Name("error"));
 
-   pdf_Tstar_800 ->plotOn(plot,LineColor(kRed),RooFit::Name("Fit_800"));
-   //pdf_Tstar_1500 ->plotOn(plot,RooFit::Name("Fit_1500"));
+      pdf_Tstar_1100 ->plotOn(plot,LineColor(kRed),RooFit::Name("Fit_1100"));
+      pdf_Tstar_1500 ->plotOn(plot,LineColor(kBlue),RooFit::Name("Fit_1500"));
   
-   Tstar_800_h->plotOn(plot,RooFit::Name("Tstar_800"));
-   //Tstar_1500_h->plotOn(plot,RooFit::Name("Tstar_1500"));
+    Tstar_1100_h->plotOn(plot,RooFit::Name("Tstar_1100"));
+     Tstar_1500_h->plotOn(plot,RooFit::Name("Tstar_1500"));
 
  //Create Legend for RooPlot
   leg = new TLegend(0.1,0.7,0.48,0.9);
-  leg->AddEntry(plot->findObject("Tstar_800"),"T* (800 GeV/c^{2})","pel");
-  leg->AddEntry(plot->findObject("Fit_800"),"Fit-Funktion (800 GeV/c^{2})","l");
+  leg->AddEntry(plot->findObject("Tstar_1100"),"T* (1100 GeV/c^{2})","pel");
+  leg->AddEntry(plot->findObject("Fit_1100"),"Fit-Function (1100 GeV/c^{2})","l");
    
-  /*
-   leg->AddEntry(plot->findObject("Tstar_1500"),"T* (1500 GeV/c^{2})","pel");
-   leg->AddEntry(plot->findObject("Fit_1500"),"Fit-Funktion (1500 GeV/c^{2})","l");
-   */
-
-
-
-//Draw PDFs and Legend     
-  plot->Draw();
+  
+  leg->AddEntry(plot->findObject("Tstar_1500"),"T* (1500 GeV/c^{2})","pel");
+  leg->AddEntry(plot->findObject("Fit_1500"),"Fit-Function (1500 GeV/c^{2})","l");
+ 
+   
+//Draw PDFs and Legend 
+   plot->Draw();
   leg->Draw("same");
  
 
@@ -302,14 +309,14 @@ for(int i=0; i<10;++i){
            << "                  " <<Signal_h[i]->sum(false)<< "     "<<data_obs->sum(false)<<"              "  << std::endl;
   textFile << "----------------------------------------------------------------------------------------------"  << std::endl;
   
-  textFile << "CMS_bTag_bc           lnN    1.05     -                                                       "  << std::endl;
-  textFile << "CMS_bTag_udsg_bc      lnN    1.04     -                                                       "  << std::endl;
-  textFile << "CMS_JEC               lnN    1.4     -                                                       "  << std::endl;
-  textFile << "CMS_JER               lnN    1.1     -                                                       "  << std::endl;
-  textFile << "CMS_MuonID            lnN    1.015     -                                                       "  << std::endl;
-  textFile << "CMS_MuonTrigger       lnN    1.01     -                                                       "  << std::endl;
-  textFile << "CMS_PU                lnN    1.05     -                                                       "  << std::endl;
-  textFile << "lumi_13TeV            lnN    1.027    -                                                       "  << std::endl;
+  //  textFile << "CMS_bTag_bc           lnN    1.05     -                                                       "  << std::endl;
+  //textFile << "CMS_bTag_udsg_bc      lnN    1.04     -                                                       "  << std::endl;
+  //textFile << "CMS_JEC               lnN    1.4     -                                                       "  << std::endl;
+  //textFile << "CMS_JER               lnN    1.1     -                                                       "  << std::endl;
+  //textFile << "CMS_MuonID            lnN    1.015     -                                                       "  << std::endl;
+  //textFile << "CMS_MuonTrigger       lnN    1.01     -                                                       "  << std::endl;
+  //textFile << "CMS_PU                lnN    1.05     -                                                       "  << std::endl;
+  //textFile << "lumi_13TeV            lnN    1.027    -                                                       "  << std::endl;
   textFile << "----------------------------------------------------------------------------------------------"  << std::endl;
   textFile << "lambda                param  " <<lambda_fit    ->getVal()<< "   "<<lambda_fit    ->getError()<<"    "  << std::endl;
   textFile << "lambda2               param  " <<lambda2_fit   ->getVal()<< "   "<<lambda2_fit   ->getError()<<"    "  << std::endl;

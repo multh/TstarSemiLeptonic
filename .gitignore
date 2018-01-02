@@ -11,3 +11,5 @@ obj/*
 *.txt
 *.log
 *.pdf
+*.sh
+

@@ -93,8 +93,11 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
   std::unique_ptr<JetCleaner>                 jet_cleaner1;
   std::unique_ptr<JetCleaner>                 jet_cleaner2;
   std::unique_ptr<JetCleaner>                 topjet_IDcleaner;
-  std::unique_ptr<TopJetCorrector>            topjet_corrector;
-  //std::unique_ptr<TopJetResolutionSmearer>    topjetER_smearer;
+  std::unique_ptr<TopJetCorrector>            topjet_corrector_MC;
+  std::unique_ptr<TopJetCorrector>            topjet_corrector_BCD;
+  std::unique_ptr<TopJetCorrector>            topjet_corrector_EFearly;
+  std::unique_ptr<TopJetCorrector>            topjet_corrector_FlateG;
+  std::unique_ptr<TopJetCorrector>            topjet_corrector_H;
   std::unique_ptr<TopJetLeptonDeltaRCleaner>  topjetlepton_cleaner;
   std::unique_ptr<TopJetCleaner>              topjet_cleaner;
 
@@ -106,6 +109,7 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
   std::unique_ptr<uhh2::Selection>    twodcut_sel;
   std::unique_ptr<uhh2::Selection>    toptagevt_sel;
   std::unique_ptr<uhh2::Selection>    jet_top_sel;
+  std::unique_ptr<uhh2::Selection>    ht_sel;
 
   // ttbar reconstruction
   std::unique_ptr<uhh2::AnalysisModule> reco_primlep;
@@ -114,9 +118,8 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
   //T*T*  reconstruction
   std::unique_ptr<uhh2::AnalysisModule> tstargenprod;
   std::unique_ptr<uhh2::AnalysisModule> tstar_reco;  
-  std::unique_ptr<uhh2::AnalysisModule> tstar_ttag_reco;
-  std::unique_ptr<uhh2::AnalysisModule> tstar_chi2;
-  std::unique_ptr<uhh2::AnalysisModule> tstar_ttag_chi2;
+
+  //T*T* Matching
   std::unique_ptr<uhh2::AnalysisModule> tstar_match;
 
 
@@ -126,11 +129,8 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
    std::unique_ptr<Hists> h_tstargenhists_eta;
    std::unique_ptr<Hists> h_tstargenhists_pt;
 
-  std::unique_ptr<uhh2::Hists> chi2min_h;
-  std::unique_ptr<uhh2::Hists> chi2min_ttag_h;
-  std::unique_ptr<uhh2::Hists> chi2min_ttag_comb_h;
-
-  std::unique_ptr<uhh2::Hists> corrmatch_h;
+   std::unique_ptr<uhh2::Hists> corrmatch_h;
+   std::unique_ptr<uhh2::Hists> match_h;
 
   std::unique_ptr<Hists> input_h, input_h_event, input_h_bJet, input_h_jet, input_h_ele, input_h_muo, input_h_topjet, input_h_lumi, input_h_tagjet, input_h_NoTagjet;
   std::unique_ptr<Hists> lep1_h, lep1_h_event, lep1_h_bJet, lep1_h_jet, lep1_h_ele, lep1_h_muo, lep1_h_topjet, lep1_h_lumi ;
@@ -138,14 +138,17 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
   std::unique_ptr<Hists> jet2_h, jet2_h_event, jet2_h_bJet, jet2_h_jet, jet2_h_ele, jet2_h_muo, jet2_h_topjet, jet2_h_lumi;
   std::unique_ptr<Hists> bTag_h, bTag_h_event, bTag_h_bJet, bTag_h_jet, bTag_h_ele, bTag_h_muo, bTag_h_topjet, bTag_h_lumi;
   std::unique_ptr<Hists> twodcut_h, twodcut_h_event, twodcut_h_bJet, twodcut_h_jet, twodcut_h_ele, twodcut_h_muo, twodcut_h_topjet, twodcut_h_lumi;
+ std::unique_ptr<Hists>       ht_h,          ht_h_event,        ht_h_bJet,         ht_h_jet,         ht_h_ele,         ht_h_muo,         ht_h_topjet,        ht_h_lumi;
   std::unique_ptr<Hists> toptagevt_h, toptagevt_h_event, toptagevt_h_bJet, toptagevt_h_jet, toptagevt_h_ele, toptagevt_h_muo, toptagevt_h_topjet, toptagevt_h_lumi;
 
   std::unique_ptr<Hists> GenParticles_h_event, GenParticles_h_bJet, GenParticles_h_jet, GenParticles_h_ele, GenParticles_h_muo, GenParticles_h_topjet;
+ std::unique_ptr<Hists> match_h_event, match_h_bJet, match_h_jet, match_h_ele, match_h_muo, match_h_topjet;
   std::unique_ptr<Hists> corrmatch_h_event, corrmatch_h_bJet, corrmatch_h_jet, corrmatch_h_ele, corrmatch_h_muo, corrmatch_h_topjet;
   std::unique_ptr<Hists> no_corrmatch_h_event, no_corrmatch_h_bJet, no_corrmatch_h_jet, no_corrmatch_h_ele, no_corrmatch_h_muo, no_corrmatch_h_topjet;
-  std::unique_ptr<Hists> chi2_h_event, chi2_h_bJet, chi2_h_jet, chi2_h_ele, chi2_h_muo, chi2_h_topjet;
+ 
 
   std::unique_ptr<Hists> output_h, output_h_event, output_h_bJet, output_h_jet, output_h_ele, output_h_muo, output_h_topjet, output_h_lumi;
+
   std::unique_ptr<Hists> h_PDF_variations;
   std::unique_ptr<BTagMCEfficiencyHists> BTagEffHists;
 
@@ -156,8 +159,8 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
   ElectronId EleId;
   JetId      Btag_medium;
   
-  bool do_scale_variation, is_mc, do_pdf_variations;
-  string sys_muonID, sys_bTag, sys_muonTrigger, sys_PU;
+  bool       do_scale_variation, is_mc,    do_pdf_variations;
+  string     sys_muonID,         sys_bTag, sys_muonTrigger,   sys_PU;
 
 
   uhh2::Event::Handle<TStarGen> h_tstargen;
@@ -168,9 +171,10 @@ class TstarCorrectMatchModule : public uhh2::AnalysisModule {
 ///********************************************************************************************************************
 
 TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
-  
-  std::cout << "Hello World from TstarSelectionModule!" << std::endl;
-  
+
+   std::cout << "Hello World from TstarSelectionModule!" << std::endl;
+
+ //#############################  Systematics Module  ############################################################
     do_scale_variation = (ctx.get("ScaleVariationMuR") == "up" || ctx.get("ScaleVariationMuR") == "down") || (ctx.get("ScaleVariationMuF") == "up" || ctx.get("ScaleVariationMuF") == "down");
     do_pdf_variations = ctx.get("b_PDFUncertainties") == "true";
     is_mc = ctx.get("dataset_type") == "MC";
@@ -178,20 +182,21 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
     sys_muonTrigger = ctx.get("sys_muonTrigger");
     sys_bTag = ctx.get("sys_bTag");
     sys_PU = ctx.get("sys_PU");
+   //#############################################################################################################
 
- //ID's
+
+ //############ ID's for Muons/Electrons and Jet/TopJets ##########################################################
     MuId  = AndId<Muon>(MuonIDTight(), PtEtaCut(30., 2.1));
     // EleId = AndId<Electron>(ElectronID_MVAnotrig_Spring15_25ns_loose, PtEtaSCCut(50., 2.5));
     const JetId jetID(JetPFID(JetPFID::WP_LOOSE));
+    const TopJetId topjetID = AndId<TopJet>(Type2TopTag(105,220), Tau32(0.67));
 
-    ttbar_reweight.reset(new TopPtReweight(ctx,0.159,-0.00141,"","weight_ttbar",true,0.9910819));
-   
  ///####################  CommonModules ######################################################################
     common.reset(new CommonModules());
     //common->disable_mcpileupreweight();
     //common->disable_lumisel();
     common->disable_jersmear();
-    common->disable_jec();
+    //common->disable_jec();
     common->switch_jetlepcleaner(true);
     common->set_electron_id(EleId);
     common->set_muon_id(MuId);
@@ -203,14 +208,23 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
 
 
 //######################### Scale Factors & B-Tag Eff  #####################################################################################
-    SF_muonID.reset(new MCMuonScaleFactor(ctx,"nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/data/MuonID_Z_RunCD_Reco76X_Feb15.root", "MC_NUM_TightIDandIPCut_DEN_genTracks_PAR_pt_spliteta_bin1", 1,0, "tightID",sys_muonID)); 
-    SF_muonTrigger.reset(new MCMuonScaleFactor(ctx,"nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/data/HLT_Mu45_eta2p1_TriggEff_DATA_4fb.root", "runD_Mu45_eta2p1_PtEtaBins", 0.5,0, "trigger",sys_muonTrigger));
+ SF_muonID.reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/MuonID_EfficienciesAndSF_average_RunBtoH.root", "MC_NUM_TightID_DEN_genTracks_PAR_pt_eta", 1,"tightID",0,sys_muonID)); 
+
+ 
+ SF_muonTrigger.reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/MuonTrigger_EfficienciesAndSF_average_RunBtoH.root", "IsoMu50_OR_IsoTkMu50_PtEtaBins", 1,"trigger",0,sys_muonTrigger));
+
+ 
   BTagEffHists.reset(new BTagMCEfficiencyHists(ctx,"EffHists/BTag",CSVBTag::WP_MEDIUM));
   SF_btag.reset(new MCBTagScaleFactor(ctx,CSVBTag::WP_MEDIUM,"jets",sys_bTag));
   syst_module_scale.reset(new MCScaleVariation(ctx));
+
+  // top-tagging
+  const float minDR_topjet_jet(1.2);
+    toptagevt_sel.reset(new TopTagEventSelection(topjetID, minDR_topjet_jet));
+    h_flag_toptagevent = ctx.declare_event_output<int>("flag_toptagevent");
 //##########################################################################################################################################
 
-
+ 
 /// ######################  Cannel and Top Jet Corrections  ###############################################################################
   const std::string& channel = ctx.get("channel", "");
   if     (channel == "muon") channel_ = muon;
@@ -219,26 +233,25 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   
   const bool is_mc = (ctx.get("dataset_type") == "MC");
 
-  std::vector<std::string> JEC_AK4, JEC_AK8;
-    if(is_mc){
-      //    JEC_AK8 = JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_MC;
-  }
-  else {
-    //    JEC_AK8 = JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_DATA;
-  }
-//####################################################################################################################################
-
-////#######################   CLEANER  ##############################################################################################
    jet_cleaner1        .reset(new JetCleaner(ctx, 15., 2.4));
    jet_cleaner2        .reset(new JetCleaner(ctx, 30., 2.4));
    topjet_IDcleaner    .reset(new JetCleaner(ctx, jetID));
-   // topjet_corrector    .reset(new TopJetCorrector(ctx, JEC_AK8));
-   //topjetER_smearer  .reset(new TopJetResolutionSmearer(ctx));
+
    topjetlepton_cleaner.reset(new TopJetLeptonDeltaRCleaner(.8));
    topjet_cleaner      .reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4))));
+
+ //TopJet Corector
+  if(is_mc){
+    topjet_corrector_MC.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_MC));           //For MC
+  }
+  else {                                                                                                            //For Data ->
+    topjet_corrector_BCD.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK8PFchs_DATA));    //            Run Period BCD
+    topjet_corrector_EFearly.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_EF_L123_AK8PFchs_DATA)); //            Run Period EF
+    topjet_corrector_FlateG.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_G_L123_AK8PFchs_DATA));   //            Run Period G
+    topjet_corrector_H.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_H_L123_AK8PFchs_DATA));        //            Run Period H
+  }
+
 ///###################################################################################################################################
-
-
 
 ////############################  EVENT SELECTIONS #################################################################################
 
@@ -266,16 +279,12 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   ///2D Cut Lepton-Jets
   twodcut_sel.reset(new TwoDCut(.4, 40.)); //New Cut, because QCD Problems
   ///
+
+  ///HT Selection
+  ht_sel              .reset(new HtSelection(500,-1));
+
  //###################################################################################################################################
 
-
-  /// top-tagging
-  const TopJetId topjetID = AndId<TopJet>(Type2TopTag(110,240,Type2TopTag::MassType::groomed), Tau32());
-  const float minDR_topjet_jet(1.2);
-
-     toptagevt_sel.reset(new TopTagEventSelection(topjetID, minDR_topjet_jet));
-     h_flag_toptagevent = ctx.declare_event_output<int>("flag_toptagevent");
-  ///
 
   ////############################  TTBAR KINEMATICAL RECO ###############################################################################
   const std::string ttbar_gen_label ("ttbargen");
@@ -290,9 +299,6 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
 
   // TStar Reco
   tstar_reco       .reset(new HighMassTstarReconstruction(ctx, TstarNeutrinoReconstruction, "TstarReconstruction"));
-  tstar_ttag_reco  .reset(new TstarTopTagReconstruction(ctx, NeutrinoReconstruction, "TstarReconstruction", topjetID, 1.2));
-  tstar_chi2       .reset(new TstarChi2Discriminator      (ctx, "TstarReconstruction"));
-  tstar_ttag_chi2  .reset(new TstarChi2DiscriminatorTTAG      (ctx, "TstarReconstruction"));
 
   // Correct Match
   tstar_match .reset(new TstarCorrectMatchDiscriminator    (ctx, "TstarReconstruction"));
@@ -302,23 +308,18 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   
 ////#########################################################################################################################################
 
+//########################### SETUP HISTS #####################################################################
 
-  //// HISTS ################################################################################################################################
-  chi2min_h          .reset(new HypothesisHistsOwn(ctx, "chi2min__HypHists", "TstarReconstruction", "Chi2")); 
-  chi2min_ttag_h     .reset(new HypothesisHistsOwn(ctx, "chi2min_ttag__HypHists", "TstarReconstruction", "Chi2")); 
-  chi2min_ttag_comb_h.reset(new HypothesisHistsOwn(ctx, "chi2min_ttag_comb__HypHists","TstarReconstruction", "Chi2"));
-
+//Hists for Reconstruction
   corrmatch_h.reset(new HypothesisHistsOwn(ctx, "corrmatch__HypHists", "TstarReconstruction", "CorrectMatch"));
+  match_h.reset(new HypothesisHistsOwn(ctx, "match__HypHists", "TstarReconstruction", "CorrectMatch"));
 
-
-  //##################### GenHists #############################################
+  //GenHists
   h_tstargenhists    .reset(new TStarGenHists(ctx, "tstargenhists"));
   h_tstargenhists_eta.reset(new TStarGenHists(ctx, "tstargenhists_eta"));
   h_tstargenhists_pt .reset(new TStarGenHists(ctx, "tstargenhists_pt"));
-  //############################################################################
-
-
-  // ##############  set up Hists classes  #####################################
+ 
+  //Hists after every Selection Step
   input_h       .reset(new TstarSelectionHists(ctx, "input"));
   input_h_event .reset(new EventHists(ctx, "input_Event"));
   input_h_bJet  .reset(new TstarSelectionHists(ctx, "input_bJet"));
@@ -375,6 +376,15 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   twodcut_h_topjet.reset(new TopJetHists(ctx, "twodcut_TopJets")); 
   twodcut_h_lumi  .reset(new LuminosityHists(ctx, "twodcut_Lumi"));
 
+  ht_h       .reset(new TstarSelectionHists(ctx, "HT500"));
+  ht_h_event .reset(new EventHists(ctx, "HT500_Event"));
+  ht_h_bJet  .reset(new TstarSelectionHists(ctx, "HT500_bJet"));
+  ht_h_jet   .reset(new JetHists(ctx, "HT500_Jets",6));
+  ht_h_ele   .reset(new ElectronHists(ctx, "HT500_Electrons"));
+  ht_h_muo   .reset(new MuonHists(ctx, "HT500_Muons"));
+  ht_h_topjet.reset(new TopJetHists(ctx, "HT500_TopJets")); 
+  ht_h_lumi  .reset(new LuminosityHists(ctx, "HT500_Lumi"));
+
   toptagevt_h       .reset(new TstarSelectionHists(ctx, "toptagevt"));
   toptagevt_h_event .reset(new EventHists(ctx, "toptagevt_Event"));
   toptagevt_h_bJet  .reset(new TstarSelectionHists(ctx, "toptagevt_bJet"));
@@ -383,6 +393,13 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   toptagevt_h_muo   .reset(new MuonHists(ctx, "toptagevt_Muons"));
   toptagevt_h_topjet.reset(new TopJetHists(ctx, "toptagevt_TopJets")); 
   toptagevt_h_lumi  .reset(new LuminosityHists(ctx, "toptagevt_Lumi"));
+
+  match_h_event .reset(new EventHists(ctx, "match_Event"));
+  match_h_bJet  .reset(new TstarSelectionHists(ctx, "match_bJet"));
+  match_h_jet   .reset(new JetHists(ctx, "match_Jets",6));
+  match_h_ele   .reset(new ElectronHists(ctx, "match_Electrons"));
+  match_h_muo   .reset(new MuonHists(ctx, "match_Muons"));
+  match_h_topjet.reset(new TopJetHists(ctx, "match_TopJets"));
 
   corrmatch_h_event .reset(new EventHists(ctx, "corrmatch_Event"));
   corrmatch_h_bJet  .reset(new TstarSelectionHists(ctx, "corrmatch_bJet"));
@@ -397,13 +414,6 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
   no_corrmatch_h_ele   .reset(new ElectronHists(ctx, "no_corrmatch_Electrons"));
   no_corrmatch_h_muo   .reset(new MuonHists(ctx, "no_corrmatch_Muons"));
   no_corrmatch_h_topjet.reset(new TopJetHists(ctx, "no_corrmatch_TopJets"));
-
-  chi2_h_event .reset(new EventHists(ctx, "chi2_Event"));
-  chi2_h_bJet  .reset(new TstarSelectionHists(ctx, "chi2_bJet"));
-  chi2_h_jet   .reset(new JetHists(ctx, "chi2_Jets",6));
-  chi2_h_ele   .reset(new ElectronHists(ctx, "chi2_Electrons"));
-  chi2_h_muo   .reset(new MuonHists(ctx, "chi2_Muons"));
-  chi2_h_topjet.reset(new TopJetHists(ctx, "chi2_TopJets"));
 
   GenParticles_h_event .reset(new EventHists(ctx, "GenParticles_Event"));
   GenParticles_h_bJet  .reset(new TstarSelectionHists(ctx, "GenParticles_bJet"));
@@ -426,13 +436,19 @@ TstarCorrectMatchModule::TstarCorrectMatchModule(uhh2::Context& ctx){
 }
 
 
-//********************** Main Programm **********************************************
-bool TstarCorrectMatchModule::process(uhh2::Event& event){
 
+bool TstarCorrectMatchModule::process(uhh2::Event& event){
+//*****************************************************************************************************
+//
+// \brief module for Correct Matching  T*T*->ttbar gg semileptonic events
+//  
+//*****************************************************************************************************
+
+
+// ############## Common Modules and Object Cleaning ################################################## 
   SF_muonTrigger->process(event);
   SF_muonID->process(event);
   
- 
 //COMMON MODULES:  
   bool pass_common = common->process(event);
     if(!pass_common) return false;
@@ -440,11 +456,35 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
     if(do_scale_variation){
     syst_module_scale->process(event);
     }
- 
- //Reweight Top Jet Pt:
-    ttbar_reweight->process(event);
- 
-  //dump input content
+   
+  //Object Cleaning for Jets/TopJets
+  jet_cleaner1        ->process(event);
+
+    const int runnr_BCD = 276811;
+    const int runnr_EFearly = 278802;
+    const int runnr_FlateG = 280385;
+
+    if(is_mc){
+      topjet_corrector_MC->process(event);
+    }
+    else{
+      if(event.run <= runnr_BCD)          topjet_corrector_BCD->process(event);
+      else if(event.run < runnr_EFearly)  topjet_corrector_EFearly->process(event);
+      else if(event.run <= runnr_FlateG)  topjet_corrector_FlateG->process(event);
+      else if(event.run > runnr_FlateG)   topjet_corrector_H->process(event);
+      else throw runtime_error("TstarPreSelectionModule: run number not covered");
+    }
+
+  topjet_IDcleaner    ->process(event);
+  topjetlepton_cleaner->process(event);
+  topjet_cleaner      ->process(event);
+
+  sort_by_pt<Jet>(*event.jets);
+  sort_by_pt<TopJet>(*event.topjets);
+  ////###########################################################
+
+
+ //Dump input content
   input_h       ->fill(event);
   input_h_event ->fill(event);
   input_h_bJet  ->fill(event);
@@ -454,24 +494,6 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
   input_h_topjet->fill(event);
   input_h_lumi  ->fill(event);
   
-   const bool pass_ttagevt1 = toptagevt_sel->passes(event);
- if(pass_ttagevt1){ 
-  input_h_tagjet   ->fill(event);
-  }
- else{
-   input_h_NoTagjet    ->fill(event);
- }
-
-  ////########### OBJ CLEANING ###################################
-  jet_cleaner1        ->process(event);
-  topjet_IDcleaner    ->process(event);
-  // topjet_corrector    ->process(event);
-  topjetlepton_cleaner->process(event);
-  topjet_cleaner      ->process(event);
-
-  sort_by_pt<Jet>(*event.jets);
-  sort_by_pt<TopJet>(*event.topjets);
-  ////###########################################################
  
  //// LEPTON selection
   const bool pass_lep1 = lep1_sel->passes(event);
@@ -485,10 +507,6 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
        lep1_h_muo    ->fill(event);
        lep1_h_topjet ->fill(event);
        lep1_h_lumi   ->fill(event);
-////
-
-
-
 
 /// lepton-2Dcut boolean
  const bool pass_twodcut = twodcut_sel->passes(event);
@@ -502,17 +520,17 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
      twodcut_h_muo    ->fill(event);
      twodcut_h_topjet ->fill(event);
      twodcut_h_lumi   ->fill(event);
-///
 
-
- jet_cleaner2    ->process(event);// Jet Cleaner after 2D-Cut 
+ 
+     //Need second Jet-Cleaner after 2D-Cut
+     jet_cleaner2    ->process(event);
 
  ///################## B-Tag with Efficiency and SF #############
- BTagEffHists->fill(event);
+     //BTagEffHists->fill(event);
   
-  /// b-Tag selection 
- //  const bool pass_bTag = b_tag_medium_sel->passes(event);
- //     if(!pass_bTag) return false;
+  // b-Tag 
+   const bool pass_bTag = b_tag_medium_sel->passes(event);
+      if(!pass_bTag) return false;
         SF_btag->process(event);
 	
         bTag_h        ->fill(event);
@@ -522,12 +540,13 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
 	bTag_h_ele    ->fill(event);
 	bTag_h_muo    ->fill(event);
 	bTag_h_topjet ->fill(event);
-        bTag_h_lumi   ->fill(event);
- ////############################################################
+       bTag_h_lumi   ->fill(event);
+ 
+////############################################################
   
  
- 
-//// TOPTAG-EVENT boolean
+//// ##########  Top-Tagging with appropriate Jet-Selection #################### 
+//Top-Tag
   const bool pass_ttagevt = toptagevt_sel->passes(event);
     if(pass_ttagevt){  
      toptagevt_h        ->fill(event);
@@ -540,7 +559,7 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
      toptagevt_h_lumi   ->fill(event);
 
 //// JET selection
-  ///  AK4 jet selection for TopTag Catogery 
+  ///  AK4 jet selection for TopTag Catogery (#Jets >= 4)
   const bool pass_jet_top = jet_top_sel->passes(event);
      if(!pass_jet_top) return false;
 
@@ -552,9 +571,11 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
        jet_top_h_muo    ->fill(event);
        jet_top_h_topjet ->fill(event);
        jet_top_h_lumi   ->fill(event);
- ///
   }
-  
+//##############################################################################
+
+
+ //Jet Selection without Top-Tag (#Jets >=5)
   if(!pass_ttagevt){ 
    const bool pass_jet2 = jet2_sel->passes(event);
    
@@ -570,50 +591,76 @@ bool TstarCorrectMatchModule::process(uhh2::Event& event){
   }
 
 /* add flag_toptagevent to output ntuple */
-
   event.set(h_flag_toptagevent, int(pass_ttagevt));
 ////    
 
-//// ###############  SYSTEM RECO  #########################
+ 
+///HT Cut
+ const bool pass_HTcut = ht_sel->passes(event);
+   if(!pass_HTcut) return false;
+ 
+     ht_h        ->fill(event);
+     ht_h_event  ->fill(event);
+     ht_h_bJet   ->fill(event);
+     ht_h_jet    ->fill(event);
+     ht_h_ele    ->fill(event);
+     ht_h_muo    ->fill(event);
+     ht_h_topjet ->fill(event);
+     ht_h_lumi   ->fill(event);
 
+
+//// ###############  SYSTEM RECO  #############################################################################
+
+//***********************************************************************************************************
+//
+//  Reconstruction of T*T* System for different Catogeries  (With/Without Top-Tag in Event) 
+//  Fisrt Reconstruct Primary Lepton
+//  Reconstruct the FourVector of Neutrino
+//  
+//  Reconstruct full Event with Chi2-Method  
+//
+//  Additional: Corect Matching between Reco and Gen Particles
+//
+//  ToDo: Change the Cut-Selection Scheme into boolian pass_chi2 return false; 
+//
+//***********************************************************************************************************
+
+ 
 ////PrimeLep Reco
   reco_primlep->process(event);
 
+//For MC Only! Needs Generator Information
 if(!event.isRealData){
   ttgenprod->process(event);
   tstargenprod->process(event);
  
   h_tstargenhists->fill(event);
   }
-  //##############################################################################################################################################################################################    
+
+////################   Reconstruction without TopTag & Correct-Match Method  ######################################################  
+
+     tstar_reco->process(event);
  
-////################   Hypothesis selection  #####################################################################################################################  
 
-  ////// Chi2 Hypothesis WITHOUT TopTag  save only the chi2-best ttbar hypothesis in output sub-ntuple ###########################
-    //tstar_reco->process(event);
-    //tstar_chi2->process(event);
-
-
-//################################################################################################################################
-
-//// TStar Reco and Chi2 with TopTag #############################################################################################
-
-if(!pass_ttagevt){ 
-tstar_reco->process(event); tstar_chi2->process(event); }
-  else { 
-    const bool pass_reco = tstar_ttag_reco->process(event);
-    if(!pass_reco) {       tstar_reco->process(event); tstar_chi2->process(event);}
-    else{     tstar_ttag_chi2->process(event); }
-  }
  /////##################################  Correct Match Hypothesis #################################################################
 
-////// ##########################################################################################################################
  tstar_match->process(event);
   std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);
   
  const TstarReconstructionHypothesis* hyp_c = get_best_hypothesis(hyps, "CorrectMatch");
   if(!hyp_c) std::runtime_error("TstarSelectionModule::process -- best hypothesis for tstar-reconstruction not found");
-   if(hyp_c->discriminator("CorrectMatch")<3){
+    
+    match_h->fill(event);
+
+    match_h_event  ->fill(event);
+    match_h_bJet   ->fill(event);
+    match_h_jet    ->fill(event);
+    match_h_ele    ->fill(event);
+    match_h_muo    ->fill(event);
+    match_h_topjet ->fill(event);
+
+
+   if(hyp_c->discriminator("CorrectMatch")<5){
 
     corrmatch_h->fill(event);
 
@@ -634,30 +681,6 @@ tstar_reco->process(event); tstar_chi2->process(event); }
   }
 
  
-/////##################################  Chi2 Hypothesis #################################################################
-/*
-  const TstarReconstructionHypothesis* hyp = get_best_hypothesis(hyps, "Chi2");
-
-  if(!hyp) std::runtime_error("TstarSelectionModule::process -- best hypothesis for tstar-reconstruction not found");
-  if(!hyp->discriminator("Chi2")) std::cout<<"Nullpointer!"<<std::endl;
-  if(hyp->discriminator("Chi2")<50){
-    if(!pass_ttagevt){ chi2min_h->fill(event); }
-    else             { chi2min_ttag_h->fill(event); }
-    chi2min_ttag_comb_h->fill(event);
- 
-    chi2_h_event  ->fill(event);
-    chi2_h_bJet   ->fill(event);
-    chi2_h_jet    ->fill(event);
-    chi2_h_ele    ->fill(event);
-    chi2_h_muo    ->fill(event);
-    chi2_h_topjet ->fill(event);
-  }
-*/
- ////// ##########################################################################################################################
- 
-  
- // if(hyp->discriminator("Chi2")<50) h_PDF_variations->fill(event);
-
   const TstarReconstructionHypothesis hyp_obj(*hyp_c);
   hyps.clear();
   hyps.push_back(hyp_obj);

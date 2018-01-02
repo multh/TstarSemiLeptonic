@@ -61,9 +61,9 @@ using namespace uhh2examples;
  *     * HLT
  *     * ==1 lepton (w/ pt+eta+ID cuts)
  *     * >=4 AK4 jets w/ pt> 50 |eta|<2.4
- *     * >=2 b-tag /CSVBTag::MEDIUM
+ *     * >=1 b-tag /CSVBTag::MEDIUM
  *     * HT > 500 GeV
- *     * lepton-2D-cut [DR>0.4 || pTrel>40 GeV] (wrt AK4 jets w/ pt>25 GeV)
+ *     * lepton-2D-cut [DR>0.4 || pTrel>25 GeV] (wrt AK4 jets w/ pt>25 GeV)
  *     * (electron-only) triangular cuts
  *     * perform T*T*bar kinematical reconstruction (hyps stored in output ntuple)
  *     * Reconstruction without TopTag 
@@ -89,21 +89,33 @@ class TstarSelectionModule : public uhh2::AnalysisModule {
   // common modules
   std::unique_ptr<CommonModules>               common;
     std::unique_ptr<TopPtReweight>             ttbar_reweight;
-  std::unique_ptr<AnalysisModule>              syst_module_scale, SF_btag;
+  std::unique_ptr<AnalysisModule>              syst_module_scale, SF_muonID, SF_muonTrigger, SF_btag, SF_muonIso ;
    
   // cleaners
-  std::unique_ptr<JetCleaner>                  jet_cleaner1;
   std::unique_ptr<JetCleaner>                  jet_cleaner2;
-  std::unique_ptr<JetCleaner>                  topjet_IDcleaner;
   std::unique_ptr<TopJetCorrector>             topjet_corrector_MC;
   std::unique_ptr<TopJetCorrector>             topjet_corrector_BCD;
   std::unique_ptr<TopJetCorrector>             topjet_corrector_EFearly;
   std::unique_ptr<TopJetCorrector>             topjet_corrector_FlateG;
   std::unique_ptr<TopJetCorrector>             topjet_corrector_H;
+
+  std::unique_ptr<SubJetCorrector>             subjet_corrector_MC;
+  std::unique_ptr<SubJetCorrector>             subjet_corrector_BCD;
+  std::unique_ptr<SubJetCorrector>             subjet_corrector_EFearly;
+  std::unique_ptr<SubJetCorrector>             subjet_corrector_FlateG;
+  std::unique_ptr<SubJetCorrector>             subjet_corrector_H;
+
   std::unique_ptr<TopJetLeptonDeltaRCleaner>   topjetlepton_cleaner;
   std::unique_ptr<TopJetCleaner>               topjet_cleaner;
 
   // selections
+  std::unique_ptr<Selection>                   trigger_Mu50;
+  std::unique_ptr<Selection>                   trigger_TkMu50;
+
+  //ISO
+  std::unique_ptr<Selection>                   trigger_sel1;
+  std::unique_ptr<Selection>                   trigger_sel2;
+
   std::unique_ptr<uhh2::AndSelection>          lep1_sel;
   std::unique_ptr<uhh2::Selection>             jet2_sel;
   std::unique_ptr<uhh2::Selection>             jet1_sel;
@@ -112,6 +124,8 @@ class TstarSelectionModule : public uhh2::AnalysisModule {
   std::unique_ptr<uhh2::Selection>             toptagevt_sel;
   std::unique_ptr<uhh2::Selection>             jet_top_sel;
   std::unique_ptr<uhh2::Selection>             ht_sel;
+  std::unique_ptr<Selection>                   lumi_sel;
+  std::unique_ptr<uhh2::Selection>             met_sel;
 
   // ttbar reconstruction
   std::unique_ptr<uhh2::AnalysisModule>        reco_primlep;
@@ -139,16 +153,20 @@ class TstarSelectionModule : public uhh2::AnalysisModule {
 
   std::unique_ptr<uhh2::Hists> corrmatch_h;
 
-  std::unique_ptr<Hists>       input_h,      input_h_event,      input_h_bJet,      input_h_jet,      input_h_ele,      input_h_muo,      input_h_topjet,      input_h_lumi;
-  std::unique_ptr<Hists>       lep1_h,       lep1_h_event,       lep1_h_bJet,       lep1_h_jet,       lep1_h_ele,       lep1_h_muo,       lep1_h_topjet,       lep1_h_lumi;
-  std::unique_ptr<Hists>       jet_top_h,    jet_top_h_event,    jet_top_h_bJet,    jet_top_h_jet,    jet_top_h_ele,    jet_top_h_muo,    jet_top_h_topjet,    jet_top_h_lumi;
-  std::unique_ptr<Hists>       jet2_h,       jet2_h_event,       jet2_h_bJet,       jet2_h_jet,       jet2_h_ele,       jet2_h_muo,       jet2_h_topjet,       jet2_h_lumi;
-  std::unique_ptr<Hists>       jet_h,        jet_h_event,        jet_h_bJet,        jet_h_jet,        jet_h_ele,        jet_h_muo,        jet_h_topjet,        jet_h_lumi;
-  std::unique_ptr<Hists>       bTag_h,       bTag_h_event,       bTag_h_bJet,       bTag_h_jet,       bTag_h_ele,       bTag_h_muo,       bTag_h_topjet,       bTag_h_lumi;
-  std::unique_ptr<Hists>       twodcut_h,    twodcut_h_event,    twodcut_h_bJet,    twodcut_h_jet,    twodcut_h_ele,    twodcut_h_muo,    twodcut_h_topjet,    twodcut_h_lumi;
-  std::unique_ptr<Hists>       ht_h,          ht_h_event,        ht_h_bJet,         ht_h_jet,         ht_h_ele,         ht_h_muo,         ht_h_topjet,        ht_h_lumi;
-  std::unique_ptr<Hists>       toptagevt_h,  toptagevt_h_event,  toptagevt_h_bJet,  toptagevt_h_jet,  toptagevt_h_ele,  toptagevt_h_muo,  toptagevt_h_topjet,  toptagevt_h_lumi;
-  std::unique_ptr<Hists>       output_h,     output_h_event,     output_h_bJet,     output_h_jet,     output_h_ele,     output_h_muo,     output_h_topjet,     output_h_lumi;
+  std::unique_ptr<Hists>       input_h,       input_h_event,       input_h_bJet,       input_h_jet,       input_h_ele,       input_h_muo,       input_h_topjet,       input_h_lumi;
+  std::unique_ptr<Hists>       h_trigger,     h_trigger_event,     h_trigger_bJet,     h_trigger_jet,     h_trigger_ele,     h_trigger_muon,    h_trigger_topjet,     h_trigger_lumi;
+  std::unique_ptr<Hists>       cleaner_h,     cleaner_h_event,     cleaner_h_bJet,     cleaner_h_jet,     cleaner_h_ele,     cleaner_h_muo,     cleaner_h_topjet,     cleaner_h_lumi;
+  std::unique_ptr<Hists>       lep1_h,        lep1_h_event,        lep1_h_bJet,        lep1_h_jet,        lep1_h_ele,        lep1_h_muo,        lep1_h_topjet,        lep1_h_lumi;
+  std::unique_ptr<Hists>       jet_top_h,     jet_top_h_event,     jet_top_h_bJet,     jet_top_h_jet,     jet_top_h_ele,     jet_top_h_muo,     jet_top_h_topjet,     jet_top_h_lumi;
+  std::unique_ptr<Hists>       jet2_h,        jet2_h_event,        jet2_h_bJet,        jet2_h_jet,        jet2_h_ele,        jet2_h_muo,        jet2_h_topjet,        jet2_h_lumi;
+  std::unique_ptr<Hists>       jet_h,         jet_h_event,         jet_h_bJet,         jet_h_jet,         jet_h_ele,         jet_h_muo,         jet_h_topjet,         jet_h_lumi;
+  std::unique_ptr<Hists>       bTag_h,        bTag_h_event,        bTag_h_bJet,        bTag_h_jet,        bTag_h_ele,        bTag_h_muo,        bTag_h_topjet,        bTag_h_lumi;
+  std::unique_ptr<Hists>       twodcut_h,     twodcut_h_event,     twodcut_h_bJet,     twodcut_h_jet,     twodcut_h_ele,     twodcut_h_muo,     twodcut_h_topjet,     twodcut_h_lumi;
+  std::unique_ptr<Hists>       met_h,         met_h_event,         met_h_bJet,         met_h_jet,         met_h_ele,         met_h_muo,         met_h_topjet,         met_h_lumi;
+  std::unique_ptr<Hists>       ht_h,          ht_h_event,          ht_h_bJet,          ht_h_jet,          ht_h_ele,          ht_h_muo,          ht_h_topjet,          ht_h_lumi;
+  std::unique_ptr<Hists>       toptagevt_h,   toptagevt_h_event,   toptagevt_h_bJet,   toptagevt_h_jet,   toptagevt_h_ele,   toptagevt_h_muo,   toptagevt_h_topjet,   toptagevt_h_lumi;
+  std::unique_ptr<Hists>       notoptagevt_h, notoptagevt_h_event, notoptagevt_h_bJet, notoptagevt_h_jet, notoptagevt_h_ele, notoptagevt_h_muo, notoptagevt_h_topjet, notoptagevt_h_lumi;
+  std::unique_ptr<Hists>       output_h,      output_h_event,      output_h_bJet,      output_h_jet,      output_h_ele,      output_h_muo,      output_h_topjet,      output_h_lumi;
   
   std::unique_ptr<Hists>       GenParticles_h_event,  GenParticles_h_bJet,      GenParticles_h_jet,      GenParticles_h_ele,  GenParticles_h_muo,  GenParticles_h_topjet;
   std::unique_ptr<Hists>       corrmatch_h_event,     corrmatch_h_bJet,         corrmatch_h_jet,         corrmatch_h_ele,     corrmatch_h_muo,     corrmatch_h_topjet;
@@ -165,9 +183,10 @@ class TstarSelectionModule : public uhh2::AnalysisModule {
   MuonId     MuId;
   ElectronId EleId;
   JetId      Btag_medium;
+  JetId      jetID;
   
   bool       do_scale_variation,  is_mc,  do_pdf_variations;
-  string     sys_bTag,  sys_PU;
+  string     sys_bTag,  sys_PU, sys_muonTrigger, sys_muonID;
 
 
   uhh2::Event::Handle<TStarGen> h_tstargen;
@@ -185,52 +204,64 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
     do_scale_variation = (ctx.get("ScaleVariationMuR") == "up" || ctx.get("ScaleVariationMuR") == "down") || (ctx.get("ScaleVariationMuF") == "up" || ctx.get("ScaleVariationMuF") == "down");
     do_pdf_variations  =  ctx.get("b_PDFUncertainties") == "true";
     is_mc              = ctx.get("dataset_type") == "MC";
+    sys_muonID         = ctx.get("sys_muonID");
+    sys_muonTrigger    = ctx.get("sys_muonTrigger");
     sys_bTag           = ctx.get("sys_bTag");
     sys_PU             = ctx.get("sys_PU");
     //#############################################################################################################
 
+ 
  //############ ID's for Muons/Electrons and Jet/TopJets ##########################################################
-    MuId  = AndId<Muon>(MuonIDMedium_ICHEP(), PtEtaCut(55., 2.1));
-    EleId = AndId<Electron>(ElectronID_MVAGeneralPurpose_Spring16_loose, PtEtaSCCut(50., 2.5));
-    const JetId jetID(JetPFID(JetPFID::WP_LOOSE));
-    const TopJetId topjetID = AndId<TopJet>(Type2TopTag(105,220), Tau32(0.67));
-        
-    ttbar_reweight.reset(new TopPtReweight(ctx,0.1,-0.00141,"","weight_ttbar",true,0.9910819));
+    // MuId = AndId<Muon>(MuonIDTight(), PtEtaCut(30.0, 2.4),MuonIso(0.15)); 
 
- ///####################  CommonModules ######################################################################
+    MuId  = AndId<Muon>    (MuonIDTight(),              PtEtaCut(53., 2.4));
+    EleId = AndId<Electron>(ElectronID_Spring16_tight,  PtEtaSCCut(50., 2.4));
+    jetID = AndId<Jet>     (JetPFID(JetPFID::WP_LOOSE), PtEtaCut(15., 2.4));
+
+    const TopJetId topjetID = AndId<TopJet>(Type2TopTag(105,220,Type2TopTag::MassType::groomed), Tau32(0.67));
+  
+  ///####################  CommonModules ######################################################################
     common.reset(new CommonModules());
-    //common->disable_mcpileupreweight();   //Disable PileUp Reweight -> Done in PreSelection?
-    //common->disable_lumisel();            //Disable LumiSelection   -> Done in PreSelection?
-    common->disable_jec();                  //Disable JEC             -> Done in PreSelection?
-    common->disable_jersmear();
+    // common->disable_lumisel();            //Disable LumiSelection   -> Done in PreSelection
+    common->set_electron_id(EleId);      
     common->switch_jetlepcleaner(true);
-    //common->set_electron_id(EleId);      //Disable ElectronID, no correct ID is set before 
+    //common->disable_jec();                  //Disable JEC   -> Done in PreSelection        
+    //common->disable_jersmear();             //Disable JER   -> Done in PreSelection
     common->set_muon_id(MuId);
     common->set_jet_id(jetID);
     common->switch_jetPtSorter(true);    
-    common->init(ctx,sys_PU);             //Systematics for PileUpReweight in COmmon Modules
-
-
-
+    common->init(ctx,sys_PU);             //Systematics for PileUpReweight in Common Modules
+ 
 /// ###########################################################################################################
 
 
-//Not implemented jet... 
+
 //######################### MC-ScaleVariation & B-Tag & T-Tag   ############################################################################
 //MC-ScaleVariation 
-  //syst_module_scale.reset(new MCScaleVariation(ctx));
- 
+ syst_module_scale  .reset(new MCScaleVariation(ctx));
+ /*
+//Muon Trigger/Scale Factor
+ SF_muonID          .reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonID_EfficienciesAndSF_average_RunBtoH.root", "MC_NUM_TightID_DEN_genTracks_PAR_pt_eta", 1)); 
+ SF_muonTrigger.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonTrigger_EfficienciesAndSF_average_RunBtoH.root", "IsoMu24_OR_IsoTkMu24_PtEtaBins", 0.5));
+ SF_muonIso.reset(new MCMuonScaleFactor(ctx, "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonIso_EfficienciesAndSF_average_RunBtoH.root", "TightISO_TightID_pt_eta", 1));
+ */
+
+ SF_muonID          .reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonID_EfficienciesAndSF_average_RunBtoH.root", "MC_NUM_TightID_DEN_genTracks_PAR_pt_eta",1)); 
+ SF_muonTrigger     .reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonTrigger_EfficienciesAndSF_average_RunBtoH.root", "IsoMu50_OR_IsoTkMu50_PtEtaBins",0.5));
+
+
 // b-Tagging
-   BTagEffHists.reset(new BTagMCEfficiencyHists(ctx,"EffHists/BTag",CSVBTag::WP_MEDIUM));
+//   BTagEffHists.reset(new BTagMCEfficiencyHists(ctx,"EffHists/BTag",CSVBTag::WP_MEDIUM));
+ SF_btag            .reset(new MCBTagScaleFactor(ctx,CSVBTag::WP_MEDIUM,"jets",sys_bTag));  // "mujets","incl","MCBtagEfficienciesAK4","_AK4","BTagCalibration"
+ syst_module_scale  .reset(new MCScaleVariation(ctx));
 
-   SF_btag.reset(new MCBTagScaleFactor(ctx,CSVBTag::WP_MEDIUM,"jets",sys_bTag));  // "mujets","incl","MCBtagEfficienciesAK4","_AK4","BTagCalibration"
+// top-tagging
+const float minDR_topjet_jet(1.2);
+ toptagevt_sel      .reset(new TopTagEventSelection(topjetID, minDR_topjet_jet));
 
- // top-tagging
-  const float minDR_topjet_jet(1.2);
-    toptagevt_sel.reset(new TopTagEventSelection(topjetID, minDR_topjet_jet));
-    h_flag_toptagevent = ctx.declare_event_output<int>("flag_toptagevent");
+ h_flag_toptagevent = ctx.declare_event_output<int>("flag_toptagevent");
+
 //##########################################################################################################################################
-
 
 /// ######################  Cannel and Jet/TopJet Cleaners  ###############################################################################
   const std::string& channel = ctx.get("channel", "");
@@ -238,31 +269,42 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
    else if(channel == "elec") channel_ = elec;
    else throw std::runtime_error("TstarSelectionModule -- undefined argument for 'channel' key in xml file (must be 'muon' or 'elec'): "+channel);
 
-   jet_cleaner1        .reset(new JetCleaner(ctx, 15., 2.4));
-   jet_cleaner2        .reset(new JetCleaner(ctx, 30., 2.4));
-   topjet_IDcleaner    .reset(new JetCleaner(ctx, jetID));
+   jet_cleaner2               .reset(new JetCleaner(ctx, 30., 2.4));
 
-   topjetlepton_cleaner.reset(new TopJetLeptonDeltaRCleaner(.8));
-   topjet_cleaner      .reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4))));
+   topjetlepton_cleaner       .reset(new TopJetLeptonDeltaRCleaner(.8));
+   topjet_cleaner             .reset(new TopJetCleaner(ctx, TopJetId(PtEtaCut(400., 2.4))));
 
   //TopJet Corector
   if(is_mc){
-    topjet_corrector_MC.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_MC));           //For MC
+    topjet_corrector_MC       .reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_L123_AK8PFchs_MC));   
+    subjet_corrector_MC       .reset(new SubJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_L123_AK4PFchs_MC));   //For MC
   }
   else {                                                                                                            //For Data ->
-    topjet_corrector_BCD.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK8PFchs_DATA));    //            Run Period BCD
-    topjet_corrector_EFearly.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_EF_L123_AK8PFchs_DATA)); //            Run Period EF
-    topjet_corrector_FlateG.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_G_L123_AK8PFchs_DATA));   //            Run Period G
-    topjet_corrector_H.reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_H_L123_AK8PFchs_DATA));        //            Run Period H
+    topjet_corrector_BCD      .reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK8PFchs_DATA));    //            Run Period BCD
+    topjet_corrector_EFearly  .reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_EF_L123_AK8PFchs_DATA)); //            Run Period EF
+    topjet_corrector_FlateG   .reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_G_L123_AK8PFchs_DATA));   //            Run Period G
+    topjet_corrector_H        .reset(new TopJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_H_L123_AK8PFchs_DATA));        //            Run Period H
+
+    subjet_corrector_BCD      .reset(new SubJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_BCD_L123_AK4PFchs_DATA));    //            Run Period BCD
+    subjet_corrector_EFearly  .reset(new SubJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_EF_L123_AK4PFchs_DATA)); //            Run Period EF
+    subjet_corrector_FlateG   .reset(new SubJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_G_L123_AK4PFchs_DATA));   //            Run Period G
+    subjet_corrector_H        .reset(new SubJetCorrector(ctx,JERFiles::Summer16_23Sep2016_V4_H_L123_AK4PFchs_DATA));        //            Run Period H
+
   }
-
-
-
 ///###################################################################################################################################
 
 
 
 ////############################  EVENT SELECTIONS #################################################################################
+
+ //Trigger Selection
+
+ trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
+ trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
+
+
+  trigger_Mu50.reset(new TriggerSelection("HLT_Mu50_v*"));              //As recommended on MuonTwiki for Non-iso Muons
+  trigger_TkMu50.reset(new TriggerSelection("HLT_TkMu50_v*"));
 
 //Lepton Selection
   lep1_sel.reset(new uhh2::AndSelection(ctx));
@@ -270,14 +312,12 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
     lep1_sel->add<NMuonSelection>    ("muoN == 1", 1, 1);
     lep1_sel->add<NElectronSelection>("eleN == 0", 0, 0);
   }
-
   else if(channel_ == elec){
     lep1_sel->add<NMuonSelection>    ("muoN == 0", 0, 0);
     lep1_sel->add<NElectronSelection>("eleN == 1", 1, 1);
   }
 
   
-
   ///Jet Selection
   jet_top_sel         .reset(new NJetSelection(4, -1, JetId(PtEtaCut( 50., 2.4))));  //general Jet-Selection
   jet2_sel            .reset(new NJetSelection(5, -1, JetId(PtEtaCut( 50., 2.4))));  //Jet-Selection without Top-Tag
@@ -289,11 +329,18 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   ///
 
   ///2D Cut Lepton-Jets
-  twodcut_sel         .reset(new TwoDCut(.4, 30.));   //Still under investigation! QCD Problems
+  twodcut_sel         .reset(new TwoDCut(.4, 25.));   //Still under investigation! QCD Problems
   ///
+
+  ///MET Cut 
+  met_sel             .reset(new METCut(80));     //Under investigation! QCD Reduction
+  //
 
   ///HT Selection
   ht_sel              .reset(new HtSelection(500,-1));
+
+ //Lumi Selection (For Data Only)
+  lumi_sel            .reset(new LumiSelection(ctx));
 
  //###################################################################################################################################
 
@@ -306,6 +353,8 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   tstargenprod     .reset(new TStarGenProducer(ctx, tstar_gen_label, false));
   h_tstargen = ctx.get_handle<TStarGen>("tstargen");
 
+ttbar_reweight      .reset(new TopPtReweight(ctx, 0.0615, -0.0005, "", "weight_ttbar", true)); //13TeV
+
   // Lepton
   reco_primlep     .reset(new PrimaryLepton(ctx));
 
@@ -315,8 +364,6 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   tstar_chi2       .reset(new TstarChi2Discriminator(ctx, "TstarReconstruction"));
   tstar_ttag_chi2  .reset(new TstarChi2DiscriminatorTTAG(ctx, "TstarReconstruction"));
 
-  // Correct Match
-  tstar_match      .reset(new TstarCorrectMatchDiscriminator(ctx, "TstarReconstruction"));
 
   // Hypothesis Container
   h_hyps = ctx.get_handle<std::vector<TstarReconstructionHypothesis>>("TstarReconstruction");
@@ -326,13 +373,11 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
 
 ////########################### Setup HISTS #################################################################################################
  
-//Hists for Rekonstruction
+//Hists for Reconstruction
   chi2_before_h       .reset(new HypothesisHistsOwn(ctx, "chi2before__HypHists", "TstarReconstruction", "Chi2")); 
   chi2min_h           .reset(new HypothesisHistsOwn(ctx, "chi2min__HypHists", "TstarReconstruction", "Chi2")); 
   chi2min_ttag_h      .reset(new HypothesisHistsOwn(ctx, "chi2min_ttag__HypHists", "TstarReconstruction", "Chi2")); 
   chi2min_ttag_comb_h .reset(new HypothesisHistsOwn(ctx, "chi2min_ttag_comb__HypHists","TstarReconstruction", "Chi2"));
-
-  corrmatch_h         .reset(new HypothesisHistsOwn(ctx, "corrmatch__HypHists", "TstarReconstruction", "CorrectMatch"));
 
 
 // GenHists 
@@ -349,6 +394,26 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   input_h_muo         .reset(new MuonHists(ctx, "input_Muons"));
   input_h_topjet      .reset(new TopJetHists(ctx, "input_TopJets"));
   input_h_lumi        .reset(new LuminosityHists(ctx, "input_Lumi"));
+
+  h_trigger           .reset(new TstarSelectionHists(ctx, "trigger"));
+  h_trigger_event     .reset(new EventHists(ctx, "trigger_Event"));
+  h_trigger_bJet      .reset(new TstarSelectionHists(ctx, "trigger_bJet"));
+  h_trigger_jet       .reset(new JetHists(ctx, "trigger_Jets",6));
+  h_trigger_ele       .reset(new ElectronHists(ctx, "trigger_Electrons"));
+  h_trigger_muon      .reset(new MuonHists(ctx, "trigger_Muons"));
+  h_trigger_topjet    .reset(new TopJetHists(ctx, "trigger_TopJets"));
+  h_trigger_lumi      .reset(new LuminosityHists(ctx, "trigger_Lumi"));
+
+
+
+  cleaner_h           .reset(new TstarSelectionHists(ctx, "cleaner"));
+  cleaner_h_event     .reset(new EventHists(ctx, "cleaner_Event"));
+  cleaner_h_bJet      .reset(new TstarSelectionHists(ctx, "cleaner_bJet"));
+  cleaner_h_jet       .reset(new JetHists(ctx, "cleaner_Jets",6));
+  cleaner_h_ele       .reset(new ElectronHists(ctx, "cleaner_Electrons"));
+  cleaner_h_muo       .reset(new MuonHists(ctx, "cleaner_Muons"));
+  cleaner_h_topjet    .reset(new TopJetHists(ctx, "cleaner_TopJets"));
+  cleaner_h_lumi      .reset(new LuminosityHists(ctx, "cleaner_Lumi"));
 
   lep1_h              .reset(new TstarSelectionHists(ctx, "1Muon"));
   lep1_h_event        .reset(new EventHists(ctx, "1Muon_Event"));
@@ -377,7 +442,6 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   jet2_h_topjet       .reset(new TopJetHists(ctx, "5Jets_TopJets")); 
   jet2_h_lumi         .reset(new LuminosityHists(ctx, "5Jets_Lumi"));
 
-
   jet_h              .reset(new TstarSelectionHists(ctx, "Jets"));
   jet_h_event        .reset(new EventHists(ctx, "Jets_Event"));
   jet_h_bJet         .reset(new TstarSelectionHists(ctx, "Jets_bJet"));
@@ -386,7 +450,6 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   jet_h_muo          .reset(new MuonHists(ctx, "Jets_Muons"));
   jet_h_topjet       .reset(new TopJetHists(ctx, "Jets_TopJets")); 
   jet_h_lumi         .reset(new LuminosityHists(ctx, "Jets_Lumi"));
-
 
   bTag_h              .reset(new TstarSelectionHists(ctx, "bTag"));
   bTag_h_event        .reset(new EventHists(ctx, "bTag_Event"));
@@ -406,14 +469,24 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   twodcut_h_topjet    .reset(new TopJetHists(ctx, "twodcut_TopJets")); 
   twodcut_h_lumi      .reset(new LuminosityHists(ctx, "twodcut_Lumi"));
 
-  ht_h       .reset(new TstarSelectionHists(ctx, "HT500"));
-  ht_h_event .reset(new EventHists(ctx, "HT500_Event"));
-  ht_h_bJet  .reset(new TstarSelectionHists(ctx, "HT500_bJet"));
-  ht_h_jet   .reset(new JetHists(ctx, "HT500_Jets",6));
-  ht_h_ele   .reset(new ElectronHists(ctx, "HT500_Electrons"));
-  ht_h_muo   .reset(new MuonHists(ctx, "HT500_Muons"));
-  ht_h_topjet.reset(new TopJetHists(ctx, "HT500_TopJets")); 
-  ht_h_lumi  .reset(new LuminosityHists(ctx, "HT500_Lumi"));
+  met_h               .reset(new TstarSelectionHists(ctx, "met"));
+  met_h_event         .reset(new EventHists(ctx, "met_Event"));
+  met_h_bJet          .reset(new TstarSelectionHists(ctx, "met_bJet"));
+  met_h_jet           .reset(new JetHists(ctx, "met_Jets",6));
+  met_h_ele           .reset(new ElectronHists(ctx, "met_Electrons"));
+  met_h_muo           .reset(new MuonHists(ctx, "met_Muons"));
+  met_h_topjet        .reset(new TopJetHists(ctx, "met_TopJets"));
+  met_h_lumi          .reset(new LuminosityHists(ctx, "met_Lumi"));
+
+
+  ht_h                .reset(new TstarSelectionHists(ctx, "HT500"));
+  ht_h_event          .reset(new EventHists(ctx, "HT500_Event"));
+  ht_h_bJet           .reset(new TstarSelectionHists(ctx, "HT500_bJet"));
+  ht_h_jet            .reset(new JetHists(ctx, "HT500_Jets",6));
+  ht_h_ele            .reset(new ElectronHists(ctx, "HT500_Electrons"));
+  ht_h_muo            .reset(new MuonHists(ctx, "HT500_Muons"));
+  ht_h_topjet         .reset(new TopJetHists(ctx, "HT500_TopJets")); 
+  ht_h_lumi           .reset(new LuminosityHists(ctx, "HT500_Lumi"));
 
 
   toptagevt_h         .reset(new TstarSelectionHists(ctx, "toptagevt"));
@@ -425,19 +498,15 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   toptagevt_h_topjet  .reset(new TopJetHists(ctx, "toptagevt_TopJets")); 
   toptagevt_h_lumi    .reset(new LuminosityHists(ctx, "toptagevt_Lumi"));
 
-  corrmatch_h_event   .reset(new EventHists(ctx, "corrmatch_Event"));
-  corrmatch_h_bJet    .reset(new TstarSelectionHists(ctx, "corrmatch_bJet"));
-  corrmatch_h_jet     .reset(new JetHists(ctx, "corrmatch_Jets",6));
-  corrmatch_h_ele     .reset(new ElectronHists(ctx, "corrmatch_Electrons"));
-  corrmatch_h_muo     .reset(new MuonHists(ctx, "corrmatch_Muons"));
-  corrmatch_h_topjet  .reset(new TopJetHists(ctx, "corrmatch_TopJets"));
+  notoptagevt_h       .reset(new TstarSelectionHists(ctx, "notoptagevt"));
+  notoptagevt_h_event .reset(new EventHists(ctx, "notoptagevt_Event"));
+  notoptagevt_h_bJet  .reset(new TstarSelectionHists(ctx, "notoptagevt_bJet"));
+  notoptagevt_h_jet   .reset(new JetHists(ctx, "notoptagevt_Jets",6));
+  notoptagevt_h_ele   .reset(new ElectronHists(ctx, "notoptagevt_Electrons"));
+  notoptagevt_h_muo   .reset(new MuonHists(ctx, "notoptagevt_Muons"));
+  notoptagevt_h_topjet.reset(new TopJetHists(ctx, "notoptagevt_TopJets")); 
+  notoptagevt_h_lumi  .reset(new LuminosityHists(ctx, "notoptagevt_Lumi"));
 
-  no_corrmatch_h_event   .reset(new EventHists(ctx, "no_corrmatch_Event"));
-  no_corrmatch_h_bJet    .reset(new TstarSelectionHists(ctx, "no_corrmatch_bJet"));
-  no_corrmatch_h_jet     .reset(new JetHists(ctx, "no_corrmatch_Jets",6));
-  no_corrmatch_h_ele     .reset(new ElectronHists(ctx, "no_corrmatch_Electrons"));
-  no_corrmatch_h_muo     .reset(new MuonHists(ctx, "no_corrmatch_Muons"));
-  no_corrmatch_h_topjet  .reset(new TopJetHists(ctx, "no_corrmatch_TopJets"));
 
   chi2_h_event           .reset(new EventHists(ctx, "chi2_Event"));
   chi2_h_bJet            .reset(new TstarSelectionHists(ctx, "chi2_bJet"));
@@ -479,48 +548,10 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 //  
 //*****************************************************************************************************
 
-
-// ############## Common Modules and Object Cleaning ################################################## 
-
-//Common Modules
-  bool pass_common = common->process(event);
-    if(!pass_common) return false;
-
-//Do MC-Scale Variations for Systematics
-    if(do_scale_variation){
-    syst_module_scale->process(event);
+//Only for Data: Lumi-Selections
+if(!is_mc){
+   if(!lumi_sel->passes(event)) return false;
     }
-
-    //  ttbar_reweight->process(event);
-
- ////Object Cleaning for Jets/TopJets   
-  jet_cleaner1        ->process(event);
-
-    const int runnr_BCD = 276811;
-    const int runnr_EFearly = 278802;
-    const int runnr_FlateG = 280385;
-
-    if(is_mc){
-      topjet_corrector_MC->process(event);
-    }
-    else{
-      if(event.run <= runnr_BCD)          topjet_corrector_BCD->process(event);
-      else if(event.run < runnr_EFearly)  topjet_corrector_EFearly->process(event);
-      else if(event.run <= runnr_FlateG)  topjet_corrector_FlateG->process(event);
-      else if(event.run > runnr_FlateG)   topjet_corrector_H->process(event);
-      else throw runtime_error("TstarPreSelectionModule: run number not covered");
-    }
-
-  topjet_IDcleaner    ->process(event);
-  topjetlepton_cleaner->process(event);
-  topjet_cleaner      ->process(event);
-
- 
-
-
-  sort_by_pt<Jet>(*event.jets);
-  sort_by_pt<TopJet>(*event.topjets);
-//####################################################################################################### 
 
 //Dump input content
   input_h         ->fill(event);
@@ -532,6 +563,100 @@ bool TstarSelectionModule::process(uhh2::Event& event){
   input_h_topjet  ->fill(event);
   input_h_lumi    ->fill(event);
 
+
+  ttbar_reweight->process(event);
+
+
+ //// ############## Trigger Selection  ##################################################
+if (!is_mc){
+
+  //if(!(trigger_sel1->passes(event) || trigger_sel2->passes(event))) return false; 
+  
+    bool pass_Mu50 = trigger_Mu50->passes(event);
+    if (event.run<274954) {
+      if (!pass_Mu50) return false;
+    }
+    else {
+      bool pass_TrkMu50 = trigger_TkMu50->passes(event);
+      if (!(pass_Mu50||pass_TrkMu50)) return false;
+      }
+  }
+
+  else{
+    bool pass_Mu50 = trigger_Mu50->passes(event);
+    bool pass_TrkMu50 = trigger_TkMu50->passes(event);
+    if (!(pass_Mu50||pass_TrkMu50)) return false;
+    }
+
+
+// Scale Factors for MuonID/MuonTrigger
+  SF_muonTrigger->process(event);
+   SF_muonID->process(event);
+   // SF_muonIso->process(event);
+
+  h_trigger       ->fill(event);
+  h_trigger_event ->fill(event);
+  h_trigger_bJet  ->fill(event);
+  h_trigger_jet   ->fill(event);
+  h_trigger_ele   ->fill(event);
+  h_trigger_muon  ->fill(event);
+  h_trigger_topjet->fill(event);
+  h_trigger_lumi  ->fill(event);
+
+//// ####################################################################################
+
+
+//Do MC-Scale Variations for Systematics
+  if(do_scale_variation){
+    syst_module_scale->process(event);
+  }
+// ############## Common Modules and Object Cleaning #################################### 
+
+//Common Modules
+  bool pass_common = common->process(event);
+    if(!pass_common) return false;
+ 
+
+ ////Object Cleaning for Jets/TopJets   
+    const int runnr_BCD = 276811;
+    const int runnr_EFearly = 278802;
+    const int runnr_FlateG = 280385;
+
+    if(is_mc){
+      topjet_corrector_MC->process(event);
+      subjet_corrector_MC->process(event);
+    }
+    else{
+      /*
+      if(event.run <= runnr_BCD)          topjet_corrector_BCD->process(event);
+      else if(event.run < runnr_EFearly)  topjet_corrector_EFearly->process(event);
+      else if(event.run <= runnr_FlateG)  topjet_corrector_FlateG->process(event);
+      else if(event.run > runnr_FlateG)   topjet_corrector_H->process(event);
+      else throw runtime_error("TstarPreSelectionModule: run number not covered");
+      */
+      if(event.run <= runnr_BCD)          subjet_corrector_BCD->process(event);
+      else if(event.run < runnr_EFearly)  subjet_corrector_EFearly->process(event);
+      else if(event.run <= runnr_FlateG)  subjet_corrector_FlateG->process(event);
+      else if(event.run > runnr_FlateG)   subjet_corrector_H->process(event);
+      else throw runtime_error("TstarPreSelectionModule: run number not covered");
+    }
+
+  topjetlepton_cleaner ->process(event);
+  topjet_cleaner       ->process(event);
+
+  
+  sort_by_pt<Jet>(*event.jets);
+  sort_by_pt<TopJet>(*event.topjets);
+
+  cleaner_h         ->fill(event);
+  cleaner_h_event   ->fill(event);
+  cleaner_h_bJet    ->fill(event);
+  cleaner_h_jet     ->fill(event);
+  cleaner_h_ele     ->fill(event);
+  cleaner_h_muo     ->fill(event);
+  cleaner_h_topjet  ->fill(event);
+  cleaner_h_lumi    ->fill(event);
+//################################################################################### 
 
 //// Lepton Selection
   const bool pass_lep1 = lep1_sel->passes(event);
@@ -546,7 +671,7 @@ bool TstarSelectionModule::process(uhh2::Event& event){
        lep1_h_topjet ->fill(event);
        lep1_h_lumi   ->fill(event);
 
-
+      
 /// 2D-Cut for Muons
  const bool pass_twodcut = twodcut_sel->passes(event);
    if(!pass_twodcut) return false;
@@ -559,19 +684,28 @@ bool TstarSelectionModule::process(uhh2::Event& event){
      twodcut_h_muo    ->fill(event);
      twodcut_h_topjet ->fill(event);
      twodcut_h_lumi   ->fill(event);
-
+      
      //Need second Jet-Cleaner after 2D-Cut
  jet_cleaner2    ->process(event);
 
-///
+
+ //MET-Cut for further QCD Reduction
+  if(!met_sel->passes(event)) return false;  
+     met_h        ->fill(event);
+     met_h_event  ->fill(event);
+     met_h_bJet   ->fill(event);
+     met_h_jet    ->fill(event);
+     met_h_ele    ->fill(event);
+     met_h_muo    ->fill(event);
+     met_h_topjet ->fill(event);
+     met_h_lumi   ->fill(event);
+
 
 //################## B-Tag with Efficiency and SF #########################
  //BTagEffHists->fill(event);            //Run First Time without b-Tag and ScaleFactors (SF_btag)
- 
- 
+  
   /// b-Tag 
- 
-  const bool pass_bTag = b_tag_medium_sel->passes(event);
+ const bool pass_bTag = b_tag_medium_sel->passes(event);
       if(!pass_bTag) return false;
   
        SF_btag       ->process(event);     //Scale Factor for b-Tagging                        
@@ -584,8 +718,6 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	bTag_h_muo    ->fill(event);
 	bTag_h_topjet ->fill(event);
         bTag_h_lumi   ->fill(event);
- 
-
  ////#######################################################################
 	 
  
@@ -617,14 +749,18 @@ bool TstarSelectionModule::process(uhh2::Event& event){
        jet_top_h_topjet ->fill(event);
        jet_top_h_lumi   ->fill(event);
   }
-
- //##############################################################################
-
+   if(!pass_ttagevt){ 
+     notoptagevt_h        ->fill(event);
+     notoptagevt_h_event  ->fill(event);
+     notoptagevt_h_bJet   ->fill(event);
+     notoptagevt_h_jet    ->fill(event);
+     notoptagevt_h_ele    ->fill(event);
+     notoptagevt_h_muo    ->fill(event);
+     notoptagevt_h_topjet ->fill(event);
+     notoptagevt_h_lumi   ->fill(event);
 
  //Jet Selection without Top-Tag (#Jets >=5)
-  if(!pass_ttagevt){ 
-   const bool pass_jet2 = jet2_sel->passes(event);
-   
+ const bool pass_jet2 = jet2_sel->passes(event);
    if(!pass_jet2) return false;
     jet2_h        ->fill(event);
     jet2_h_event  ->fill(event);
@@ -635,10 +771,9 @@ bool TstarSelectionModule::process(uhh2::Event& event){
     jet2_h_topjet ->fill(event);
     jet2_h_lumi   ->fill(event);
   }
- 
  // add flag_toptagevent to output ntuple 
     event.set(h_flag_toptagevent, int(pass_ttagevt));
-
+//##############################################################################
  
 ///HT Cut
  const bool pass_HTcut = ht_sel->passes(event);
@@ -681,7 +816,7 @@ if(!event.isRealData){
  }
 
 //######################  Reconstruction with/without TopTag & Chi2-Method  #######################################################
-/*
+
 if(!pass_ttagevt){                                                              //Without Top-Tag
 tstar_reco->process(event); tstar_chi2->process(event); }
   else { 
@@ -689,44 +824,10 @@ tstar_reco->process(event); tstar_chi2->process(event); }
     if(!pass_reco) {       tstar_reco->process(event); tstar_chi2->process(event);}
     else{     tstar_ttag_chi2->process(event); }
   }
-*/
- /////##################################  Correct Match Hypothesis #################################################################
- 
- tstar_reco->process(event);
-
-tstar_match->process(event);                                               //Correct Match between Gen and Reco Particles
- 
- std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);       //Get all Hypothesis  
- 
- const TstarReconstructionHypothesis* hyp = get_best_hypothesis(hyps, "CorrectMatch");    //Get best Hypothesis
-  if(!hyp) std::runtime_error("TstarSelectionModule::process -- best hypothesis for T*-Reconstruction not found");
- 
-//Cut on Discriminator
-  if(hyp->discriminator("CorrectMatch")<3){    
- 
-    corrmatch_h->fill(event);
-
-    corrmatch_h_event  ->fill(event);
-    corrmatch_h_bJet   ->fill(event);
-    corrmatch_h_jet    ->fill(event);
-    corrmatch_h_ele    ->fill(event);
-    corrmatch_h_muo    ->fill(event);
-    corrmatch_h_topjet ->fill(event);
-  }
-  else{
-    no_corrmatch_h_event  ->fill(event);
-    no_corrmatch_h_bJet   ->fill(event);
-    no_corrmatch_h_jet    ->fill(event);
-    no_corrmatch_h_ele    ->fill(event);
-    no_corrmatch_h_muo    ->fill(event);
-    no_corrmatch_h_topjet ->fill(event);
-  }
-
-// ##########################################################################################################################
-
+  std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);
 
 //##################################  Chi2 Hypothesis #################################################################
-/*
+
  const TstarReconstructionHypothesis* hyp = get_best_hypothesis(hyps, "Chi2");        //Get best Hypothesis
 
   if(!hyp) std::runtime_error("TstarSelectionModule::process -- best hypothesis for T*-Reconstruction not found");
@@ -751,13 +852,11 @@ tstar_match->process(event);                                               //Cor
     chi2_h_topjet ->fill(event);
     chi2_h_lumi   ->fill(event);
   }
-*/
+
 // ##########################################################################################################################
  
 //#######################################  End of SYSTEM RECO  ###########################################################################
-
-
-
+ 
  // Histogramms for PDF-Variations 
     // if(hyp->discriminator("Chi2")<50) h_PDF_variations->fill(event);
 

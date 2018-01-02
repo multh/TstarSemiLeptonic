@@ -65,18 +65,18 @@ bool TstarChi2Discriminator::process(uhh2::Event & event){
     auto & hyps = event.get(h_hyps);
 
     //Top-Quark values
-    const double mass_thad = 184;
-    const double mass_thad_sigma = 25;
-    const double mass_tlep = 177;
-    const double mass_tlep_sigma = 24;
+    const double mass_thad = 177;
+    const double mass_thad_sigma = 19;
+    const double mass_tlep = 181;
+    const double mass_tlep_sigma = 27;
     
     //T* values (Masspoint independend)
-    const double mass_Tstar_diff_rel = -0.0076; //Average CorrectMatch
-    const double mass_Tstar_diff_rel_sigma = 0.135; //
+    const double mass_Tstar_diff_rel = 0.0074; //Average CorrectMatch
+    const double mass_Tstar_diff_rel_sigma = 0.1189; //
 
     //Make use of topology
-    const double deltaPhi_Tstar = 3.14;
-    const double deltaPhi_sigma = 0.20;
+    const double deltaPhi_Tstar = 3.13;
+    const double deltaPhi_sigma = 0.144;
     
     for(auto & hyp: hyps){
         double mass_thad_rec = inv_mass(hyp.tophad_v4());
@@ -159,18 +159,18 @@ bool TstarChi2DiscriminatorTTAG::process(uhh2::Event& event){
 auto & hyps = event.get(h_hyps);
 
 //Top-Quark values
-  const double mass_thad       = 184.;
-  const double mass_thad_sigma =  25.;
-  const double mass_tlep       = 177.;
-  const double mass_tlep_sigma =  24.;
+  const double mass_thad       = 177.;
+  const double mass_thad_sigma =  19.;
+  const double mass_tlep       = 181.;
+  const double mass_tlep_sigma =  27.;
 
   //T* values
-  const double mass_Tstar_diff_rel = -0.0076; //How to get
-  const double mass_Tstar_diff_rel_sigma = 0.13; //How to get
+  const double mass_Tstar_diff_rel = 0.0074; //How to get
+  const double mass_Tstar_diff_rel_sigma = 0.119; //How to get
 
   //Topology
-  const double deltaPhi_Tstar = 3.04;
-  const double deltaPhi_sigma = 0.13;
+  const double deltaPhi_Tstar = 3.13;
+  const double deltaPhi_sigma = 0.144;
 
   //Run over all Hypothesis 
   for(auto & hyp: hyps){
@@ -295,11 +295,12 @@ float match_dr(const Particle & p, const std::vector<T> & jets, int& index){
 }
 
 bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
+
      auto & hyps = event.get(h_hyps);
      //  const auto & ttbargen = event.get(h_ttbargen);
     const auto & tstargen = event.get(h_tstargen);
     auto dec = tstargen.DecayChannel();
-    if(dec != TStarGen::e_ehad && dec != TStarGen::e_muhad){
+    if(dec != TStarGen::e_muhad){
         for(auto & hyp: hyps){
             hyp.set_discriminator(config.discriminator_label, 999999);
         }
@@ -310,16 +311,17 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
     for(auto & hyp: hyps){
       hyp.set_discriminator(config.discriminator_label, 999999);
  
+     
         auto hadr_jets = hyp.tophad_jets();
         auto lept_jets = hyp.toplep_jets();
 	auto gluonlep_jets = hyp.gluonlep_jets();
 	auto gluonhad_jets = hyp.gluonhad_jets();
-	
+
         if(lept_jets.size() != 1){
             hyp.set_discriminator(config.discriminator_label, 999999);
             continue;
         }
-        if(hadr_jets.size() > 3){ // < 3 is allowed ...
+        if(hadr_jets.size() > 3){ // <= 3 is allowed ...
             hyp.set_discriminator(config.discriminator_label, 999999);
             continue;
         }
@@ -332,12 +334,15 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
           continue;
         }
 
+
         //index lists of jets that can be matched to partons
         std::set<int> matched_hadr_jets;
 
         // match b jets
         int index_l, index_h;
-        float correct_dr = match_dr(tstargen.BLep(), lept_jets, index_l) + match_dr(tstargen.BHad(), hadr_jets, index_h);
+
+        float correct_dr = match_dr(tstargen.BLep(), lept_jets, index_l);
+	  correct_dr += match_dr(tstargen.BHad(), hadr_jets, index_h);
 
         if(index_h >= 0) matched_hadr_jets.insert(index_h);
 
@@ -349,6 +354,7 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
 
         if(index_h >= 0) matched_hadr_jets.insert(index_h);
 
+
         // if not all jets of the hadronic side of the reconstruction could be matched: infinite
         // value:
         if(matched_hadr_jets.size() != hadr_jets.size()){
@@ -358,7 +364,7 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
 
 
 	//Match Lepton 
-	if( deltaR(tstargen.ChargedLepton(), hyp.lepton().v4())>0.3){ hyp.set_discriminator(config.discriminator_label, 999999); continue;}
+	//	if( deltaR(tstargen.ChargedLepton(), hyp.lepton().v4())>0.3){ hyp.set_discriminator(config.discriminator_label, 999999); continue;}
 
 	int index_gl;
 	int index_gh;
@@ -385,7 +391,9 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
 	    continue;
         }
 
+
 	//isolation of Jets for Testing Kinematics
+	
 	int dummie_index;
 	if(match_dr(tstargen.GluonHad(), gluonlep_jets, dummie_index) <= 0.4) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
 	if(match_dr(tstargen.GluonLep(), gluonhad_jets, dummie_index) <= 0.4) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
@@ -406,12 +414,12 @@ bool TstarCorrectMatchDiscriminator::process(uhh2::Event & event){
 	if(match_dr(tstargen.BHad(), gluonlep_jets, dummie_index) <= 0.4) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
 
 	if(match_dr(tstargen.BLep(), gluonhad_jets, dummie_index) <= 0.4) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
-
+	
         //add deltaR between reconstructed and true neutrino
-           // if(deltaR(tstargen.Neutrino(), hyp.neutrino_v4())<0.4) {
-	correct_dr += deltaR(tstargen.Neutrino(), hyp.neutrino_v4());
-	   //else{hyp.set_discriminator(config.discriminator_label, 999999); continue;}
-        hyp.set_discriminator(config.discriminator_label, correct_dr);
+	if(deltaR(tstargen.Neutrino(), hyp.neutrino_v4())>0.4) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
+	   correct_dr += deltaR(tstargen.Neutrino(), hyp.neutrino_v4());
+
+	 hyp.set_discriminator(config.discriminator_label, correct_dr);
     }
     return true;
 }

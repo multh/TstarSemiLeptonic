@@ -367,10 +367,10 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/nfs/dust/cms/user/multh/SFrame_JEC",
-"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src",
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed5/include",
-"/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/TstarSemiLeptonic/",
+"/nfs/dust/cms/user/multh/SFrame_8_0_26_patch2",
+"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed6/include",
+"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(

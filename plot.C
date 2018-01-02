@@ -2,15 +2,16 @@ void plot()
 {
   gStyle->SetOptStat(0);
 
-  TFile* bkg = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.QCD.root", "READ");
-  TFile* sig = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root", "READ");
+  TFile* bkg = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.QCD.root", "READ");
+  // TFile* sig = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root", "READ");
+  TFile* sig = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root", "READ");
 
   TH2D* hbkg = (TH2D*) bkg->Get("1Muon_Muons/deltaRmin_ptrel");
 
   TH2D* hsig = (TH2D*) sig->Get("1Muon_Muons/deltaRmin_ptrel");
 
-  TLine *line1 = new TLine(0,40,0.4,40);
-  TLine *line2 = new TLine(0.4,0,0.4,40);
+  TLine *line1 = new TLine(0,25,0.3,25);
+  TLine *line2 = new TLine(0.3,0,0.3,25);
  
   line1->SetLineWidth(4);
   line1->SetLineColor(kRed);

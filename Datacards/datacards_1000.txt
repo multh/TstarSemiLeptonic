@@ -3,30 +3,22 @@ jmax *   number of backgrounds
 kmax *   number of nuisance parameters
 -----------------
 bin            mTstar                                                                         
-observation 3957
+observation 10923
 -----------------
 shapes * * datacards.root cms_workspace:$PROCESS
 ---------------------------------------------------------------------------------------------
 bin                          mTstar      mTstar                                               
 process                      Tstar_1000   Background                                             
 process                      0           1                                                    
-rate                       272.224     3957              
+rate                       1027.38     10923              
 ----------------------------------------------------------------------------------------------
-CMS_bTag_bc           lnN    1.05     -                                                       
-CMS_bTag_udsg_bc      lnN    1.04     -                                                       
-CMS_JEC               lnN    1.4     -                                                       
-CMS_JER               lnN    1.1     -                                                       
-CMS_MuonID            lnN    1.015     -                                                       
-CMS_MuonTrigger       lnN    1.01     -                                                       
-CMS_PU                lnN    1.05     -                                                       
-lumi_13TeV            lnN    1.027    -                                                       
 ----------------------------------------------------------------------------------------------
-lambda                param  2.1993   0.48629    
-lambda2               param  -5.83308   0.726571    
-lambda3               param  1.39634   0.320215    
-gaus_mean_1000         param  900.872     31.8293    
-gaus_sigma_1000        param  197.774     26.2438    
-land_mean_1000         param  1117.01     39.4088    
-land_sigma_1000        param  155.097     23.3981    
+lambda                param  30   1.07015    
+lambda2               param  -7.01766   0.142847    
+lambda3               param  0.414123   0.0230364    
+gaus_mean_1000         param  853.145     20.6789    
+gaus_sigma_1000        param  205.541     20.9412    
+land_mean_1000         param  1077.05     15.2903    
+land_sigma_1000        param  135.866     9.70171    
 rate                  rateParam       mTstar Background   1                                                     
 

@@ -11,33 +11,32 @@
 
 void MassMacro() {
  // open a file and get a histogram
- TFile *s1 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M700.root");
- TFile *s2 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M800.root");
- TFile *s3 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M900.root");
- TFile *s4 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1000.root");
- TFile *s5 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1100.root");
- TFile *s6 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1200.root");
- TFile *s7 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1300.root");
- TFile *s8 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1400.root");
- TFile *s9 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1500.root");
- TFile *s10 = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.MC.Tstar_M1600.root");
+ TFile *s1 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root");
+ TFile *s2 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-800.root");
+ TFile *s3 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-900.root");
+ TFile *s4 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1000.root");
+ TFile *s5 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1100.root");
+ TFile *s6 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1200.root");
+ TFile *s7 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1300.root");
+ TFile *s8 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1400.root");
+ TFile *s9 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root");
+ TFile *s10 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1600.root");
 
 
- TH1F *h1    = (TH1F*)s1->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h2    = (TH1F*)s2->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h3    = (TH1F*)s3->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h4    = (TH1F*)s4->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h5    = (TH1F*)s5->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h6    = (TH1F*)s6->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h7    = (TH1F*)s7->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h8    = (TH1F*)s8->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h9    = (TH1F*)s9->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h10   = (TH1F*)s10->Get("chi2min__HypHists/M_Tstar_comb");
+ TH1F *h1    = (TH1F*)s1->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h2    = (TH1F*)s2->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h3    = (TH1F*)s3->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h4    = (TH1F*)s4->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h5    = (TH1F*)s5->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h6    = (TH1F*)s6->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h7    = (TH1F*)s7->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h8    = (TH1F*)s8->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h9    = (TH1F*)s9->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
+ TH1F *h10   = (TH1F*)s10->Get("chi2min_ttag_comb__HypHists/M_Tstarhad_rec");
 
 
 
  gStyle->SetOptStat(0);
- gROOT->ForceStyle();
  int bin_up = 730;
   int bin_down = 610;
 

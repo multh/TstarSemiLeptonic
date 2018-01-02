@@ -160,6 +160,8 @@ void limit()
 {
 
 //Setup Bins for Histogramm
+  double ex[5] = {700,700,800,803,803};
+
  double x[10] = {700,800,900,1000,1100,1200,1300,1400,1500,1600};
  double x2[12]={700,700,800,900,1000,1100,1200,1300,1400,1500,1600,1600};
  double x3[12]={700,700,800,900,1000,1100,1200,1300,1400,1500,1600,1600};
@@ -180,17 +182,19 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
 */
 
 //*************************** FINAL Limits out of combine with Fit ******************************
+ double exclude[5]          = {0,10,10,10,0};
+
   double observed[10]      = {0.28, 0.26, 0.3, 0.27, 0.24, 0.22, 0.29, 0.17, 0.16,  0.14};
 
-  double central_FINAL[10] = {0.59, 0.48, 0.47, 0.38, 0.30, 0.27, 0.21, 0.19, 0.15, 0.13};
-  double low_95[12]        = {0, 0.37, 0.3, 0.30, 0.24, 0.19, 0.18, 0.14, 0.12, 0.09, 0.08, 0};
-  double up_95[12]         = {0, 0.99, 0.80, 0.79, 0.64, 0.49, 0.45, 0.35, 0.3, 0.25, 0.22, 0};
-  double low_68[12]        = {0, 0.26, 0.21, 0.21, 0.17, 0.14, 0.13, 0.1, 0.09, 0.07, 0.06, 0};
-  double up_68[12]         = {0, 1.65, 1.36, 1.32, 1.09, 0.80, 0.75, 0.59, 0.50, 0.43, 0.37, 0};
+  double central_FINAL[10] = {   0.25, 0.22, 0.18,  0.14, 0.10, 0.08, 0.07, 0.06, 0.05, 0.04};
+  double low_95[12]        = {0, 0.18, 0.15, 0.13, 0.10, 0.07, 0.06, 0.05, 0.04, 0.04, 0.03, 0};
+  double up_95[12]         = {0, 0.35, 0.30, 0.25, 0.19, 0.14, 0.12, 0.10, 0.08, 0.07, 0.06, 0};
+  double low_68[12]        = {0, 0.13, 0.11, 0.10, 0.08, 0.06, 0.05, 0.04, 0.03, 0.03, 0.023, 0};
+  double up_68[12]         = {0, 0.48, 0.41, 0.33, 0.25, 0.19, 0.15, 0.13, 0.11, 0.09, 0.08, 0};
 //**********************************************************************************************
 
 //*************************** Theoretical Limits on T* *******************************************
- double theory[10] = {0.174E+02,0.526E+01,0.189E+01,0.769E+00,0.342E+00,0.163E+00,0.820E-01,0.431E-01,0.235E-01,0.132E-01};
+ double theory[10] = {4.92, 1.68, 0.636, 0.262, 0.116, 0.0537, 0.0261, 0.0131, 0.00677, 0.00359};
  double theory_up[10] = {0.150E+02,0.454E+01,0.163E+01,0.663E+00,0.295E+00,0.140E+00,0.705E-01,0.369E-01,0.201E-01,0.113E-01};
  double theory_down[10] = {0.196E+02,0.594E+01,0.213E+01,0.865E+00,0.384E+00,0.183E+00,0.923E-01,0.484E-01,0.264E-01,0.149E-01};
 //************************************************************************************************ 
@@ -205,7 +209,9 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
 
 
 //Setup TGraphs for FINAL WQ
- TGraph* g_observed = new TGraph(10,x,observed);
+ TGraph* g_exclude = new TGraph(5,ex, exclude);
+
+// TGraph* g_observed = new TGraph(10,x,observed);
 
  TGraph* g_central_FINAL = new TGraph(10,x,central_FINAL);
  TGraph* g_low_95 = new TGraph(12,x2,low_95);
@@ -244,16 +250,24 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
 
 
 //TGraph Styles for FINAL WQ
+/*
  g_observed->SetFillColor(0);
  g_observed->SetLineStyle(1);
  g_observed->SetLineColor(kBlack);
  g_observed->SetLineWidth(3);
+*/
 
 
  g_central_FINAL ->SetFillColor(0);
- g_central_FINAL ->SetLineStyle(9);
+ g_central_FINAL ->SetLineStyle(2);
  g_central_FINAL ->SetLineColor(kBlack);
  g_central_FINAL ->SetLineWidth(3);
+
+g_exclude->UseCurrentStyle();
+g_exclude->SetLineColor(kBlack);
+ g_exclude->SetFillColor(kBlack);
+ g_exclude->SetFillStyle(3005);
+ g_exclude->SetLineWidth(0);
 
  g_up_95->UseCurrentStyle();
  g_up_95->SetLineColor(kYellow+2);
@@ -291,16 +305,15 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
  g_central_FINAL->GetXaxis()->SetRangeUser(x[0],x[9]);
 
  g_central_FINAL ->Draw("AF");
- 
- g_up_68->Draw("F SAME");
+   g_up_68->Draw("F SAME");
  g_up_95->Draw("F SAME"); 
  g_low_95->Draw("F SAME"); 
  g_low_68 ->Draw("F SAME");
- g_observed->Draw("L SAME");
+ // g_observed->Draw("L SAME");
  g_central_FINAL ->Draw("L SAME");
- 
+  g_exclude->Draw("F SAME");
  g_theory->Draw("L SAME");    //Draw Theoretical WQ
-
+ 
 
 //For comparison of theta/combine
  /*
@@ -322,12 +335,12 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
  TLegendEntry* entries[5];
   
  //Legend for FINAL WQ (combine)  
-   entries[0]=leg1->AddEntry(g_theory, "theoretischer Wirkungsquerschnitt","L");
-   entries[1]=leg1->AddEntry(g_observed, "erwartetes Limit","L");
-   entries[2]=leg1->AddEntry(g_central_FINAL, "beobachtetes Limit","L");
-   entries[3]=leg1->AddEntry(g_up_95, "zentrale 95% der Erwartung","F");
-   entries[4]=leg1->AddEntry(g_up_68, "zentrale 68% der Erwartung","F");
-  
+   entries[0]=leg1->AddEntry(g_theory, "theoretical cross section","L");
+   // entries[1]=leg1->AddEntry(g_observed, "expected upper limit","L");
+   entries[1]=leg1->AddEntry(g_central_FINAL, "expected upper limit","L");
+   entries[2]=leg1->AddEntry(g_up_95, "central 95% expected upper limit","F");
+   entries[3]=leg1->AddEntry(g_up_68, "central 68% expected upper limit","F");
+   entries[4]=leg1->AddEntry(g_exclude, "JHEP06 (2014) 125, 8 TeV resolved","F");
 //Legend for Comparison
    /*
    entries[0]=leg1->AddEntry(g_central_noKat, "erwartetes Limit ohne Kategorisierung","L");
@@ -341,7 +354,7 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
 
  //Plot Infotext
    double m_lumi = 2.7;                     //integrated Luminosity of Data
-   TString infotext = TString::Format("2.7 fb^{-1}, #sqrt{s} = 13 TeV"); //Format of Text
+   TString infotext = TString::Format("Work in Progress,  35.8 fb^{-1}, #sqrt{s} = 13 TeV"); //Format of Text
 
    TLatex *text1 = new TLatex(3.5, 24, infotext);
     text1->SetNDC();
@@ -360,7 +373,7 @@ double central_noKat[10] = {0.46, 0.38, 0.31, 0.23, 0.2, 0.18, 0.15, 0.13, 0.11,
   h->GetXaxis()->SetRangeUser(700,1600);
   h->GetYaxis()->SetRangeUser(0.01,10);
   h->SetXTitle(" M_{T*} [GeV/c^{2}]");
-  h->SetYTitle("#sigma(pp#rightarrow T*#rightarrow t+g) #times VV [pb]");
+  h->SetYTitle("#sigma(pp#rightarrow T*#rightarrow t+g)");
   h->Draw("AXIS SAME");
   c->GetFrame()->Draw("same");
 

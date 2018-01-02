@@ -10,13 +10,13 @@ TLatex latex;
 
 
   // plot the lumi yield histogram
-   TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuData.root","READ");
+   TFile *Data = new TFile("/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V4/AK4CHS/MC_NoReWeighted_CHS_NoEtaCleaning/uhh2.AnalysisModuleRunner.DATA.DATA_RunEFearly_AK4CHS.root","READ");
    //TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root","READ");
 
-  TH1F *h  = (TH1F*)Data->Get("chi2_Lumi/luminosity");
+  TH1F *h  = (TH1F*)Data->Get("HT300_Lumi/luminosity");
   //TH1F *h  = (TH1F*)Data->Get("twodcut_Lumi/luminosity");
   
-  h->GetYaxis()->SetRangeUser(0,400);
+  h->GetYaxis()->SetRangeUser(0,400000);
   h->GetXaxis()->SetTitle("integrierte Luminosit#ddot{a}t [pb^{-1}]");
   h->GetXaxis()->SetTitleSize(0.04);
   h->GetXaxis()->SetTitleOffset(1.3);

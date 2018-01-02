@@ -93,7 +93,14 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
 
     Pt_toplep_rec                       = book<TH1F>("Pt_toplep", "P_{T, top}^{lep} [GeV/c]",70, 0,1000);
     Pt_tophad_rec                       = book<TH1F>("Pt_tophad", "P_{T, top}^{had} [GeV/c]",70, 0,1000);
-     
+ 
+    M_Wlep_rec                          = book<TH1F>("M_Wlep_rec", "M_{W}^{had} [GeV/c^{2}]",40, 60,200);
+    M_toplep_Wlep                       = book<TH1F>("M_toplep_Wlep","M_{top}^{lep} [GeV/c^{2}]",20,50,350);
+    M_Tstarlep_Wlep                     = book<TH1F>( "M_Tstarlep_Wlep", "M_{T*}^{lep} [GeV/c^{2}]", 30, 0, 2000 );
+    M_Tstar_comb_Wlep                   = book<TH1F>( "M_Tstar_comb_Wlep", "M_{T*}^{comb} [GeV/c^{2}]", 30, 0, 2000);
+    DeltaR_Lepton                       = book<TH1F>("DeltaR_Lepton","#R Lepton",20,0,3.5);
+    DeltaR_Neutrino                     = book<TH1F>("DeltaR_Neutrino","#R Neutrino",20,0,3.5);
+
     CSV_Lep_Signal                      = book<TH1F>("CSVLep_Signal","CSV Lep Signal",10,0,1);
     CSV_Had_Signal                      = book<TH1F>("CSVHad_Signal","CSV Had Signal",10,0,1);
 
@@ -160,7 +167,7 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
   double m_Tstar_diff_rel=0;
   double m_TstarAntiTstar_gen = 0;
   double m_TstarhadTstarlep_rec = 0;
-
+  double m_Wlep_rec=0;
 
                                                                    
   if(hyp->Tstarlep_v4().isTimelike()) m_Tstarlep = hyp->Tstarlep_v4().M();
@@ -169,7 +176,9 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
   else {m_Tstarhad = sqrt( -(hyp->Tstarhad_v4()).mass2());}
   
   if(hyp->toplep_v4().isTimelike()) m_toplep = hyp->toplep_v4().M();
+  else{m_toplep =sqrt( -(hyp->toplep_v4()).mass2());}
   if(hyp->tophad_v4().isTimelike()) m_tophad = hyp->tophad_v4().M();
+  else{m_tophad =sqrt( -(hyp->tophad_v4()).mass2());}
 
   if( (hyp->Tstarhad_v4()+hyp->Tstarlep_v4()).isTimelike() )
     m_TstarhadTstarlep_rec = (hyp->Tstarhad_v4()+hyp->Tstarlep_v4()).M();
@@ -177,13 +186,27 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     m_TstarhadTstarlep_rec = sqrt( -(hyp->Tstarlep_v4()+hyp->Tstarhad_v4()).mass2());
   }
 
+  if( (hyp->neutrino_v4()+hyp->lepton().v4()).isTimelike() )
+    m_Wlep_rec = (hyp->neutrino_v4()+hyp->lepton().v4()).M();
+  else{
+    m_Wlep_rec = sqrt( -(hyp->neutrino_v4()+hyp->lepton().v4()).mass2());
+  }
+
 
   M_TstarhadTstarlep_rec  ->Fill(m_TstarhadTstarlep_rec, weight);
 
   M_toplep_rec            ->Fill(m_toplep,weight);
   M_tophad_rec            ->Fill(m_tophad,weight);
+  
+  M_Wlep_rec              ->Fill(m_Wlep_rec,weight);
 
- 
+  if(m_Wlep_rec < 90){
+    M_toplep_Wlep         ->Fill(m_toplep, weight);
+    M_Tstarlep_Wlep       ->Fill(m_Tstarlep, weight);
+    M_Tstar_comb_Wlep     ->Fill(m_Tstarmed_rec,weight);
+  }
+
+
   m_Tstarmed_rec    = (m_Tstarhad + m_Tstarlep)/2;
   m_TstarDiff       = (m_Tstarhad - m_Tstarlep);
   m_Tstar_diff_rel  = m_TstarDiff/m_Tstarmed_rec;
@@ -210,7 +233,10 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
 
   //With  Generator Level Particles ###################################################################### 
   if(e.is_valid(h_tstargen)){
-    const auto & tstargen = e.get(h_tstargen);
+   const auto & tstargen = e.get(h_tstargen);
+auto dec = tstargen.DecayChannel();
+ if(dec == TStarGen::e_muhad){
+ 
     
     double m_Top_gen       = tstargen.tTStar().v4().M();
     double m_Tstar_gen     = tstargen.TStar().v4().M();
@@ -252,6 +278,10 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     DeltaEta_AntiTopAntiGluon_gen  ->Fill(tstargen.tAntiTStar().eta()-tstargen.gAntiTStar().eta(),weight);
     DeltaEta_TopAntiTop_gen        ->Fill(tstargen.tTStar().eta()-tstargen.tAntiTStar().eta(),weight);
     DeltaEta_GluonGluon_gen        ->Fill(tstargen.gTStar().eta()-tstargen.gAntiTStar().eta(),weight);
+
+
+    DeltaR_Lepton                  ->Fill(deltaR(tstargen.ChargedLepton(), hyp->lepton().v4()),weight);
+    DeltaR_Neutrino                ->Fill(deltaR(tstargen.Neutrino(), hyp->neutrino_v4()),weight);
     //#########################################################################################################
 
 
@@ -280,6 +310,6 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
    */
   }
   
- 
+  }
 }
  

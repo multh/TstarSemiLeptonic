@@ -3,79 +3,89 @@
 
  <!ENTITY NEVT "-1">
 
-<!ENTITY SingleMuData_B SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/SingleMuonB_v3.xml">
-<!ENTITY SingleMuData_C SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/SingleMuonC.xml">
-<!ENTITY SingleMuData_D SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/SingleMuonD.xml">
-<!ENTITY SingleMuData_E SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016E_23Sep.xml">
-<!ENTITY SingleMuData_F SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016F_23Sep.xml">
-<!ENTITY SingleMuData_G SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016G_23Sep.xml">
-<!ENTITY SingleMuData_H SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016H_PromptReco.xml">
- 
-<!ENTITY Tstar_M-700 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-700.xml">
-<!ENTITY Tstar_M-1600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1600.xml">
-<!ENTITY Tstar_M-1100 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1100.xml">
-<!ENTITY Tstar_M-1500 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1500.xml">
-<!ENTITY Tstar_M-1000 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1000.xml">
-<!ENTITY Tstar_M-800 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-800.xml">
-<!ENTITY Tstar_M-1200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1200.xml">
-<!ENTITY Tstar_M-1400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1400.xml">
-<!ENTITY Tstar_M-1300 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1300.xml">
-<!ENTITY Tstar_M-900 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-900.xml">
-<!ENTITY SingleT_t SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_ST_t-channel_antitop_4f_inclusiveDecays.xml">
-<!ENTITY SingleT_t_top SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_ST_t-channel_top_4f_inclusiveDecays.xml">
-<!ENTITY SingleTWtop SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/ST_tW_top_5f_inclusiveDecays_13TeV.xml">
-<!ENTITY SingleTWAntitop SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/ST_tW_antitop_5f_inclusiveDecays_13TeV.xml">
-<!ENTITY SingleT_s SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/ST_s-channel_4f_leptonDecays_13TeV.xml">
-<!ENTITY TTbar_Tune SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4.xml">
-<!ENTITY WW SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WW.xml">
-<!ENTITY WZ SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WZ.xml">
-<!ENTITY ZZ SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_ZZ.xml">
-<!ENTITY WJets_Pt-100To250 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-100To250.xml">
-<!ENTITY WJets_Pt-250To400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-250To400.xml">
-<!ENTITY WJets_Pt-400To600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-400To600.xml">
-<!ENTITY WJets_Pt-600ToInf SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-600ToInf.xml">
-<!ENTITY ZJets_HT70to100 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-70to100.xml">
-<!ENTITY ZJets_HT100to200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
-<!ENTITY ZJets_HT200to400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
-<!ENTITY ZJets_HT400to600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-400to600.xml">
-<!ENTITY ZJets_HT600to800 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-600to800.xml">
-<!ENTITY ZJets_HT800to1200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-800to1200.xml">
-<!ENTITY ZJets_HT1200to2500 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
-<!ENTITY ZJets_HT2500toInf SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
-<!ENTITY QCD_15to20_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-15to20_MuEnrichedPt5.xml">
-<!ENTITY QCD_20to30_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-20to30_MuEnrichedPt5.xml">
-<!ENTITY QCD_30to50_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-30to50_MuEnrichedPt5.xml">
-<!ENTITY QCD_50to80_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-50to80_MuEnrichedPt5.xml">
-<!ENTITY QCD_80to120_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-80to120_MuEnrichedPt5.xml">
-<!ENTITY QCD_120to170_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-120to170_MuEnrichedPt5.xml">
-<!ENTITY QCD_170to300_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-170to300_MuEnrichedPt5.xml">
-<!ENTITY QCD_300to470_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-300to470_MuEnrichedPt5.xml">
-<!ENTITY QCD_470to600_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-470to600_MuEnrichedPt5.xml">
-<!ENTITY QCD_600to800_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-600to800_MuEnrichedPt5.xml">
-<!ENTITY QCD_800to1000_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-800to1000_MuEnrichedPt5.xml">
-<!ENTITY QCD_1000toInf_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-1000toInf_MuEnrichedPt5.xml">
+<!ENTITY SingleMuData_B SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016B_03Feb.xml">
+<!ENTITY SingleMuData_C SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016C_03Feb.xml">
+<!ENTITY SingleMuData_D SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016D_03Feb.xml">
+<!ENTITY SingleMuData_E SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016E_03Feb.xml">
+<!ENTITY SingleMuData_F SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016F_03Feb.xml">
+<!ENTITY SingleMuData_G SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016G_03Feb.xml">
+<!ENTITY SingleMuData_H SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/DATA_SingleMuon_Run2016H_03Feb.xml">
+
+
+<!ENTITY Tstar_M-700 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-700.xml">
+<!ENTITY Tstar_M-800 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-800.xml">
+<!ENTITY Tstar_M-900 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-900.xml">
+<!ENTITY Tstar_M-1000 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1000.xml">
+<!ENTITY Tstar_M-1100 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1100.xml">
+<!ENTITY Tstar_M-1200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1200.xml">
+<!ENTITY Tstar_M-1300 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1300.xml">
+<!ENTITY Tstar_M-1400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1400.xml">
+<!ENTITY Tstar_M-1500 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1500.xml">
+<!ENTITY Tstar_M-1600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-1600.xml">
+
+
+<!ENTITY SingleT_t SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_ST_t-channel_antitop_4f_inclusiveDecays.xml">
+<!ENTITY SingleT_t_top SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_ST_t-channel_top_4f_inclusiveDecays.xml">
+<!ENTITY SingleTWtop SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/ST_tW_top_5f_inclusiveDecays_13TeV.xml">
+<!ENTITY SingleTWAntitop SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/ST_tW_antitop_5f_inclusiveDecays_13TeV.xml">
+<!ENTITY SingleT_s SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/ST_s-channel_4f_leptonDecays_13TeV.xml">
+
+<!ENTITY TTbar_Tune SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_TT_TuneCUETP8M2T4_both.xml">
+
+<!ENTITY WW SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WW.xml">
+<!ENTITY WZ SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WZ.xml">
+<!ENTITY ZZ SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_ZZ.xml">
+
+<!ENTITY WJets_Pt-100To250 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-100To250.xml">
+<!ENTITY WJets_Pt-250To400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-250To400.xml">
+<!ENTITY WJets_Pt-400To600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-400To600.xml">
+<!ENTITY WJets_Pt-600ToInf SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_WJetsToLNu_Pt-600ToInf.xml">
+
+<!ENTITY ZJets_HT70to100 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-70to100.xml">
+<!ENTITY ZJets_HT100to200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-100to200.xml">
+<!ENTITY ZJets_HT200to400 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-200to400.xml">
+<!ENTITY ZJets_HT400to600 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-400to600.xml">
+<!ENTITY ZJets_HT600to800 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-600to800.xml">
+<!ENTITY ZJets_HT800to1200 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-800to1200.xml">
+<!ENTITY ZJets_HT1200to2500 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-1200to2500.xml">
+<!ENTITY ZJets_HT2500toInf SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_DYJetsToLL_M-50_HT-2500toInf.xml">
+
+<!ENTITY QCD_15to20_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-15to20_MuEnrichedPt5.xml">
+<!ENTITY QCD_20to30_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-20to30_MuEnrichedPt5.xml">
+<!ENTITY QCD_30to50_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-30to50_MuEnrichedPt5.xml">
+<!ENTITY QCD_50to80_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-50to80_MuEnrichedPt5.xml">
+<!ENTITY QCD_80to120_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-80to120_MuEnrichedPt5.xml">
+<!ENTITY QCD_120to170_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-120to170_MuEnrichedPt5.xml">
+<!ENTITY QCD_170to300_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-170to300_MuEnrichedPt5.xml">
+<!ENTITY QCD_300to470_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-300to470_MuEnrichedPt5.xml">
+<!ENTITY QCD_470to600_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-470to600_MuEnrichedPt5.xml">
+<!ENTITY QCD_600to800_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-600to800_MuEnrichedPt5.xml">
+<!ENTITY QCD_800to1000_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-800to1000_MuEnrichedPt5.xml">
+<!ENTITY QCD_1000toInf_Mu SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/MC_QCD_Pt-1000toInf_MuEnrichedPt5.xml">
 ]>
 
 <!-- 
 <ConfigParse NEventsBreak="0" FileSplit="30" AutoResubmit="3" MaxJobsPerProcess="150" />
-<ConfigSGE RAM ="2" DISK ="2" Mail="Jens.Multhaup@desy.de" Notification="as" Workdir="workdir.PreSel_v1"/>
+<ConfigSGE RAM ="4" DISK ="3" Mail="Jens.Multhaup@desy.de" Notification="as" Workdir="workdir.Sel_TopTag"/>
 -->
 
 <JobConfiguration JobName="ExampleCycleJob" OutputLevel="INFO">
 	<Library Name="libSUHH2TstarSemiLeptonic"/>
 	<Package Name="SUHH2TstarSemiLeptonic.par" />
-	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/multh/RunII_80X_v3/PreSelection/" PostFix="" TargetLumi="35867">
-	
+	<Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/" PostFix="" TargetLumi="35867">
+
 	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="SingleMuData_B" Cacheable="False">
 			&SingleMuData_B;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
+
 	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="SingleMuData_C" Cacheable="False">
 			&SingleMuData_C;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
+
 	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="SingleMuData_D" Cacheable="False">
 			&SingleMuData_D;
 			<InputTree Name="AnalysisTree" />
@@ -93,6 +103,7 @@
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
 
+
 	<InputData Lumi="1.0" NEventsMax="&NEVT;" Type="DATA" Version="SingleMuData_G" Cacheable="False">
 			&SingleMuData_G;
 			<InputTree Name="AnalysisTree" />
@@ -105,54 +116,63 @@
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
 
+
 		<InputData Lumi="34979.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-700" Cacheable="False">
 			&Tstar_M-700;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
 
-		<InputData Lumi="34571.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1600" Cacheable="False">
-			&Tstar_M-1600;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34977.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1100" Cacheable="False">
-			&Tstar_M-1100;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1500" Cacheable="False">
-			&Tstar_M-1500;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1000" Cacheable="False">
-			&Tstar_M-1000;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
 		<InputData Lumi="33386.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-800" Cacheable="False">
 			&Tstar_M-800;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
+
+		<InputData Lumi="34987.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-900" Cacheable="False">
+			&Tstar_M-900;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1000" Cacheable="False">
+			&Tstar_M-1000;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34977.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1100" Cacheable="False">
+			&Tstar_M-1100;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
 		<InputData Lumi="34573.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1200" Cacheable="False">
 			&Tstar_M-1200;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
-		<InputData Lumi="34975.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1400" Cacheable="False">
-			&Tstar_M-1400;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
+
 		<InputData Lumi="34978.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1300" Cacheable="False">
 			&Tstar_M-1300;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
-		<InputData Lumi="34987.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-900" Cacheable="False">
-			&Tstar_M-900;
+
+		<InputData Lumi="34975.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1400" Cacheable="False">
+			&Tstar_M-1400;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1500" Cacheable="False">
+			&Tstar_M-1500;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34571.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1600" Cacheable="False">
+			&Tstar_M-1600;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
@@ -185,11 +205,12 @@
 		</InputData>
 
 
-		<InputData Lumi="92847.9104549" NEventsMax="&NEVT;" Type="MC" Version="TTbar_Tune" Cacheable="False">
+		<InputData Lumi="186543.350" NEventsMax="&NEVT;" Type="MC" Version="TTbar_Tune" Cacheable="False">
 			&TTbar_Tune;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
+
 
 		<InputData Lumi="8374.19545072" NEventsMax="&NEVT;" Type="MC" Version="WW" Cacheable="False">
 			&WW;
@@ -214,6 +235,8 @@
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
+
+
 		<InputData Lumi="25802848.782" NEventsMax="&NEVT;" Type="MC" Version="WJets_Pt-250To400" Cacheable="False">
 			&WJets_Pt-250To400;
 			<InputTree Name="AnalysisTree" />
@@ -345,22 +368,31 @@
 			<Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
 			<Item Name="GenParticleCollection" Value="GenParticles" />
 			<Item Name="GenInfoName" Value="genInfo" />
-			<Item Name="lumi_file" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root" />
+			<Item Name="lumi_file" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root" />
 			<Item Name="lumihists_lumi_per_bin" Value="1000."/>
 			<!-- the class name of the AnalysisModule subclasses to run: -->
-			<Item Name="AnalysisModule" Value="TstarPreSelectionModule" />
+			<Item Name="AnalysisModule" Value="TstarSelectionModule" />
 			<!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
 			MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
 			event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
 			<Item Name="use_sframe_weight" Value="false" />
 			<Item Name="channel" Value="muon" /> <!-- Choose Channel for Selection-->
 			<!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-			<Item Name="pileup_directory" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyMCPileupHistogram.root" />
-			<Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyDataPileupHistogram.root" />
+			<Item Name="pileup_directory" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MyMCPileupHistogram.root" />
+			<Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MyDataPileupHistogram.root" />
+			
+
+			<Item Name="MCBtagEfficiencies" Value="/nfs/dust/cms/user/multh/RunII_80X_v3/BTagMCEfficiencyHists/BTagMCEfficiencyHists_medium.root" />
+			<Item Name="BTagCalibration" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/CSVv2_Moriond17_B_H.csv" />
+
+
 			<Item Name="sys_muonID" Value="nominal" />
-			<Item Name="sys_muonTrig" Value="nominal" />
-			<Item Name="jecsmear_direction" Value="nominal" />
-			<Item Name="jersmear_direction" Value="nominal" />
+			<Item Name="sys_muonTrigger" Value="nominal" />
+		        <Item Name="b_PDFUncertainties" Value="true" />
+		        <Item Name="ScaleVariationMuR" Value="none" />
+		        <Item Name="ScaleVariationMuF" Value="none" />
+			<Item Name="sys_bTag" Value="central" />
+			<Item Name="sys_PU" Value="central" />
 		</UserConfig>
 	</Cycle>
 </JobConfiguration>
