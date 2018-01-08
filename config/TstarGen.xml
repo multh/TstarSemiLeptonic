@@ -31,11 +31,56 @@
         <Package Name="SUHH2TstarSemiLeptonic.par" />
         <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&SELECdir;" PostFix="" TargetLumi="35867">
 
-
-
-
 		<InputData Lumi="34979.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-700" Cacheable="False">
 			&Tstar_M-700;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="33386.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-800" Cacheable="False">
+			&Tstar_M-800;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34987.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-900" Cacheable="False">
+			&Tstar_M-900;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1000" Cacheable="False">
+			&Tstar_M-1000;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34977.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1100" Cacheable="False">
+			&Tstar_M-1100;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34573.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1200" Cacheable="False">
+			&Tstar_M-1200;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34978.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1300" Cacheable="False">
+			&Tstar_M-1300;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34975.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1400" Cacheable="False">
+			&Tstar_M-1400;
+			<InputTree Name="AnalysisTree" />
+			<OutputTree Name="AnalysisTree" />
+		</InputData>
+
+		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1500" Cacheable="False">
+			&Tstar_M-1500;
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
@@ -45,46 +90,7 @@
 			<InputTree Name="AnalysisTree" />
 			<OutputTree Name="AnalysisTree" />
 		</InputData>
-		<InputData Lumi="34977.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1100" Cacheable="False">
-			&Tstar_M-1100;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1500" Cacheable="False">
-			&Tstar_M-1500;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34981.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1000" Cacheable="False">
-			&Tstar_M-1000;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="33386.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-800" Cacheable="False">
-			&Tstar_M-800;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34573.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1200" Cacheable="False">
-			&Tstar_M-1200;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34975.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1400" Cacheable="False">
-			&Tstar_M-1400;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34978.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-1300" Cacheable="False">
-			&Tstar_M-1300;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
-		<InputData Lumi="34987.0" NEventsMax="&NEVT;" Type="MC" Version="Tstar_M-900" Cacheable="False">
-			&Tstar_M-900;
-			<InputTree Name="AnalysisTree" />
-			<OutputTree Name="AnalysisTree" />
-		</InputData>
+
 
 
 

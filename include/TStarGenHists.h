@@ -13,9 +13,14 @@ public:
     virtual void fill(const uhh2::Event & t) override;
 
 protected:
-    TH1F* M_TStar_gen, *Pt_TStarTStar_gen, *shat, *M_tstar, *M_antitstar,*M_TStar_reco,*M_AntiTStar_reco,*M_tTStar_reco,*M_tAntiTStar_reco, *Pt_tstar, *Pt_antitstar, *Pt_top_over_shat, *Pt_antitop_over_shat, *Pt_top_over_M_ttbar, *Pt_antitop_over_M_ttbar, *y_tstar, *y_antitstar, *eta_TStar, *eta_AntiTStar, *diffabseta, *diffabsy, *deltaR_tstar_decays, *deltaR_antitstar_decays, *deltaR_top_decays, *deltaR_antitop_decays,*ptrel_top, *ptrel_antitop,
- *Pt_top, *Pt_antitop, *eta_top, *eta_antitop,*Pt_gluon, *Pt_antigluon, *eta_gluon, *eta_antigluon, *y_b, *y_antib, *M_top, *M_antitop, *Pt_Wplus, *Pt_Wminus, *eta_Wplus, *eta_Wminus, *y_Wplus, *y_Wminus, *M_Wplus, *M_Wminus, *cosThetastar_top_ttframe, *cosThetastar_antitop_ttframe, *Pt_top_ttframe, *Pt_antitop_ttframe, *DecayChannel, *Match_Gluon;
+    TH1F* M_TstarTstar, *Pt_TstarTstar;
+    TH1F* M_Tstar, *M_antiTstar, *M_Tstar_reco, *M_antiTstar_reco, *Pt_Tstar, *Pt_antiTstar, *phi_Tstar, *phi_antiTstar, *eta_Tstar, *eta_antiTstar, *Pt_Tstar_over_M_TstarTstar, *Pt_antiTstar_over_M_TstarTstar, *Pt_Tstar_over_shat, *Pt_antiTstar_over_shat;
+    TH1F* M_top,*M_antitop, *Pt_top, *Pt_antitop, *eta_top, *eta_antitop, *phi_top, *phi_antitop, *diffabseta, *diffabsphi, *M_tAntiTstar_reco, *M_tTstar_reco;
+    TH1F* Pt_gluon, *Pt_antigluon, *eta_gluon, *eta_antigluon, *phi_gluon, *phi_antigluon;
+    TH1F* Pt_bottom, *Pt_antibottom, *eta_bottom, *eta_antibottom, *phi_bottom, *phi_antibottom;
+    TH1F* deltaR_Tstar_decays, *deltaR_antiTstar_decays, *deltaR_top_decays, *deltaR_antitop_decays;
+    TH2F* M_TstarTstar_vs_eta_Tstar, *M_TstarTstar_vs_eta_antiTstar, *  M_TstarTstar_vs_deltaR_Tstar, *M_TstarTstar_vs_deltaR_antiTstar;
+    TH2F* shat_vs_deltaR_Tstar, *shat_vs_deltaR_antiTstar, *shat_vs_Pt_Tstar, *shat_vs_Pt_antiTstar ;
 
-    TH2F* M_ttbar_vs_shat, *M_ttbar_vs_deltaR_top, *M_ttbar_vs_deltaR_antitop, *shat_vs_deltaR_top, *shat_vs_deltaR_antitop, *Pt_top_vs_deltaR_top, *Pt_antitop_vs_deltaR_antitop, *M_ttbar_vs_deltaR_Wplus, *M_ttbar_vs_deltaR_Wminus, *M_ttbar_vs_Pt_top, *M_ttbar_vs_Pt_antitop, *shat_vs_Pt_top, *shat_vs_Pt_antitop, *Pt_top_vs_Pt_antitop, *M_ttbar_vs_Pt_top_ttframe, *M_ttbar_vs_Pt_antitop_ttframe, *M_ttbar_vs_eta_top, *M_ttbar_vs_eta_antitop;
     uhh2::Event::Handle<TStarGen> h_tstargen;
 };

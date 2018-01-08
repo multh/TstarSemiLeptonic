@@ -6,7 +6,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 #include <assert.h>
 #define G__DICTIONARY
@@ -367,10 +366,10 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/nfs/dust/cms/user/multh/SFrame_8_0_26_patch2",
-"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src",
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed6/include",
-"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/",
+"/nfs/dust/cms/user/multh/SFrame_9_2_4",
+"/nfs/dust/cms/user/multh/CMSSW_9_2_4/src",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.08.07/include",
+"/nfs/dust/cms/user/multh/CMSSW_9_2_4/src/UHH2/TstarSemiLeptonic/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
@@ -380,7 +379,7 @@ namespace {
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_Autoloading_Map;
 class __attribute__((annotate("$clingAutoload$include/TstarReconstructionHypothesis.h")))  TstarReconstructionHypothesis;
-namespace std{template <typename _Tp> class __attribute__((annotate("$clingAutoload$string")))  allocator;
+namespace std{template <typename _Tp> class __attribute__((annotate("$clingAutoload$bits/allocator.h")))  __attribute__((annotate("$clingAutoload$string")))  allocator;
 }
 )DICTFWDDCLS";
     static const char* payloadCode = R"DICTPAYLOAD(
