@@ -42,14 +42,14 @@ public:
   enum E_DecayChannel{
     e_ee, 
     e_emu,
-    e_ehad,
-    e_had,
-    e_muhad,
-    e_tauhad,  
     e_mumu,
     e_tautau,
     e_etau,
     e_mutau,
+    e_ehad,
+    e_muhad,
+    e_tauhad,  
+    e_had,
     e_notfound
   };
   

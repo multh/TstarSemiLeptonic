@@ -105,7 +105,7 @@
 			<Item Name="TopJetCollection" Value="slimmedJetsAK8_SoftDrop" />
 			<Item Name="GenParticleCollection" Value="GenParticles" />
 			<Item Name="GenInfoName" Value="genInfo" />
-			<Item Name="lumi_file" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root" />
+			<Item Name="lumi_file" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.root" />
 			<Item Name="lumihists_lumi_per_bin" Value="1000."/>
 			<!-- the class name of the AnalysisModule subclasses to run: -->
 			<Item Name="AnalysisModule" Value="TStarGenModule" />
@@ -115,11 +115,11 @@
 			<Item Name="use_sframe_weight" Value="false" />
 			<Item Name="channel" Value="muon" /> <!-- Choose Channel for Selection-->
 			<!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-			<Item Name="pileup_directory" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyMCPileupHistogram.root" />
-			<Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/MyDataPileupHistogram.root" />
+			<Item Name="pileup_directory" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MyMCPileupHistogram.root" />
+			<Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MyDataPileupHistogram.root" />
 
 			<Item Name="MCBtagEfficiencies" Value="/nfs/dust/cms/user/multh/RunII_80X_v3/BTagMCEfficiencyHists/BTagMCEfficiencyHists_medium.root" />
-			<Item Name="BTagCalibration" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_24_JEC/CMSSW_8_0_24_patch1/src/UHH2/common/data/CSVv2_Moriond17_B_H.csv" />
+			<Item Name="BTagCalibration" Value="/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/CSVv2_Moriond17_B_H.csv" />
 
 
 			<Item Name="sys_muonID" Value="nominal" />

@@ -41,9 +41,10 @@ namespace uhh2examples {
     //printer->process(event);
     tstargenprod->process(event);
     const auto & tstargen = event.get(h_tstargen);
-    cout << "Decay channel is " << tstargen.DecayChannel() << endl;
-    
-    h_tstargenhists->fill(event);
+    //   cout << "Decay channel is " << tstargen.DecayChannel() << endl;
+    //  if(tstargen.DecayChannel() == 5){  // Decay Channel Muon+Jets
+      h_tstargenhists->fill(event);
+      // }
     
     return true;
   }

@@ -9,6 +9,8 @@ using namespace std;
 
 TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): Hists(ctx, dirname){
 
+  DecayChannel  = book<TH1F>("Decay_Channel","Decay_Channel", 11, -0.5, 10.5);
+
   M_TstarTstar  = book<TH1F>( "M_TstarTstar", "M_{T^{*}#bar{T}^{*}} [GeV/c^{2}]", 200, 0, 6000 ) ;   
   Pt_TstarTstar = book< TH1F>( "Pt_TstarTstar", "P_{T,T^{*}#bar{T^{*}}} [GeV/c]", 10, -0.5, 0.5 ) ;
 
@@ -39,7 +41,7 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
 
 
   diffabseta = book<TH1F>( "diffabseta", "|#eta_{T^{*}}|-|#eta_{#bar{T}^{*}}|",200,-5,5);
-  diffabsphi = book<TH1F>( "diffabsphi", "|#phi_{T^{*}}|-|#phi_{#bar{T}^{*}}|",200,-3.14,3.14);
+  diffphi = book<TH1F>( "diffphi", "|#phi_{T^{*}}-#phi_{#bar{T}^{*}}|",20,0,6.5);
        
   deltaR_Tstar_decays     = book<TH1F>( "deltaR_tstar_decays", "#DeltaR(T^{*} decay prod.)",200,0,5);
   deltaR_antiTstar_decays = book<TH1F>( "deltaR_antitstar_decays", "#DeltaR(#bar{T}^{*} decay prod.)",200,0,5);  
@@ -55,18 +57,21 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   eta_antigluon = book<TH1F>("eta_gluon_AntiTstar","#eta_{g}",100,-5,5);
   phi_antigluon = book<TH1F>("phi_gluon_AntiTstar", "#phi_{gluon}", 100, -3.14, 3.14);
 
-  M_top   = book<TH1F>("M_top", "M_{t} [GeV/c^{2}]",50,0, 250);
+  M_top   = book<TH1F>("M_top", "M_{t} [GeV/c^{2}]",50,140, 210);
   Pt_top  = book<TH1F>("Pt_top","P_{T,t} [GeV/c]",100,0,1000);
   eta_top = book<TH1F>("eta_top","#eta_{t}",100,-5.19,5.19);
   phi_top = book<TH1F>("phi_top", "#phi_{t}", 100, -3.14, 3.14);
 
-  M_antitop   = book<TH1F>("M_antitop", "M_{#bar{t}} [GeV/c^{2}]", 50, 0, 250);
+  M_antitop   = book<TH1F>("M_antitop", "M_{#bar{t}} [GeV/c^{2}]", 50, 140, 210);
   Pt_antitop  = book<TH1F>("Pt_antitop","P_{T,#bar{t}} [GeV/c]",100,0,1000);
   eta_antitop = book<TH1F>( "eta_antitop","#eta_{#bar{t}}",100,-5,5);
   phi_antitop = book<TH1F>("phi_antitop", "#phi_{#bar{t}}", 100, -3.14, 3.14);
 
   deltaR_top_decays     = book<TH1F>( "deltaR_top_decays", "#DeltaR(t decay prod.)",100,0,5);
   deltaR_antitop_decays = book<TH1F>( "deltaR_antitop_decays", "#DeltaR(#bar{t} decay prod.)",100,0,5);  
+
+  Pt_Top_vs_deltaR_top         = book<TH2F>( "Pt_top_vs_deltaR_top", "P_{T, t} [GeV/c] vs #DeltaR(top decay prod.)",200,0,3000,500,0,5);
+  Pt_antiTop_vs_deltaR_antitop = book<TH2F>( "Pt_antitop_vs_deltaR_antitop", "P_{T, #bar{t}} [GeV/c] vs #DeltaR(top decay prod.)",200,0,3000,500,0,5);
 
   M_tTstar_reco     = book< TH1F>("M_tTstar_reco", "M_{W b} [GeV/c^{2}]", 185, 150, 2000) ;
   M_tAntiTstar_reco = book< TH1F>("M_tAntiTstar", "M_{W #bar{b}} [GeV/c^{2}]", 185, 150, 2000) ;
@@ -89,9 +94,15 @@ void TStarGenHists::fill(const uhh2::Event & e){
   if(!e.is_valid(h_tstargen)){
     return;
   }
-  
+  const char *channels[11] = {"ee","#mu#mu", "#tau#tau","e#mu", "e#tau", "#mu#tau","e+had", "#mu+had", "#tau+had", "all had", "not found"};
+  for(int i=0; i<11; i++){
+    DecayChannel->GetXaxis()->SetBinLabel(i+1, channels[i]);
+  }
+
   const auto & tstargen = e.get(h_tstargen);
   
+  DecayChannel -> Fill(tstargen.DecayChannel(), e.weight);
+
   LorentzVector tstar = tstargen.TStar().v4();
   LorentzVector antitstar = tstargen.AntiTStar().v4();
   
@@ -121,10 +132,10 @@ void TStarGenHists::fill(const uhh2::Event & e){
   Pt_antiTstar_over_shat         -> Fill(antitstar.Pt()/sh, e.weight);
 
   double difabseta = fabs( tstargen.TStar().eta()) - fabs( tstargen.AntiTStar().eta());
-  double difabsphi = fabs( tstargen.TStar().phi()) - fabs( tstargen.AntiTStar().phi());
+  double difabsphi = fabs(tstargen.TStar().phi() - tstargen.AntiTStar().phi());
 
   diffabseta -> Fill(difabseta, e.weight);
-  diffabsphi -> Fill(difabsphi, e.weight);
+  diffphi -> Fill(difabsphi, e.weight);
        
 
   double deltaR_tstar     =  uhh2::deltaR(tstargen.gTStar(), tstargen.tTStar());
@@ -133,8 +144,8 @@ void TStarGenHists::fill(const uhh2::Event & e){
   deltaR_Tstar_decays     -> Fill(deltaR_tstar,e.weight);
   deltaR_antiTstar_decays -> Fill(deltaR_antitstar,e.weight);
    
-  M_TstarTstar_vs_deltaR_Tstar     -> Fill(tstar.Pt(), deltaR_tstar, e.weight);
-  M_TstarTstar_vs_deltaR_antiTstar -> Fill(antitstar.Pt(), deltaR_antitstar, e.weight);
+  M_TstarTstar_vs_deltaR_Tstar     -> Fill(mtstar_gen, deltaR_tstar, e.weight);
+  M_TstarTstar_vs_deltaR_antiTstar -> Fill(mtstar_gen, deltaR_antitstar, e.weight);
   shat_vs_deltaR_Tstar             -> Fill(sh, deltaR_tstar, e.weight);
   shat_vs_deltaR_antiTstar         -> Fill(sh, deltaR_antitstar, e.weight);
   shat_vs_Pt_Tstar                 -> Fill(sh, tstar.Pt(), e.weight);
@@ -156,6 +167,7 @@ void TStarGenHists::fill(const uhh2::Event & e){
 					 uhh2::deltaR(tstargen.wPlusDecay1(), tstargen.bTStar())), 
 			       uhh2::deltaR(tstargen.wPlusDecay2(), tstargen.bTStar() ));  
 
+  M_top   -> Fill(tstargen.tTStar().v4().M(), e.weight);
   Pt_top  -> Fill(tstargen.tTStar().pt(), e.weight);
   eta_top -> Fill(tstargen.tTStar().eta(), e.weight);
   phi_top -> Fill(tstargen.tTStar().phi(), e.weight);
@@ -170,6 +182,7 @@ void TStarGenHists::fill(const uhh2::Event & e){
 					     uhh2::deltaR(tstargen.wMinusDecay1(), tstargen.bAntiTStar())), 
 				   uhh2::deltaR(tstargen.wMinusDecay2(), tstargen.bAntiTStar() ));  
 
+  M_antitop   -> Fill(tstargen.tAntiTStar().v4().M(), e.weight);
   Pt_antitop  -> Fill(tstargen.tAntiTStar().pt(), e.weight);  
   eta_antitop -> Fill(tstargen.tAntiTStar().eta(), e.weight); 
   phi_antitop -> Fill(tstargen.tAntiTStar().phi(), e.weight);
@@ -178,6 +191,9 @@ void TStarGenHists::fill(const uhh2::Event & e){
   double mantitstar_reco = (antitop+antigluon).M();
   M_antiTstar_reco->Fill( mantitstar_reco,e.weight);
  
+  Pt_Top_vs_deltaR_top         -> Fill(tstargen.tTStar().pt(), deltaR_top, e.weight);
+  Pt_antiTop_vs_deltaR_antitop -> Fill(tstargen.tAntiTStar().pt(), deltaR_antitop, e.weight);
+
   Pt_bottom  -> Fill(tstargen.bTStar().pt(), e.weight);
   eta_bottom -> Fill(tstargen.bTStar().eta(), e.weight);
   phi_bottom -> Fill(tstargen.bTStar().phi(), e.weight);
