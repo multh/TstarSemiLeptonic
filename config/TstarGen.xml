@@ -3,8 +3,8 @@
 
  <!ENTITY NEVT "-1">
 
-<!ENTITY PROOFdir "/nfs/dust/cms/user/multh/RunII_80X_v3/GenSelection/">
-<!ENTITY SELECdir "/nfs/dust/cms/user/multh/RunII_80X_v3/GenSelection/">
+<!ENTITY PROOFdir "/nfs/dust/cms/user/multh/RunII_80X_v3/GenSelection/03Feb2017_Relaunch_17Jan2017/">
+<!ENTITY SELECdir "/nfs/dust/cms/user/multh/RunII_80X_v3/GenSelection/03Feb2017_Relaunch_17Jan2017/">
 
  
 <!ENTITY Tstar_M-700 SYSTEM "/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/datasets/RunII_80X_v3/Tstar/TstarTstarToTgluonTgluon_M-700.xml">

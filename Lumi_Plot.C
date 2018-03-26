@@ -10,17 +10,17 @@ TLatex latex;
 
 
   // plot the lumi yield histogram
-   TFile *Data = new TFile("/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V4/AK4CHS/MC_NoReWeighted_CHS_NoEtaCleaning/uhh2.AnalysisModuleRunner.DATA.DATA_RunEFearly_AK4CHS.root","READ");
-   //TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_76X_v1/Selection/FINAL/Nominal/uhh2.AnalysisModuleRunner.DATA.SingleMuDATA.root","READ");
+  //   TFile *Data = new TFile("/nfs/dust/cms/user/multh/JEC/2016Legacy/Residuals/Summer16_07Aug2017_V4/AK4CHS/MC_NoReWeighted_CHS_NoEtaCleaning/uhh2.AnalysisModuleRunner.DATA.DATA_RunEFearly_AK4CHS.root","READ");
+   TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/uhh2.AnalysisModuleRunner.DATA.SingleMuData.root","READ");
 
-  TH1F *h  = (TH1F*)Data->Get("HT300_Lumi/luminosity");
+  TH1F *h  = (TH1F*)Data->Get("output_Lumi/luminosity");
   //TH1F *h  = (TH1F*)Data->Get("twodcut_Lumi/luminosity");
   
-  h->GetYaxis()->SetRangeUser(0,400000);
-  h->GetXaxis()->SetTitle("integrierte Luminosit#ddot{a}t [pb^{-1}]");
+  h->GetYaxis()->SetRangeUser(0,4000);
+  h->GetXaxis()->SetTitle("integrated Luminosity [pb^{-1}]");
   h->GetXaxis()->SetTitleSize(0.04);
   h->GetXaxis()->SetTitleOffset(1.3);
-  h->GetYaxis()->SetTitle("Ereignisse pro 50 pb^{-1}");
+  h->GetYaxis()->SetTitle("Events per 50 pb^{-1}");
   h->GetYaxis()->SetTitleOffset(1.5);
   h->GetYaxis()->SetTitleSize(0.04);
   h->SetMarkerStyle(20);
@@ -133,7 +133,7 @@ TLatex latex;
   text->DrawLatex(0.3, 0.3, info.Data());
   info = TString::Format("%3.1f / %d", chi2, bins-1);
   text->DrawLatex(0.50, 0.3, info.Data());
-  info = TString::Format("Durchschnitt");
+  info = TString::Format("average");
   text->DrawLatex(0.3, 0.25, info.Data());
   info = TString::Format("%4.1f #pm %4.1f", av, err);
   text->DrawLatex(0.50, 0.25, info.Data());

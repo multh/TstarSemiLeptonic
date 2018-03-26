@@ -3,22 +3,22 @@ jmax *   number of backgrounds
 kmax *   number of nuisance parameters
 -----------------
 bin            mTstar                                                                         
-observation 10923
+observation 40241
 -----------------
 shapes * * datacards.root cms_workspace:$PROCESS
 ---------------------------------------------------------------------------------------------
 bin                          mTstar      mTstar                                               
 process                      Tstar_1500   Background                                             
 process                      0           1                                                    
-rate                       968.754     10923              
+rate                       1553.57     40241              
 ----------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------
-lambda                param  30   1.07015    
-lambda2               param  -7.01766   0.142847    
-lambda3               param  0.414123   0.0230364    
-gaus_mean_1500         param  1411.68     13.5211    
-gaus_sigma_1500        param  146.65     12.3097    
-land_mean_1500         param  1635.27     142.078    
-land_sigma_1500        param  563.479     75.5066    
+lambda                param  29.9953   3.07603    
+lambda2               param  -6.81163   0.0209775    
+lambda3               param  0.380149   0.00386042    
+gaus_mean_1500         param  1407.83     9.98627    
+gaus_sigma_1500        param  140.49     9.34103    
+land_mean_1500         param  1611.47     110.539    
+land_sigma_1500        param  560.627     62.3285    
 rate                  rateParam       mTstar Background   1                                                     
 

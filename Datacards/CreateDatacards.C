@@ -14,83 +14,52 @@ using namespace RooFit;
 void CreateDatacards() {
 
 //******************* Read in Data/MC Files *******************************************
+  const TString Input_Dir = {"/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/"};
 
-//Read in Data File 
-TFile *Data = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.DATA.SingleMuData.root");
+  const int n_signal = 10;
 
-//Read in Signal Files 
-TFile *Tstar_M700  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root");
-TFile *Tstar_M800  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-800.root");
-TFile *Tstar_M900  = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-900.root");
-TFile *Tstar_M1000 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1000.root");
-TFile *Tstar_M1100 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1100.root");
-TFile *Tstar_M1200 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1200.root");
-TFile *Tstar_M1300 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1300.root");
-TFile *Tstar_M1400 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1400.root");
-TFile *Tstar_M1500 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root");
-TFile *Tstar_M1600 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Tstar_M-1600.root");
+  const TString Signal_Files[n_signal] = {"Tstar_M-700", "Tstar_M-800", "Tstar_M-900", "Tstar_M-1000", "Tstar_M-1100", "Tstar_M-1200", "Tstar_M-1300", "Tstar_M-1400", "Tstar_M-1500","Tstar_M-1600"};
+  TFile *Tstar[n_signal];
 
-TFile *TTbar     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.TTbar_Tune.root");
-TFile *WJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.WJets_Pt.root");
-TFile *ZJets     = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.ZJets_HT.root");
-TFile *QCD       = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.QCD.root");
-TFile *Diboson   = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.Diboson.root");
-TFile *SingleTop = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Test/uhh2.AnalysisModuleRunner.MC.SingleT.root");
-
-/*
- TH1F *h1    = (TH1F*)TTbar     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1F *h2    = (TH1F*)WJets     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1F *h3    = (TH1F*)ZJets     ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1F *h4    = (TH1F*)QCD       ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1F *h5    = (TH1F*)Diboson   ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1F *h6    = (TH1F*)SingleTop ->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
-*/
-
- TH1F *h1    = (TH1F*)TTbar     ->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h2    = (TH1F*)WJets     ->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h3    = (TH1F*)ZJets     ->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h4    = (TH1F*)QCD       ->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h5    = (TH1F*)Diboson   ->Get("chi2min__HypHists/M_Tstar_comb");
- TH1F *h6    = (TH1F*)SingleTop ->Get("chi2min__HypHists/M_Tstar_comb");
-
-//Create Vector for BKG Hists
- TH1F* histos[6]={h1,h2,h3,h4,h5,h6};
-for (int i=0;i<6;++i){
-         histos[i]->Sumw2(); // *Very* Important
-        }
-
-//Merge All BKG Hists
-TList *list = new TList; 
-list->Add(h1); 
-list->Add(h2);
- list->Add(h3);
-list->Add(h4);
-list->Add(h5);
-list->Add(h6);
-
-TH1D *bkg = (TH1D*)h1->Clone("h"); 
-bkg->Reset(); 
-bkg->Merge(list); 
+  const int n_bkg = 6;
+  const TString Background_Files[n_bkg] = {"TTbar_Tune", "WJets_Pt", "ZJets_HT", "QCD_Mu", "SingleT", "Diboson"};
+  TFile* Background[n_bkg];
 
 
-// TH1D *h_TTbar        = (TH1D*)TTbar->Get("chi2min_ttag_comb__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_700    = (TH1D*)Tstar_M700->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_800    = (TH1D*)Tstar_M800->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_900    = (TH1D*)Tstar_M900->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1000   = (TH1D*)Tstar_M1000->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1100   = (TH1D*)Tstar_M1100->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1200   = (TH1D*)Tstar_M1200->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1300   = (TH1D*)Tstar_M1300->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1400   = (TH1D*)Tstar_M1400->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1500   = (TH1D*)Tstar_M1500->Get("chi2min__HypHists/M_Tstar_comb");
- TH1D *h_Tstar_1600   = (TH1D*)Tstar_M1600->Get("chi2min__HypHists/M_Tstar_comb");
- 
- TH1D *h_Data         = (TH1D*)Data->Get("chi2min_ttag__HypHists/M_Tstar_comb");
+  TH1F *h_bkg[n_bkg]; 
+  TH1F *h_sig[n_signal];
+  
+  const TString Hist_Dir = {"chi2min__HypHists/M_Tstar_comb"};
 
- cout<<"Data SumWeight: "<< h_Data->GetSumOfWeights() <<endl;
- cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
- cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
 
+  for(int i = 0; i<n_signal; i++){
+    Tstar[i] = new TFile(Input_Dir+"uhh2.AnalysisModuleRunner.MC."+Signal_Files[i]+".root");
+    h_sig[i] = (TH1F*)Tstar[i] -> Get(Hist_Dir);
+  }
+
+  for(int i = 0; i<n_bkg; i++){
+    Background[i] = new TFile(Input_Dir+"uhh2.AnalysisModuleRunner.MC."+Background_Files[i]+".root");
+    h_bkg[i]      = (TH1F*)Background[i] -> Get(Hist_Dir);
+  }
+
+  //Read in Data File 
+  TFile *Data  = new TFile(Input_Dir+"uhh2.AnalysisModuleRunner.DATA.SingleMuData.root");
+  TH1D *h_Data = (TH1D*)Data->Get(Hist_Dir);
+
+  
+  //Merge All BKG Hists
+  TList *list = new TList; 
+  for(int i = 0; i<n_bkg; i++){
+    list ->Add(h_bkg[i]);
+  }
+  
+  TH1D *bkg = (TH1D*)h_bkg[0]->Clone("h"); 
+  bkg->Reset(); 
+  bkg->Merge(list); 
+
+  cout<<"Data SumWeight: "<< h_Data->GetSumOfWeights() <<endl;
+  cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
+  cout<<"bkg SumWeight: "<< bkg->GetSumOfWeights() <<endl;
 
 
 //***************** Fit with RooFit **************************************************************************************** 
@@ -106,9 +75,8 @@ bkg->Merge(list);
 
 
    //PDF for Background 
-  RooGenericPdf Background("Background","Background","TMath::Power(InvMass/25, lambda+lambda2*log(InvMass/25)+lambda3*log(InvMass/25)*log(InvMass/25))",RooArgSet(InvMass,lambda,lambda2, lambda3));
-  
-   // RooGenericPdf Background("Background","Background","TMath::Power(InvMass/100, (lambda+lambda2*log(InvMass/100)))",RooArgSet(InvMass,lambda,lambda2));
+   RooGenericPdf Background_Func("Background","Background","TMath::Power(InvMass/20, lambda+lambda2*log(InvMass/20)+lambda3*log(InvMass/20)*log(InvMass/20))",RooArgSet(InvMass,lambda,lambda2, lambda3)); //20
+     // RooGenericPdf Background("Background","Background","TMath::Power(InvMass/100, (lambda+lambda2*log(InvMass/100)))",RooArgSet(InvMass,lambda,lambda2));
     
    //Add PDFs for Signals to workspace  
    cms_workspace.factory("RooGaussian:gx_700(InvMass[400,2000],gaus_mean_700[500,800],gaus_sigma_700[50,200])");
@@ -152,7 +120,7 @@ bkg->Merge(list);
    cms_workspace.factory("SUM:Tstar_1600(g1frac_1600[0.4]*gx_1600,p1frac_1600[0.6]*lx_1600)");
 
    //Add PDF for Background to workspace
-   cms_workspace.import(Background);
+   cms_workspace.import(Background_Func);
    RooAbsPdf * pdf_Background = cms_workspace.pdf("Background");   // access object from workspace
      pdf_Background->Print();
 
@@ -170,18 +138,18 @@ bkg->Merge(list);
 
  // create dataset
    RooDataHist * data_obs    = new RooDataHist("data_obs","data_obs",*InvMass1,h_Data); 
-   RooDataHist * bkg_h       = new RooDataHist("bkg_h","bkg_h",*InvMass1,h1);
+   RooDataHist * bkg_h       = new RooDataHist("bkg_h","bkg_h",*InvMass1,h_bkg[0]);
    RooDataHist * merge_h     = new RooDataHist("merge_h","merge_h",*InvMass1,bkg);
-   RooDataHist * Tstar_700_h = new RooDataHist("Tstar_700_h","Tstar_700_h",*InvMass1,h_Tstar_700);
-   RooDataHist * Tstar_800_h = new RooDataHist("Tstar_800_h","Tstar_800_h",*InvMass1,h_Tstar_800); 
-   RooDataHist * Tstar_900_h = new RooDataHist("Tstar_900_h","Tstar_900_h",*InvMass1,h_Tstar_900); 
-   RooDataHist * Tstar_1000_h = new RooDataHist("Tstar_1000_h","Tstar_1000_h",*InvMass1,h_Tstar_1000); 
-   RooDataHist * Tstar_1100_h = new RooDataHist("Tstar_1100_h","Tstar_1100_h",*InvMass1,h_Tstar_1100); 
-   RooDataHist * Tstar_1200_h = new RooDataHist("Tstar_1200_h","Tstar_1200_h",*InvMass1,h_Tstar_1200); 
-   RooDataHist * Tstar_1300_h = new RooDataHist("Tstar_1300_h","Tstar_1300_h",*InvMass1,h_Tstar_1300); 
-   RooDataHist * Tstar_1400_h = new RooDataHist("Tstar_1400_h","Tstar_1400_h",*InvMass1,h_Tstar_1400); 
-   RooDataHist * Tstar_1500_h = new RooDataHist("Tstar_1500_h","Tstar_1500_h",*InvMass1,h_Tstar_1500); 
-   RooDataHist * Tstar_1600_h = new RooDataHist("Tstar_1600_h","Tstar_1600_h",*InvMass1,h_Tstar_1600); 
+   RooDataHist * Tstar_700_h = new RooDataHist("Tstar_700_h","Tstar_700_h",*InvMass1,h_sig[0]);
+   RooDataHist * Tstar_800_h = new RooDataHist("Tstar_800_h","Tstar_800_h",*InvMass1,h_sig[1]); 
+   RooDataHist * Tstar_900_h = new RooDataHist("Tstar_900_h","Tstar_900_h",*InvMass1,h_sig[2]); 
+   RooDataHist * Tstar_1000_h = new RooDataHist("Tstar_1000_h","Tstar_1000_h",*InvMass1,h_sig[3]); 
+   RooDataHist * Tstar_1100_h = new RooDataHist("Tstar_1100_h","Tstar_1100_h",*InvMass1,h_sig[4]); 
+   RooDataHist * Tstar_1200_h = new RooDataHist("Tstar_1200_h","Tstar_1200_h",*InvMass1,h_sig[5]); 
+   RooDataHist * Tstar_1300_h = new RooDataHist("Tstar_1300_h","Tstar_1300_h",*InvMass1,h_sig[6]); 
+   RooDataHist * Tstar_1400_h = new RooDataHist("Tstar_1400_h","Tstar_1400_h",*InvMass1,h_sig[7]); 
+   RooDataHist * Tstar_1500_h = new RooDataHist("Tstar_1500_h","Tstar_1500_h",*InvMass1,h_sig[8]); 
+   RooDataHist * Tstar_1600_h = new RooDataHist("Tstar_1600_h","Tstar_1600_h",*InvMass1,h_sig[9]); 
    
   
    //Create Canvas 
@@ -211,7 +179,7 @@ bkg->Merge(list);
   
    
    // plot PDFs on the same RooPlot object we have plotted the data 
-   /*
+   
    data_obs ->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
    //merge_h->plotOn(plot,DataError(RooAbsData::None),XErrorSize(0),MarkerColor(kWhite));
 
@@ -226,10 +194,10 @@ bkg->Merge(list);
    leg->AddEntry(plot->findObject("daten"),"MC-Background","pel");
    leg->AddEntry(plot->findObject("pdf"),"Fit-Function","l");
    leg->AddEntry(plot->findObject("error"),"#pm 1 #sigma Error band","f");
-   */
+   
    
  // plot PDFs on the same RooPlot object we have plotted the data 
-   
+   /*
      Tstar_1100_h     ->plotOn(plot,MarkerColor(kBlack));
       Tstar_1500_h    ->plotOn(plot,MarkerColor(kBlue));
         pdf_Tstar_1100   ->plotOn(plot,VisualizeError(*r_Tstar1100,1),FillColor(kGray),Name("error"));
@@ -240,7 +208,7 @@ bkg->Merge(list);
   
     Tstar_1100_h->plotOn(plot,RooFit::Name("Tstar_1100"));
      Tstar_1500_h->plotOn(plot,RooFit::Name("Tstar_1500"));
-
+   
  //Create Legend for RooPlot
   leg = new TLegend(0.1,0.7,0.48,0.9);
   leg->AddEntry(plot->findObject("Tstar_1100"),"T* (1100 GeV/c^{2})","pel");
@@ -249,7 +217,8 @@ bkg->Merge(list);
   
   leg->AddEntry(plot->findObject("Tstar_1500"),"T* (1500 GeV/c^{2})","pel");
   leg->AddEntry(plot->findObject("Fit_1500"),"Fit-Function (1500 GeV/c^{2})","l");
- 
+   */
+
    
 //Draw PDFs and Legend 
    plot->Draw();
@@ -276,7 +245,6 @@ bkg->Merge(list);
        RooDataHist * Signal_h[10] = {Tstar_700_h, Tstar_800_h, Tstar_900_h, Tstar_1000_h, Tstar_1100_h, Tstar_1200_h, Tstar_1300_h, Tstar_1400_h, Tstar_1500_h, Tstar_1600_h};
 
 for(int i=0; i<10;++i){
-
    RooRealVar * gaus_mean  = cms_workspace.var("gaus_mean_"+Signal_num[i]);    // access object from workspace
    RooRealVar * gaus_sigma = cms_workspace.var("gaus_sigma_"+Signal_num[i]);   // access object from workspace
    RooRealVar * land_mean  = cms_workspace.var("land_mean_"+Signal_num[i]);    // access object from workspace

@@ -2,178 +2,177 @@
 
 
 void CorrMatchMacro() {
- // open a file and get a histogram
- TFile *s1 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root");
- TFile *s2 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-800.root");
- TFile *s3 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-900.root");
- TFile *s4 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1000.root");
- TFile *s5 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1100.root");
- TFile *s6 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1200.root");
- TFile *s7 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1300.root");
- TFile *s8 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1400.root");
- TFile *s9 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1500.root");
- TFile *s10 = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/CorrectMatch/uhh2.AnalysisModuleRunner.MC.Tstar_M-1600.root");
+  
+  const int n_files   = 10;
 
+  const TString directory = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Matching/Changed_Reco/";
  
- TH1F *h1    = (TH1F*)s1->Get("corrmatch__HypHists/M_tophad");
- TH1F *h2    = (TH1F*)s2->Get("corrmatch__HypHists/M_tophad");
- TH1F *h3    = (TH1F*)s3->Get("corrmatch__HypHists/M_tophad");
- TH1F *h4    = (TH1F*)s4->Get("corrmatch__HypHists/M_tophad");
- TH1F *h5    = (TH1F*)s5->Get("corrmatch__HypHists/M_tophad");
- TH1F *h6    = (TH1F*)s6->Get("corrmatch__HypHists/M_tophad");
- TH1F *h7    = (TH1F*)s7->Get("corrmatch__HypHists/M_tophad");
- TH1F *h8    = (TH1F*)s8->Get("corrmatch__HypHists/M_tophad");
- TH1F *h9    = (TH1F*)s9->Get("corrmatch__HypHists/M_tophad");
- TH1F *h10   = (TH1F*)s10->Get("corrmatch__HypHists/M_tophad");
+  const TString file_name[n_files] =  {"Tstar_M-700","Tstar_M-800","Tstar_M-900","Tstar_M-1000","Tstar_M-1100","Tstar_M-1200", "Tstar_M-1300", "Tstar_M-1400", "Tstar_M-1500", "Tstar_M-1600"};
 
- TH1F *t1    = (TH1F*)s1->Get("corrmatch__HypHists/M_toplep");
- TH1F *t2    = (TH1F*)s2->Get("corrmatch__HypHists/M_toplep");
- TH1F *t3    = (TH1F*)s3->Get("corrmatch__HypHists/M_toplep");
- TH1F *t4    = (TH1F*)s4->Get("corrmatch__HypHists/M_toplep");
- TH1F *t5    = (TH1F*)s5->Get("corrmatch__HypHists/M_toplep");
- TH1F *t6    = (TH1F*)s6->Get("corrmatch__HypHists/M_toplep");
- TH1F *t7    = (TH1F*)s7->Get("corrmatch__HypHists/M_toplep");
- TH1F *t8    = (TH1F*)s8->Get("corrmatch__HypHists/M_toplep");
- TH1F *t9    = (TH1F*)s9->Get("corrmatch__HypHists/M_toplep");
- TH1F *t10   = (TH1F*)s10->Get("corrmatch__HypHists/M_toplep");
+  TList *list_tophad = new TList; 
+  TList *list_toplep = new TList; 
+  TList *list_Tstar_M_diff = new TList;
+  TList *list_DeltaPhi = new TList;
+  TList *list_DeltaPt_lep = new TList;
+  TList *list_DeltaPhi_Gluon = new TList;
+  TList *list_DeltaEta_Gluon = new TList;
+  TList *list_DeltaR_Gluon = new TList;
 
+  TH1F *h_signal_tophad[n_files];
+  TH1F *h_signal_toplep[n_files];
+  TH1F *h_signal_Tstar_M_diff[n_files];
+  TH1F *h_signal_DeltaPhi[n_files];
+  TH1F *h_signal_DeltaPt_lep[n_files];
+  TH1F *h_signal_DeltaR_Gluon[n_files];
+  TH1F *h_signal_DeltaPhi_Gluon[n_files];
+  TH1F *h_signal_DeltaEta_Gluon[n_files];
+ 
+  for(int i = 0; i<n_files; i++){
+    TFile *signal = new TFile(directory+"uhh2.AnalysisModuleRunner.MC."+file_name[i]+".root");
 
- TH1F *p1    = (TH1F*)s1->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p2    = (TH1F*)s2->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p3    = (TH1F*)s3->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p4    = (TH1F*)s4->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p5    = (TH1F*)s5->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p6    = (TH1F*)s6->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p7    = (TH1F*)s7->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p8    = (TH1F*)s8->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p9    = (TH1F*)s9->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
- TH1F *p10   = (TH1F*)s10->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
+     
+    h_signal_tophad[i]  = (TH1F*)signal->Get("corrmatch__HypHists/M_tophad");
+    h_signal_toplep[i]  = (TH1F*)signal->Get("corrmatch__HypHists/M_toplep");
+    h_signal_Tstar_M_diff[i] = (TH1F*)signal->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
+    h_signal_DeltaPhi[i] = (TH1F*)signal->Get("corrmatch__HypHists/DeltaPhi_TstarhadTstarlep");
+    h_signal_DeltaPt_lep[i] = (TH1F*)signal->Get("corrmatch__HypHists/Pt_Diff_gluonlep_toplep");
+    //   h_signal_DeltaPt_had[i] = (TH1F*)signal->Get("corrmatch__HypHists/Pt_Diff_gluonhad_tophad");
+    h_signal_DeltaPhi_Gluon[i] = (TH1F*)signal->Get("corrmatch__HypHists/DeltaPhi_GluonhadGluonlep_gen");
+    h_signal_DeltaEta_Gluon[i] = (TH1F*)signal->Get("corrmatch__HypHists/DeltaEta_GluonhadGluonlep");
+    h_signal_DeltaR_Gluon[i] = (TH1F*)signal->Get("corrmatch__HypHists/DeltaR_GluonGluon");
+    /*
+    h_signal_tophad[i]  = (TH1F*)signal->Get("corrmatch_ttag__HypHists/M_tophad");
+    h_signal_toplep[i]  = (TH1F*)signal->Get("corrmatch_ttag__HypHists/M_toplep");
+    h_signal_Tstar_M_diff[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/M_TstarhadTstarlep_Diff_rel");
+    h_signal_DeltaPhi[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/DeltaPhi_TstarhadTstarlep");
+    h_signal_DeltaPt_lep[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/Pt_Diff_gluonlep_toplep");
+    h_signal_DeltaPhi_Gluon[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/DeltaPhi_GluonhadGluonlep");
+    h_signal_DeltaEta_Gluon[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/DeltaEta_GluonhadGluonlep");
+    h_signal_DeltaR_Gluon[i] = (TH1F*)signal->Get("corrmatch_ttag__HypHists/DeltaR_GluonGluon");
+    */
 
- TH1F *d1    = (TH1F*)s1->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d2    = (TH1F*)s2->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d3    = (TH1F*)s3->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d4    = (TH1F*)s4->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d5    = (TH1F*)s5->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d6    = (TH1F*)s6->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d7    = (TH1F*)s7->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d8    = (TH1F*)s8->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d9    = (TH1F*)s9->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
- TH1F *d10   = (TH1F*)s10->Get("corrmatch__HypHists/M_TstarhadTstarlep_Diff_rel");
+    list_tophad->Add(h_signal_tophad[i]);
+    list_toplep->Add(h_signal_toplep[i]);
+    list_Tstar_M_diff->Add(h_signal_Tstar_M_diff[i]);
+    list_DeltaPhi->Add(h_signal_DeltaPhi[i]);
+    list_DeltaPt_lep->Add(h_signal_DeltaPt_lep[i]);
+    list_DeltaPhi_Gluon->Add(h_signal_DeltaPhi_Gluon[i]);
+    list_DeltaEta_Gluon->Add(h_signal_DeltaEta_Gluon[i]);
+    list_DeltaR_Gluon->Add(h_signal_DeltaR_Gluon[i]);
+    
+  }
 
+  gStyle->SetOptStat(0);
+  gStyle->SetOptFit(0111);
+  int bin_up = 700;
+  int bin_down = 500;
+  
+  TCanvas* c1= new TCanvas("c1","c1",bin_up,bin_down);
+  c1->Divide(2,3);
+  c1->cd(1);
+  TH1F *h = (TH1F*)h_signal_tophad[0]->Clone("h_tophad");
+  h->Reset(); 
+  h->Merge(list_tophad); 
+  h->SetTitle("");
+  h->GetXaxis()->SetTitle("M_{top}^{had} [GeV/c^{2}]");
+  h->GetXaxis()->SetTitleSize(0.045);
+  h->GetXaxis()->SetTitleOffset(1.1);
+  h->GetYaxis()->SetTitle("Events");
+  h->GetYaxis()->SetTitleSize(0.04);
+  h->GetYaxis()->SetTitleOffset(1.1);
+  h->Fit("gaus");
+  h->Draw();
+    
+  c1->cd(2);
+  TH1F *t = (TH1F*)h_signal_toplep[0]->Clone("h_toplep"); 
+  t->Reset(); 
+  t->Merge(list_toplep); 
+  t->SetTitle("");
+  t->GetXaxis()->SetTitle("M_{top}^{lep} [GeV/c^{2}]");
+  t->GetXaxis()->SetTitleSize(0.045);
+  t->GetXaxis()->SetTitleOffset(1.1);
+  t->GetYaxis()->SetTitle("Events");
+  t->GetYaxis()->SetTitleSize(0.04);
+  t->GetYaxis()->SetTitleOffset(1.1);
+  t->Fit("gaus","","",50,230);
+  t->Draw();
+  
+  c1->cd(3);
 
+  TH1F *p = (TH1F*)h_signal_Tstar_M_diff[0]->Clone("h_Tstar_M_diff"); 
+  p->Reset(); 
+  p->Merge(list_Tstar_M_diff); 
+  p->SetTitle("");
+  p->GetXaxis()->SetTitle("#Delta M_{T*#bar{T*}}");
+  p->GetXaxis()->SetTitleSize(0.045);
+  p->GetXaxis()->SetTitleOffset(1.1);
+  p->GetYaxis()->SetTitle("Events");
+  p->GetYaxis()->SetTitleSize(0.04);
+  p->GetYaxis()->SetTitleOffset(1.1);
+  p->Fit("gaus","","",-0.2,0.2);
+  p->Draw();
 
-TList *list1 = new TList; 
-list1->Add(h1); 
-list1->Add(h2);
-list1->Add(h3);
-list1->Add(h4);
-list1->Add(h5);
-list1->Add(h6);
-list1->Add(h7);
-list1->Add(h8);
-list1->Add(h9);
-list1->Add(h10);
+  c1->cd(4);
 
-TList *list2 = new TList; 
-list2->Add(p1); 
-list2->Add(p2);
-list2->Add(p3);
-list2->Add(p4);
-list2->Add(p5);
-list2->Add(p6);
-list2->Add(p7);
-list2->Add(p8);
-list2->Add(p9);
-list2->Add(p10);
+  TH1F *k = (TH1F*)h_signal_DeltaPhi[0]->Clone("h_DeltaPhi"); 
+  k->Reset(); 
+  k->Merge(list_DeltaPhi); 
+  k->SetTitle("");
+  k->GetXaxis()->SetTitle("#Delta #Phi");
+  k->GetXaxis()->SetTitleSize(0.045);
+  k->GetXaxis()->SetTitleOffset(1.1);
+  k->GetYaxis()->SetTitle("Events");
+  k->GetYaxis()->SetTitleSize(0.04);
+  k->GetYaxis()->SetTitleOffset(1.1);
+  k->Fit("gaus","","",2.8,3.5);
+  k->Draw();
+  
+  
+  c1->cd(5);
+  /*
+  TH1F *d = (TH1F*)h_signal_DeltaEta_Gluon[0]->Clone("h_DeltaEta_Gluon"); 
+  d->Reset(); 
+  d->Merge(list_DeltaEta_Gluon); 
+  d->SetTitle("");
+  d->GetXaxis()->SetTitle("#Delta #Phi gluons");
+  d->GetXaxis()->SetTitleSize(0.045);
+  d->GetXaxis()->SetTitleOffset(1.1);
+  d->GetYaxis()->SetTitle("Events");
+  d->GetYaxis()->SetTitleSize(0.04);
+  d->GetYaxis()->SetTitleOffset(1.1);
+  // d->Fit("gaus","","",2.8,3.5);
+  d->Draw();
+*/
 
-TList *list3 = new TList; 
-list3->Add(t1); 
-list3->Add(t2);
-list3->Add(t3);
-list3->Add(t4);
-list3->Add(t5);
-list3->Add(t6);
-list3->Add(t7);
-list3->Add(t8);
-list3->Add(t9);
-list3->Add(t10);
+  
+  TH1F *d = (TH1F*)h_signal_DeltaPhi_Gluon[0]->Clone("h_DeltaPhi_Gluon"); 
+  d->Reset(); 
+  d->Merge(list_DeltaPhi_Gluon); 
+  d->SetTitle("");
+  d->GetXaxis()->SetTitle("#Delta #Phi gluons");
+  d->GetXaxis()->SetTitleSize(0.045);
+  d->GetXaxis()->SetTitleOffset(1.1);
+  d->GetYaxis()->SetTitle("Events");
+  d->GetYaxis()->SetTitleSize(0.04);
+  d->GetYaxis()->SetTitleOffset(1.1);
+  // d->Fit("gaus","","",2.8,3.5);
+  d->Draw();
+  
 
-TList *list4 = new TList; 
-list4->Add(d1); 
-list4->Add(d2);
-list4->Add(d3);
-list4->Add(d4);
-list4->Add(d5);
-list4->Add(d6);
-list4->Add(d7);
-list4->Add(d8);
-list4->Add(d9);
-list4->Add(d10);
+  c1->cd(6);
 
-
- gStyle->SetOptStat(0);
- gStyle->SetOptFit(0111);
-   int bin_up = 630;
-  int bin_down = 510;
-
-TCanvas* c1= new TCanvas("c1","c1",bin_up,bin_down);
- c1->Divide(2,2);
- c1->cd(1);
-TH1F *h = (TH1F*)h1->Clone("h"); 
-h->Reset(); 
-h->Merge(list1); 
- h->SetTitle("");
- h->GetXaxis()->SetTitle("M_{top}^{had} [GeV/c^{2}]");
- h->GetXaxis()->SetTitleSize(0.045);
- h->GetXaxis()->SetTitleOffset(1.1);
- h->GetYaxis()->SetTitle("Anzahl MC-Ereignisse");
- h->GetYaxis()->SetTitleSize(0.04);
- h->GetYaxis()->SetTitleOffset(1.1);
- h->Fit("gaus");
-h->Draw();
-
- c1->cd(2);
-TH1F *t = (TH1F*)t1->Clone("t"); 
-t->Reset(); 
-t->Merge(list3); 
- t->SetTitle("");
- t->GetXaxis()->SetTitle("M_{top}^{lep} [GeV/c^{2}]");
- t->GetXaxis()->SetTitleSize(0.045);
- t->GetXaxis()->SetTitleOffset(1.1);
- t->GetYaxis()->SetTitle("Anzahl MC-Ereignisse");
- t->GetYaxis()->SetTitleSize(0.04);
- t->GetYaxis()->SetTitleOffset(1.1);
- t->Fit("gaus","","",50,230);
-t->Draw();
-
-
- c1->cd(3);
-TH1F *p = (TH1F*)p1->Clone("p"); 
-p->Reset(); 
-p->Merge(list2); 
- p->SetTitle("");
- p->GetXaxis()->SetTitle("#Delta #Phi");
- p->GetXaxis()->SetTitleSize(0.045);
- p->GetXaxis()->SetTitleOffset(1.1);
- p->GetYaxis()->SetTitle("Anzahl MC-Ereignisse");
- p->GetYaxis()->SetTitleSize(0.04);
- p->GetYaxis()->SetTitleOffset(1.1);
- p->Fit("gaus");
-p->Draw();
-
- c1->cd(4);
-TH1F *d = (TH1F*)d1->Clone("d"); 
-d->Reset(); 
-d->Merge(list4); 
- d->SetTitle("");
- d->GetXaxis()->SetTitle("#Delta M_{T*#bar{T*}}");
- d->GetXaxis()->SetTitleSize(0.045);
- d->GetXaxis()->SetTitleOffset(1.1);
- d->GetYaxis()->SetTitle("Anzahl MC-Ereignisse");
- d->GetYaxis()->SetTitleSize(0.04);
- d->GetYaxis()->SetTitleOffset(1.1);
- d->Fit("gaus","","",-0.19,0.21);
-d->Draw();
-
+  TH1F *e = (TH1F*)h_signal_DeltaR_Gluon[0]->Clone("h_DeltaR_Gluon"); 
+  e->Reset(); 
+  e->Merge(list_DeltaR_Gluon); 
+  e->SetTitle("");
+  e->GetXaxis()->SetTitle("#Delta R gluons");
+  e->GetXaxis()->SetTitleSize(0.045);
+  e->GetXaxis()->SetTitleOffset(1.1);
+  e->GetYaxis()->SetTitle("Events");
+  e->GetYaxis()->SetTitleSize(0.04);
+  e->GetYaxis()->SetTitleOffset(1.1);
+  // e->Fit("gaus","","",2.8,3.5);
+  e->Draw();
+  
 
 }

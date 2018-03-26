@@ -20,9 +20,9 @@ TstarSelectionHists::TstarSelectionHists(uhh2::Context& ctx, const std::string& 
   book<TH1D>("pt_jet3", "#p_{T}^{jet 3}", 100, 0, 3000);
 
   // leptons
-  book<TH1D>("N_mu", "N^{#mu}", 5, 0, 5);
+  book<TH1D>("N_mu", "N^{#mu}", 5, -0.5, 4.5);
   book<TH1D>("pt_mu", "p_{T}^{#mu} [GeV/c]", 40, 0, 200);
-  book<TH1D>("eta_mu", "#eta^{#mu}", 40, -2.1, 2.1);
+  book<TH1D>("eta_mu", "#eta^{#mu}", 40, -2.5, 2.5);
   book<TH1D>("reliso_mu", "#mu rel. Iso", 40, 0, 0.5);
 
   // general
@@ -43,13 +43,13 @@ std::vector<Jet>* jets = event.jets;
 
  std::vector<Jet> bjets_loose, bjets_med, bjets_tight;
   for (unsigned int i =0; i<jets->size(); ++i) {
-    if(jets->at(i).btag_combinedSecondaryVertex()>0.605) { //loose: >0.605, medium: >0.890, tight: >0.970
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.5426) { //loose: >0.605, medium: >0.890, tight: >0.970
       bjets_loose.push_back(jets->at(i));
     }
-    if(jets->at(i).btag_combinedSecondaryVertex()>0.890) { //loose: >0.605, medium: >0.890, tight: >0.970
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.8484) { //loose: >0.605, medium: >0.890, tight: >0.970
       bjets_med.push_back(jets->at(i));
     }
-    if(jets->at(i).btag_combinedSecondaryVertex()>0.970) { //loose: >0.605, medium: >0.890, tight: >0.970
+    if(jets->at(i).btag_combinedSecondaryVertex()>0.9535) { //loose: >0.605, medium: >0.890, tight: >0.970
       bjets_tight.push_back(jets->at(i));
     }
   }

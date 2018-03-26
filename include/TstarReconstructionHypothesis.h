@@ -47,6 +47,7 @@ public:
   LorentzVector Tstarhad_v4() const{return m_gluonhad_v4+m_tophad_v4;}
   LorentzVector Tstarlep_v4() const{return m_gluonlep_v4+m_toplep_v4;} 
 
+  int Match_Flow() const{return m_match_flow;}
 
   /// get the discriminator value for this hypothesis; thows a runtime_error if it does not exist.
   float discriminator(const std::string & l) const {
@@ -93,9 +94,11 @@ public:
   void add_gluonlep_jet(const Jet& j){m_gluonlep_jets.push_back(j);}
 
   void set_discriminator(const std::string & label, float discr){
+	//std::cout<<"Discriminator_Label: "<<label<<std::endl;
       m_discriminators[label] = discr;
   }
-  
+  void set_Match_Flow(const int match_flow){m_match_flow = match_flow;}
+
 private:
 std::vector<LorentzVector> tophad_lorentz;
 std::vector<LorentzVector> toplep_lorentz;
@@ -113,6 +116,9 @@ std::string unused_jets_had;
   
   LorentzVector m_gluonhad_v4;
   LorentzVector m_gluonlep_v4;
+
+  int m_match_flow;
+  
   std::string gluonhad_jet;
   std::string gluonlep_jet;
 
