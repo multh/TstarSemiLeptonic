@@ -11,7 +11,17 @@
 using namespace uhh2;
 using namespace std;
 
-
+namespace{
+  float deltaPhi_calc(float p1, float p2){
+    float deltaPhi = 100;
+    
+    if ((p1 - p2) < 0) deltaPhi = p2 - p1;
+    else{ 
+      deltaPhi = p1 - p2;
+    }
+    return deltaPhi;
+  }
+}
 
 HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & dirname, const std::string & hyps_name, const std::string & discriminator_name ): Hists(ctx, dirname){
 
@@ -42,6 +52,11 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
    
     M_TstarhadTstarlep_rec              = book<TH1F>( "M_TstarhadTstarlep_rec", "M_{T*_{had}T*_{lep}}^{rec} [GeV/c^{2}]", 50, 0, 5000 ) ;
     M_TstarAntiTstar_gen                = book<TH1F>( "M_TstarAntiTstar_gen", "M_{T*#bar{T*}}^{gen} [GeV/c^{2}]", 70, 0, 5000 ) ;
+    Pt_TstarTstar                       = book<TH1F>( "Pt_TstarTstar", "P_{T,T_{lep}^{*}T_{had}^{*}} [GeV/c]", 10, -0.5, 500.5 ) ;
+    Pt_TstarTstar_diff                  = book<TH1F>( "Pt_TstarTstar_Diff", "p_{T} (T_{lep} - T_{had})/(T_{lep}+T_{had})", 20, -1, 1);
+
+    Pt_Tstar_lep_over_M_TstarTstar      = book<TH1F>("Pt_Tstar_lep_over_M_TstarTstar", "P_{T,T_{lep}*}/M_{T*T*}", 100, 0, 1 ) ;
+    Pt_Tstar_had_over_M_TstarTstar      = book<TH1F>("Pt_Tstar_had_over_M_TstarTstar", "P_{T,T_{had}*}/M_{T*T*}", 100, 0, 1 ) ;
 
     DeltaPhi_TstarhadTstarlep           = book<TH1F>("DeltaPhi_TstarhadTstarlep","#Delta #phi T*_{had}T*_{lep}",40,2,4);
     DeltaPhi_TstarAntiTstar_gen         = book<TH1F>("DeltaPhi_TstarAntiTstar_gen","#Delta #phi T*#bar{T*}",40,2,4);
@@ -75,6 +90,13 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     DeltaR_GluonTop_had                 = book<TH1F>("DeltaR_GluonTop_had", "#Delta R gluon_{had} top_{had}", 20, 0, 5);
     DeltaR_GluonHad_TopLep              = book<TH1F>("DeltaR_GluonHad_TopLep", "#Delta R gluon_{had} top_{lep}", 20, 0, 5);
     DeltaR_GluonLep_TopHad              = book<TH1F>("DeltaR_GluonLep_TopHad", "#Delta R gluon_{lep} top_{had}", 20, 0, 5);
+    DeltaR_GluonHad_BHad                = book<TH1F>("DeltaR_GluonHad_BHad", "#Delta R gluon_{had} b_{had}", 20,0,5);
+    DeltaR_GluonLep_BLep                = book<TH1F>("DeltaR_GluonLep_BLep", "#Delta R gluon_{lep} b_{lep}", 20,0,5);
+
+    deltaR_tophad_decays                = book<TH1F>( "deltaR_tophad_decays", "#DeltaR(top had decay prod.)",20,0,5);
+    deltaR_toplep_decays                = book<TH1F>( "deltaR_toplep_decays", "#DeltaR(top lep decay prod.)",20,0,5);  
+
+ 
 
     //    Pt_over_M_Tstarlep                  = book<TH1F>("Pt_over_M_Tstarlep", "p_{T}/M_{T*, lep}", 20,0,1);
     //    Pt_over_M_Tstarhad                  = book<TH1F>("Pt_over_M_Tstarhad", "p_{T}/M_{T*, had}", 20,0,1);
@@ -107,6 +129,15 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     Pt_toplep_rec                       = book<TH1F>("Pt_toplep", "P_{T, top}^{lep} [GeV/c]",70, 0,1000);
     Pt_tophad_rec                       = book<TH1F>("Pt_tophad", "P_{T, top}^{had} [GeV/c]",70, 0,1000);
 
+    Pt_Diff_top                         = book<TH1F>("Pt_Diff_top", "(p_{T, top}^{lep}-p_{T, top}^{had})/p_{T, top}^{lep}", 20, -3, 6);
+    Pt_Ratio_top                        = book<TH1F>("Pt_Ratio_top", "p_{T, top}^{lep}/p_{T, top}^{had}", 20, -5,5);
+
+    Pt_Diff_gluon_top_had             = book<TH1F>("Pt_Diff_gluon_top_had", "(p_{T, gluon}^{had}-p_{T, top}^{had})/p_{T, gluon}^{had}", 20, -3, 6);
+    Pt_Ratio_gluonhad_tophad            = book<TH1F>("Pt_Ratio_gluonhad_tophad", "p_{T, gluon}^{had}/p_{T, top}^{had}", 20, -5,5);
+
+    Pt_Diff_gluon_top_lep             = book<TH1F>("Pt_Diff_gluon_top_lep", "(p_{T, gluon}^{lep}-p_{T, top}^{lep})/p_{T, gluon}^{lep}", 20, -3, 6);
+    Pt_Ratio_gluonlep_toplep            = book<TH1F>("Pt_Ratio_gluonlep_toplep", "p_{T, gluon}^{lep}/p_{T, top}^{lep}", 20, -5,5);
+
     Number_tophad_jets                  = book<TH1F>("Number of subjets top had", "# subjets top had", 10, 0, 10);
     Number_toplep_jets                  = book<TH1F>("Number of subjets top lep", "# subjets top lep", 10, 0, 10);
 
@@ -123,6 +154,9 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     Pt_Diff_gluonlep_bhad               = book<TH1F>("Pt_Diff_gluonlep_bhad", "(p_{T}^{gluon, lep}-p_{T}^{b, had})/(p_{T}^{gluon, lep}+p_{T}^{b, had})", 20, -1.5, 1.5);
  
     Pt_Diff_gluonlep_Wlep               = book<TH1F>("Pt_Diff_gluonlep_Wlep", "(p_{T}^{gluon, lep}-p_{T}^{W, lep})/(p_{T}^{gluon, lep}+p_{T}^{W, lep})", 20, -1.5, 1.5);
+ 
+    Pt_Diff_gluonlep_gluonhad           = book<TH1F>("Pt_Diff_gluonlep_gluonhad", "(p_{T}^{gluon, lep}-p_{T}^{gluon, had})/(p_{T}^{gluon, lep}+p_{T}^{gluon, had})", 20, -1.5, 1.5);
+    Pt_Diff_bhad_blep                   = book<TH1F>("Pt_Diff_bhad_blep", "(p_{T}^{b, had}-p_{T}^{b, lep})/(p_{T}^{b, had}+p_{T}^{b, lep})", 20, -1.5, 1.5);
 
     M_Whad_gen                          = book<TH1F>("M_Whad_gen", "M_{W}^{had} [GeV/c^{2}]",40, 50,150);
     M_Wlep_rec                          = book<TH1F>("M_Wlep_rec", "M_{W}^{lep} [GeV/c^{2}]",40, 50,150);
@@ -133,17 +167,43 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     DeltaR_gluon_lep                    = book<TH1F>("DeltaR_gluon_lep", "#Delta R gluon_{lep}",20,0,3.5);
     DeltaR_gluon_had                    = book<TH1F>("DeltaR_gluon_had", "#Delta R gluon_{had}",20,0,3.5);
 
-    DeltaR_blep                        = book<TH1F>("DeltaR_blep", "#Delta R b_{lep}",20,0,3.5);
+    DeltaR_blep                         = book<TH1F>("DeltaR_blep", "#Delta R b_{lep}",20,0,3.5);
+    DeltaR_bhad                         = book<TH1F>("DeltaR_bhad", "#Delta R b_{had}",20,0,3.5);
+
+    DeltaR_bhad_gluon                   = book<TH1F>("DeltaR_bhad_gluon", "#Delta R b_{had} gluon had",20,0,3.5);
+    DeltaR_bhad_gluonlep                = book<TH1F>("DletaR_bhad_gluonlep", "Delta R b_{had} gluon lep", 20,0,3.5);
 
     DeltaR_Lepton                       = book<TH1F>("DeltaR_Lepton","#Delta R Lepton",20,0,3.5);
     DeltaR_Neutrino                     = book<TH1F>("DeltaR_Neutrino","#Delta R Neutrino",20,0,3.5);
 
-    CSV_Lep_Signal                      = book<TH1F>("CSVLep_Signal","CSV Lep Signal",10,0,1);
-    CSV_Had_Signal                      = book<TH1F>("CSVHad_Signal","CSV Had Signal",10,0,1);
+    CSV_bLep                            = book<TH1F>("CSV_bLep","CSV b_{Lep}",20,0,1);
+    CSV_bHad                            = book<TH1F>("CSV_bHad","CSV b_{Had}",20,0,1);
 
-    CSV_Lep_Background                  = book<TH1F>("CSVLep_Background","CSV Lep Background",10,0,1);
-    CSV_Had_Background                  = book<TH1F>("CSVHad_Background","CSV Had Background",10,0,1);
+    CSV_gluonLep                        = book<TH1F>("CSV_gluonLep","CSV g_{Lep}",20,0,1);
+    CSV_gluonHad                        = book<TH1F>("CSV_gluonHad","CSV g_{Had}",20,0,1);
+    CSV_gluonLep_2                      = book<TH1F>("CSV_gluonLep_2","CSV g_{Lep, 2}",20,0,1);
+    CSV_gluonHad_2                      = book<TH1F>("CSV_gluonHad_2","CSV g_{Had, 2}",20,0,1);
 
+    CSV_vs_dR_blep                      = book<TH2F>("CSV_vs_dR_blep", "CSV_vs_dR_blep", 20,0,1 ,20, 0, 3.5);
+    CSV_vs_dR_bhad                      = book<TH2F>("CSV_vs_dR_bhad", "CSV_vs_dR_bhad", 20,0,1,20, 0, 3.5);
+
+    CSV_Lep_Background                  = book<TH1F>("CSVLep_Background","CSV Lep Background",20,0,1);
+    CSV_Had_Background                  = book<TH1F>("CSVHad_Background","CSV Had Background",20,0,1);
+
+    M_TstarLep_bMatch_gluonSwitch       = book<TH1F>("M_TstarLep_bMatch_gluonSwitch", "Tstar lep bMatch_gluonSwitch", 35, 0,2000);
+    M_TstarHad_bMatch_gluonSwitch       = book<TH1F>("M_TstarHad_bMatch_gluonSwitch", "Tstar had bMatch_gluonSwitch", 35, 0,2000);
+
+    M_TstarLep_bhad_gluonlepSwitch      = book<TH1F>("M_TstarLep_bhad_gluonlepSwitch", "M_TstarLep_bhad_gluonlepSwitch", 35, 0,2000);
+    M_TstarHad_bhad_gluonlepSwitch      = book<TH1F>("M_TstarHad_bhad_gluonlepSwitch", "M_TstarHad_bhad_gluonlepSwitch", 35, 0,2000);
+
+    M_TstarLep_bhad_gluonhadSwitch      = book<TH1F>("M_TstarLep_bhad_gluonhadSwitch", "M_TstarLep_bhad_gluonhadSwitch", 35, 0,2000);
+    M_TstarHad_bhad_gluonhadSwitch      = book<TH1F>("M_TstarHad_bhad_gluonhadSwitch", "M_TstarHad_bhad_gluonhadSwitch", 35, 0,2000);
+
+    M_TstarLep_Match_All                = book<TH1F>("M_TstarLep_Match_All", "M_TstarLep_Match_All", 35, 0,2000);
+    M_TstarHad_Match_All                = book<TH1F>("M_TstarHad_Match_All", "M_TstarHad_Match_All", 35, 0,2000);
+
+    M_TstarLep_Match_Non                = book<TH1F>("M_TstarLep_Match_Non", "M_TstarLep_Match_Non", 35, 0,2000);
+    M_TstarHad_Match_Non                = book<TH1F>("M_TstarHad_Match_Non", "M_TstarHad_Match_Non", 35, 0,2000);
 
     h_hyps = ctx.get_handle<std::vector<TstarReconstructionHypothesis>>(hyps_name);
     h_tstargen = ctx.get_handle<TStarGen>("tstargen");
@@ -153,16 +213,6 @@ HypothesisHistsOwn::HypothesisHistsOwn(uhh2::Context & ctx, const std::string & 
     is_data = dataset_type == "DATA";
 }
 
-namespace{
-  float deltaPhi_calc(const LorentzVector & p1, const LorentzVector & p2){
-    float deltaPhi = 100;
-    
-    if ((p1.phi()-p2.phi())<0) deltaPhi = p1.phi()-p2.phi();
-    else{deltaPhi = p2.phi()-p1.phi();}
-    
-    return deltaPhi;
-  }
-}
 
 void HypothesisHistsOwn::fill(const uhh2::Event & e){
   std::vector<TstarReconstructionHypothesis> hyps = e.get(h_hyps);
@@ -191,15 +241,14 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
      const auto & tstargen = e.get(h_tstargen);
      auto dec = tstargen.DecayChannel();
      if(dec == TStarGen::e_muhad){
-       if(deltaR(tstargen.GluonLep(), hyp->gluonlep_v4())<0.2){
+       if(deltaR(tstargen.BHad(), hyp->bhad_v4())<0.4){
 	 fill_hist = true;
        }
      }
     }
-
-    if(fill_hist){
+    
+    if(fill_hist){ 
     */
-
     if(hyp->toplep_v4().isTimelike()) m_toplep = hyp->toplep_v4().M();
     else{m_toplep =sqrt( -(hyp->toplep_v4()).mass2());}
     if(hyp->tophad_v4().isTimelike()) m_tophad = hyp->tophad_v4().M();
@@ -214,8 +263,8 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     m_TstarDiff       = (m_Tstarhad - m_Tstarlep);
     m_Tstar_diff_rel  = m_TstarDiff/m_Tstarmed_rec;
 
-//  if(m_Tstarlep < 750 || m_Tstarlep > 1100){
-    
+    //  if(deltaR(hyp->gluonhad_v4(), hyp->gluonlep_v4())>1.75){
+     
     //Discriminators#####################################################################################
 
     Discriminator_sum->Fill(hyp->discriminator(m_discriminator_name) ,weight);
@@ -234,9 +283,13 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     Discriminator_5->Fill(hyp->Match_Flow() ,weight);
     
     //##################################################################################################
-    
-    
-    
+    double  pttstar = (hyp->Tstarlep_v4() + hyp->Tstarhad_v4()).Pt();
+
+    Pt_TstarTstar                    ->Fill(pttstar, weight);
+    Pt_TstarTstar_diff               ->Fill((hyp->Tstarlep_v4().Pt()-hyp->Tstarhad_v4().Pt())/(hyp->Tstarlep_v4().Pt()+hyp->Tstarhad_v4().Pt()), weight);
+    Pt_Tstar_lep_over_M_TstarTstar   ->Fill(hyp->Tstarlep_v4().Pt()/(hyp->Tstarlep_v4() + hyp->Tstarhad_v4()).M(), weight);
+    Pt_Tstar_had_over_M_TstarTstar   ->Fill(hyp->Tstarhad_v4().Pt()/(hyp->Tstarlep_v4() + hyp->Tstarhad_v4()).M(), weight);
+
     //Delta Phi and Delta Eta ###########################################################################
     
     double m_deltaPhi = 0;
@@ -248,9 +301,9 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     else{ m_deltaPhi_gluon = hyp->gluonhad_v4().phi()-hyp->gluonlep_v4().phi();}
     
     DeltaPhi_TstarhadTstarlep ->Fill(m_deltaPhi,weight);
-    DeltaPhi_TophadGluonhad   ->Fill(deltaPhi(hyp->tophad_v4(), hyp->gluonhad_v4()),weight);
-    DeltaPhi_ToplepGluonlep   ->Fill(deltaPhi(hyp->toplep_v4(), hyp->gluonlep_v4()),weight);
-    DeltaPhi_TophadToplep     ->Fill(deltaPhi(hyp->tophad_v4(), hyp->toplep_v4()),weight);
+    DeltaPhi_TophadGluonhad   ->Fill(deltaPhi_calc(hyp->tophad_v4().phi(), hyp->gluonhad_v4().phi()),weight);
+    DeltaPhi_ToplepGluonlep   ->Fill(deltaPhi_calc(hyp->toplep_v4().phi(), hyp->gluonlep_v4().phi()),weight);
+    DeltaPhi_TophadToplep     ->Fill(deltaPhi_calc(hyp->tophad_v4().phi(), hyp->toplep_v4().phi()),weight);
     DeltaPhi_GluonGluon       ->Fill(m_deltaPhi_gluon, weight);
     
     DeltaEta_TstarhadTstarlep ->Fill(TMath::Abs(hyp->Tstarhad_v4().eta()-hyp->Tstarlep_v4().eta()),weight);
@@ -265,8 +318,36 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     DeltaR_GluonTop_had       ->Fill(deltaR(hyp->gluonhad_v4(), hyp->tophad_v4()), weight);
     DeltaR_GluonLep_TopHad    ->Fill(deltaR(hyp->gluonlep_v4(), hyp->tophad_v4()), weight);
     DeltaR_GluonHad_TopLep    ->Fill(deltaR(hyp->gluonhad_v4(), hyp->toplep_v4()), weight);
-    
+    DeltaR_GluonHad_BHad      ->Fill(deltaR(hyp->gluonhad_v4(), hyp->bhad_v4()), weight);
+    DeltaR_GluonLep_BLep      ->Fill(deltaR(hyp->gluonlep_v4(), hyp->blep_v4()), weight);
 
+    double deltaR_toplep = 0;
+
+    if(hyp->toplep_jets().size() == 2){
+      deltaR_toplep =  uhh2::deltaR(hyp->toplep_jets().at(0), hyp->toplep_jets().at(1));
+    }
+    else if(hyp->toplep_jets().size() == 3){
+      deltaR_toplep = std::max(std::max(uhh2::deltaR(hyp->toplep_jets().at(0), hyp->toplep_jets().at(1)),
+					     uhh2::deltaR(hyp->toplep_jets().at(0), hyp->toplep_jets().at(2))), 
+				   uhh2::deltaR(hyp->toplep_jets().at(1), hyp->toplep_jets().at(2))); 
+    }
+
+    deltaR_toplep_decays -> Fill(deltaR_toplep,e.weight);
+
+    double deltaR_tophad = 0;
+
+    if(hyp->tophad_jets().size() == 2){
+      deltaR_tophad =  uhh2::deltaR(hyp->tophad_jets().at(0), hyp->tophad_jets().at(1));
+    }
+    else if(hyp->tophad_jets().size() == 3){
+      deltaR_tophad = std::max(std::max(uhh2::deltaR(hyp->tophad_jets().at(0), hyp->tophad_jets().at(1)),
+					     uhh2::deltaR(hyp->tophad_jets().at(0), hyp->tophad_jets().at(2))), 
+				   uhh2::deltaR(hyp->tophad_jets().at(1), hyp->tophad_jets().at(2))); 
+    }
+
+    deltaR_tophad_decays -> Fill(deltaR_tophad,e.weight);
+
+  
     //####################################################################################################
     
     
@@ -281,12 +362,19 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     int n_gluonlep_jets = 0;
     int n_gluonhad_jets = 0;
     
+    
     n_tophad_jets = hyp->tophad_jets().size();
     n_toplep_jets = hyp->toplep_jets().size();
+    
     
     n_gluonhad_jets = hyp->gluonhad_jets().size();
     n_gluonlep_jets = hyp->gluonlep_jets().size();
     
+    /*      
+    n_gluonhad_jets = hyp->Gluon_Had_num();
+    n_gluonlep_jets = hyp->Gluon_Lep_num();
+    */
+
     Number_tophad_jets  ->Fill(n_tophad_jets, weight);
     Number_toplep_jets  ->Fill(n_toplep_jets, weight);
     
@@ -312,6 +400,7 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     M_toplep_rec            ->Fill(m_toplep,weight);
     M_tophad_rec            ->Fill(m_tophad,weight);
     
+
     M_Wlep_rec              ->Fill(m_Wlep_rec,weight);
     
     if(m_Wlep_rec < 90){
@@ -339,6 +428,15 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     Pt_toplep_rec           ->Fill( hyp->toplep_v4().Pt(),weight);
     Pt_tophad_rec           ->Fill( hyp->tophad_v4().Pt(),weight);
     
+    Pt_Diff_top             ->Fill( (hyp->toplep_v4().Pt()-hyp->tophad_v4().Pt())/(hyp->toplep_v4().Pt()), weight);
+    Pt_Ratio_top            ->Fill( hyp->toplep_v4().Pt()/hyp->tophad_v4().Pt(), weight);
+
+    Pt_Diff_gluon_top_had ->Fill( (hyp->gluonhad_v4().Pt()-hyp->tophad_v4().Pt())/(hyp->gluonhad_v4().Pt()), weight);
+    Pt_Ratio_gluonhad_tophad->Fill( hyp->gluonhad_v4().Pt()/hyp->tophad_v4().Pt(), weight);
+
+    Pt_Diff_gluon_top_lep ->Fill( (hyp->gluonlep_v4().Pt()-hyp->toplep_v4().Pt())/(hyp->gluonlep_v4().Pt()), weight);
+    Pt_Ratio_gluonlep_toplep->Fill( hyp->gluonlep_v4().Pt()/hyp->toplep_v4().Pt(), weight);
+
     Pt_Diff_gluonhad_tophad ->Fill( (hyp->gluonhad_v4().Pt()-hyp->tophad_v4().Pt())/(hyp->gluonhad_v4().Pt()+hyp->tophad_v4().Pt()), weight);
     Pt_Diff_gluonlep_toplep ->Fill( (hyp->gluonlep_v4().Pt()-hyp->toplep_v4().Pt())/(hyp->gluonlep_v4().Pt()+hyp->toplep_v4().Pt()), weight);
     
@@ -349,7 +447,28 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
     Pt_Diff_gluonlep_bhad ->Fill( (hyp->gluonlep_v4().Pt()-hyp->bhad_v4().Pt())/(hyp->gluonlep_v4().Pt()+hyp->bhad_v4().Pt()), weight);
     
     Pt_Diff_gluonlep_Wlep ->Fill( (hyp->gluonlep_v4().Pt()-hyp->wlep_v4().Pt())/(hyp->gluonlep_v4().Pt()+hyp->wlep_v4().Pt()), weight);
-    
+  
+    Pt_Diff_gluonlep_gluonhad ->Fill((hyp->gluonlep_v4().Pt()-hyp->gluonhad_v4().Pt())/(hyp->gluonlep_v4().Pt()+hyp->gluonhad_v4().Pt()), weight);
+    Pt_Diff_bhad_blep         ->Fill((hyp->bhad_v4().Pt()-hyp->blep_v4().Pt())/(hyp->bhad_v4().Pt()+hyp->blep_v4().Pt()), weight);
+    /*
+    cout<<"bLep Jets Size: "<<hyp->blep_jets().size()<<endl;
+    cout<<"bHad Jets Size: "<<hyp->bhad_jets().size()<<endl;
+    cout<<"gluonLep Jets Size: "<<hyp->gluonlep_jets().size()<<endl;
+    cout<<"gluonHad Jets Size: "<<hyp->gluonhad_jets().size()<<endl;
+    */
+    CSV_bLep               ->Fill(hyp->blep_jets().at(0).btag_combinedSecondaryVertex(), weight);
+    CSV_bHad               ->Fill(hyp->bhad_jets().at(0).btag_combinedSecondaryVertex(), weight);
+
+    CSV_gluonLep           ->Fill(hyp->gluonlep_jets().at(0).btag_combinedSecondaryVertex(), weight);
+    CSV_gluonHad           ->Fill(hyp->gluonhad_jets().at(0).btag_combinedSecondaryVertex(), weight);
+
+    if(hyp->gluonhad_jets().size()>1 ){
+    CSV_gluonHad_2           ->Fill(hyp->gluonhad_jets().at(1).btag_combinedSecondaryVertex(), weight);
+    }
+    if(hyp->gluonlep_jets().size()>1 ){
+    CSV_gluonLep_2           ->Fill(hyp->gluonlep_jets().at(1).btag_combinedSecondaryVertex(), weight);
+    }
+
     //######################################################################################################
     
     
@@ -389,11 +508,11 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
 	
 	//Delta Phi and Delta Eta ##################################################################################
 	
-	DeltaPhi_TstarAntiTstar_gen    ->Fill( deltaPhi(tstargen.TStar(),tstargen.AntiTStar()),weight);
-	DeltaPhi_TopGluon_gen          ->Fill(deltaPhi(tstargen.tTStar(),tstargen.gTStar()),weight);
-	DeltaPhi_AntiTopAntiGluon_gen  ->Fill(deltaPhi(tstargen.tAntiTStar(),tstargen.gAntiTStar()),weight);
-	DeltaPhi_TopAntiTop_gen        ->Fill(deltaPhi(tstargen.tTStar(),tstargen.tAntiTStar()),weight);
-	DeltaPhi_GluonGluon_gen        ->Fill(deltaPhi(tstargen.gTStar(),tstargen.gAntiTStar()),weight);
+	DeltaPhi_TstarAntiTstar_gen    ->Fill( deltaPhi_calc(tstargen.TStar().phi(),tstargen.AntiTStar().phi()),weight);
+	DeltaPhi_TopGluon_gen          ->Fill(deltaPhi_calc(tstargen.tTStar().phi(),tstargen.gTStar().phi()),weight);
+	DeltaPhi_AntiTopAntiGluon_gen  ->Fill(deltaPhi_calc(tstargen.tAntiTStar().phi(),tstargen.gAntiTStar().phi()),weight);
+	DeltaPhi_TopAntiTop_gen        ->Fill(deltaPhi_calc(tstargen.tTStar().phi(),tstargen.tAntiTStar().phi()),weight);
+	DeltaPhi_GluonGluon_gen        ->Fill(deltaPhi_calc(tstargen.gTStar().phi(),tstargen.gAntiTStar().phi()),weight);
 	
 	DeltaEta_TstarAntiTstar_gen    ->Fill( tstargen.TStar().eta()-tstargen.AntiTStar().eta(),weight);
 	DeltaEta_TopGluon_gen          ->Fill(tstargen.tTStar().eta()-tstargen.gTStar().eta(),weight);
@@ -405,35 +524,43 @@ void HypothesisHistsOwn::fill(const uhh2::Event & e){
 	DeltaR_gluon_had               ->Fill(deltaR(tstargen.GluonHad(), hyp->gluonhad_v4()), weight);
 	
 	DeltaR_blep                    ->Fill(deltaR(tstargen.BLep(), hyp->blep_v4()), weight);
-	
+	DeltaR_bhad                    ->Fill(deltaR(tstargen.BHad(), hyp->bhad_v4()), weight);
+
+	DeltaR_bhad_gluon              ->Fill(deltaR(tstargen.BHad(), hyp->gluonhad_v4()), weight);
+	DeltaR_bhad_gluonlep           ->Fill(deltaR(tstargen.BHad(), hyp->gluonlep_v4()), weight);
+
 	DeltaR_Lepton                  ->Fill(deltaR(tstargen.ChargedLepton(), hyp->lepton().v4()),weight);
 	DeltaR_Neutrino                ->Fill(deltaR(tstargen.Neutrino(), hyp->neutrino_v4()),weight);
+
+	CSV_vs_dR_blep           ->Fill(hyp->blep_jets().at(0).btag_combinedSecondaryVertex(), deltaR(tstargen.BLep(), hyp->blep_v4()), weight);
+        CSV_vs_dR_bhad           ->Fill(hyp->bhad_jets().at(0).btag_combinedSecondaryVertex(), deltaR(tstargen.BHad(), hyp->bhad_v4()), weight);
 	//#########################################################################################################
+
+	// Matching contributions to mass histograms
+
+	if(deltaR(tstargen.GluonLep(), hyp->gluonhad_v4())<0.4){
+	  M_TstarLep_bMatch_gluonSwitch -> Fill(m_Tstarlep,weight);
+	  M_TstarHad_bMatch_gluonSwitch -> Fill(m_Tstarhad,weight);
+	}
 	
+	else if(deltaR(tstargen.BLep(), hyp->gluonlep_v4())<0.4){
+	  M_TstarLep_bhad_gluonlepSwitch -> Fill(m_Tstarlep,weight);
+	  M_TstarHad_bhad_gluonlepSwitch -> Fill(m_Tstarhad,weight);
+	}
 	
-	//CSV-Variable for b-Tag Discriminator in Correct Match ###################################################
-	
-	/*  
-	    if(hyp->blep_jets().size()!=0 && hyp->bhad_jets().size()!=0){
-	    
-	    double btag_Lep_csv = hyp->blep_jets().at(0).btag_combinedSecondaryVertex();
-	    if(deltaR(hyp->blep_v4(),tstargen.BLep())<0.4){
-	    CSV_Lep_Signal->Fill(btag_Lep_csv, weight);
-	    }
-	    else{
-	    CSV_Lep_Background->Fill(btag_Lep_csv, weight);
-	    }
-   
-	    double btag_Had_csv = hyp->bhad_jets().at(0).btag_combinedSecondaryVertex();
-	    if(deltaR(hyp->bhad_v4(),tstargen.BHad())<0.4){
-	    CSV_Had_Signal->Fill(btag_Had_csv, weight);
-	    }
-	    else{
-	    CSV_Had_Background->Fill(btag_Had_csv, weight);
-	    }
-	    }
-	    //###########################################################################################################
-	    */
+	else if(deltaR(tstargen.BLep(), hyp->gluonhad_v4())<0.4){
+	  M_TstarLep_bhad_gluonhadSwitch -> Fill(m_Tstarlep,weight);
+	  M_TstarHad_bhad_gluonhadSwitch -> Fill(m_Tstarhad,weight);
+	}
+
+	else if(deltaR(tstargen.BLep(),hyp->blep_v4())<0.4 && deltaR(tstargen.GluonLep(), hyp->gluonlep_v4())<0.4 && deltaR(tstargen.GluonHad(), hyp->gluonhad_v4())<0.4){
+	  M_TstarLep_Match_All -> Fill(m_Tstarlep,weight);
+	  M_TstarHad_Match_All -> Fill(m_Tstarhad,weight);
+	}	
+	else if(deltaR(tstargen.BLep(),hyp->blep_v4())>0.4 && deltaR(tstargen.GluonLep(), hyp->gluonlep_v4())>0.4 && deltaR(tstargen.GluonHad(), hyp->gluonhad_v4())>0.4){
+	  M_TstarLep_Match_Non -> Fill(m_Tstarlep,weight);
+	  M_TstarHad_Match_Non -> Fill(m_Tstarhad,weight);
+	}
       }
     }
     //   } //Cut of Matching

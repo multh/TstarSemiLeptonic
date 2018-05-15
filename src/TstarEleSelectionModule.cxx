@@ -48,7 +48,6 @@
 using namespace std;
 using namespace uhh2;
 using namespace uhh2examples;
-
 //*****************************************************************************************************
 //
 // Analysis Module for the T*T*->ttbar gg semileptonic analysis
@@ -56,10 +55,10 @@ using namespace uhh2examples;
 //*****************************************************************************************************
 
 
-class TstarSelectionModule : public uhh2::AnalysisModule {
+class TstarEleSelectionModule : public uhh2::AnalysisModule {
   
 public:
-  explicit TstarSelectionModule(uhh2::Context&);
+  explicit TstarEleSelectionModule(uhh2::Context&);
   virtual bool process(uhh2::Event&) override;
   
 private:
@@ -90,38 +89,29 @@ private:
   // ************** Reconstruction and matching *************************************************************************************************************
   //Primary lepton
   unique_ptr<AnalysisModule> reco_primlep;
-
-  //Top reconstruction
-  unique_ptr<AnalysisModule> top_reco;      //Reco Level
-  unique_ptr<AnalysisModule> top_ttag_reco; //Reco Level with Top Tag
-
-  //Gluon reco
-  unique_ptr<AnalysisModule> gluon_reco;      //Reco Level
-
+  
   //T*T*  reconstruction
   unique_ptr<AnalysisModule> tstargenprod;    //Generator Level 
   unique_ptr<AnalysisModule> tstar_reco;      //Reco Level
   unique_ptr<AnalysisModule> tstar_ttag_reco; //Reco Level with Top Tag
   
   //T*T* Matching 
-  unique_ptr<AnalysisModule> tstar_match;       //Match Gen and Reco 
+  unique_ptr<AnalysisModule> tstar_match;    //Match Gen and Reco 
   unique_ptr<AnalysisModule> tstar_ttag_match;  //Match Gen and Reco with Top-Tag
 
-  //Top Chi2 Discriminator
-  unique_ptr<AnalysisModule> top_chi2;
-  unique_ptr<AnalysisModule> top_ttag_chi2;
-
-  //T* Chi2 Discriminator
+  //Chi2 Discriminator
   unique_ptr<AnalysisModule> tstar_chi2;
   unique_ptr<AnalysisModule> tstar_ttag_chi2;
     
  //********************************************************************************************************************************************************
     
  // ************Systematics and Scale Factors ****************************************************************************************************************************
-  string                                  sys_bTag, sys_PU, sys_muonTrigger, sys_muonID;
+  string                                  sys_bTag, sys_PU, sys_muonTrigger, sys_muonID, sys_elecID;
   unique_ptr<AnalysisModule>              sys_scale_variation;
 
   unique_ptr<AnalysisModule>              SF_muonID, SF_muonTrigger, SF_btag;
+  unique_ptr<AnalysisModule>              SF_elecID;
+
   unique_ptr<BTagMCEfficiencyHists>       BTagEffHists;                      //Important for bTag
   
   // ********************************************************************************************************************************************************     
@@ -144,10 +134,10 @@ private:
   unique_ptr<Hists> h_matchable,     h_matchable_event,     h_matchable_jet,     h_matchable_ele,     h_matchable_muon,     h_matchable_topjet,     h_matchable_lumi;
   unique_ptr<Hists> h_not_matchable, h_not_matchable_event, h_not_matchable_jet, h_not_matchable_ele, h_not_matchable_muon, h_not_matchable_topjet, h_not_matchable_lumi;
   
-  unique_ptr<Hists> h_match_discr,          h_match,          h_match_event,          h_match_jet,          h_match_ele,          h_match_muon,          h_match_topjet,          h_match_lumi;
-  unique_ptr<Hists> h_corrmatch_discr,      h_corrmatch,      h_corrmatch_event,      h_corrmatch_jet,      h_corrmatch_ele,      h_corrmatch_muon,      h_corrmatch_topjet,      h_corrmatch_lumi;
+  unique_ptr<Hists> h_match_discr,         h_match,         h_match_event,         h_match_jet,         h_match_ele,         h_match_muon,         h_match_topjet,         h_match_lumi;
+  unique_ptr<Hists> h_corrmatch_discr,     h_corrmatch,     h_corrmatch_event,     h_corrmatch_jet,     h_corrmatch_ele,     h_corrmatch_muon,     h_corrmatch_topjet,     h_corrmatch_lumi;
   unique_ptr<Hists> h_corrmatch_ttag_discr, h_corrmatch_ttag, h_corrmatch_ttag_event, h_corrmatch_ttag_jet, h_corrmatch_ttag_ele, h_corrmatch_ttag_muon, h_corrmatch_ttag_topjet, h_corrmatch_ttag_lumi;
-  unique_ptr<Hists> h_no_corrmatch_discr,   h_no_corrmatch,   h_no_corrmatch_event,   h_no_corrmatch_jet,   h_no_corrmatch_ele,   h_no_corrmatch_muon,   h_no_corrmatch_topjet,   h_no_corrmatch_lumi;
+  unique_ptr<Hists> h_no_corrmatch_discr,  h_no_corrmatch,  h_no_corrmatch_event,  h_no_corrmatch_jet,  h_no_corrmatch_ele,  h_no_corrmatch_muon,  h_no_corrmatch_topjet,  h_no_corrmatch_lumi;
   
   //Chi2 Hists
   unique_ptr<Hists> h_chi2,          h_chi2_event,       h_chi2_jet,       h_chi2_ele,       h_chi2_muon,       h_chi2_topjet,       h_chi2_lumi;
@@ -165,7 +155,6 @@ private:
   
   Event::Handle<TStarGen> h_tstargen;
   Event::Handle<vector<TstarReconstructionHypothesis>> h_hyps;
-  Event::Handle<vector<TstarReconstructionHypothesis>> h_topHyps;
   
   bool is_mc;
   bool debug;
@@ -179,7 +168,7 @@ private:
 
 ///********************************************************************************************************************
 
-TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
+TstarEleSelectionModule::TstarEleSelectionModule(uhh2::Context& ctx){
   
   std::cout << "Hello World from TstarSelectionModule!" << std::endl;
   
@@ -192,6 +181,7 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
     sys_muonTrigger    = ctx.get("sys_muonTrigger");
     sys_bTag           = ctx.get("sys_bTag");
     sys_PU             = ctx.get("sys_PU");
+    sys_elecID         = ctx.get("sys_elecID");
 
     //Scale Variations
     sys_scale_variation.reset(new MCScaleVariation(ctx));
@@ -199,6 +189,8 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
  //Muon ID and Triggers
     SF_muonID          .reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonID_EfficienciesAndSF_average_RunBtoH.root", "MC_NUM_HighPtID_DEN_genTracks_PAR_pt_eta",1, sys_muonID)); 
     SF_muonTrigger     .reset(new MCMuonScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/MuonTrigger_EfficienciesAndSF_average_RunBtoH.root", "IsoMu50_OR_IsoTkMu50_PtEtaBins",0.5, sys_muonTrigger));
+
+    SF_elecID          .reset(new MCElecScaleFactor(ctx,"/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/common/data/egammaEffi.txt_EGM2D_CutBased_Tight_ID.root",1,"",sys_elecID));
 
     BTagEffHists       .reset(new BTagMCEfficiencyHists(ctx,"EffHists/BTag",CSVBTag::WP_MEDIUM));
     SF_btag            .reset(new MCBTagScaleFactor(ctx,CSVBTag::WP_MEDIUM,"jets",sys_bTag));  // "mujets","incl","MCBtagEfficienciesAK4","_AK4","BTagCalibration"
@@ -208,6 +200,12 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   //########################## Boolean and Common Module ##########################################################################
     is_mc              = ctx.get("dataset_type") == "MC";
     debug              = false;
+
+    //Get Channel: Muon or Electon
+    const std::string& channel = ctx.get("channel", "");
+    if     (channel == "muon") channel_ = muon;
+    else if(channel == "elec") channel_ = elec;
+    else throw std::runtime_error("TstarPreSelectionModule -- undefined argument for 'channel' key in xml file (must be 'muon' or 'elec'): "+channel);
 
     do_scale_variation = (ctx.get("ScaleVariationMuR") == "up" || ctx.get("ScaleVariationMuR") == "down") || (ctx.get("ScaleVariationMuF") == "up" || ctx.get("ScaleVariationMuF") == "down");
     do_pdf_variations  =  ctx.get("b_PDFUncertainties") == "true";
@@ -239,12 +237,10 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
     ttbar_reweight      .reset(new TopPtReweight(ctx, 0.159,  -0.00141,"", "weight_ttbar", true, 0.9910819));  // 8 TeV values l+jets 
     //
 
-
 ///###############################################################################################################
 
 
 ////############################# EVENT SELECTIONS ###############################################################
-   
    
    ///b-Tag
    //LOOSE WP
@@ -284,32 +280,20 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
   // Lepton
   reco_primlep     .reset(new PrimaryLepton(ctx));
 
-  //Top Reco
-  top_reco         .reset(new HighMassTopReconstruction(ctx, TstarNeutrinoReconstruction, "TstarReconstruction"));
-  top_ttag_reco    .reset(new HighMassTopReconstructionTTag(ctx, TstarNeutrinoReconstruction, "TstarReconstruction"));
-
-  gluon_reco       .reset(new HighMassGluonReconstruction(ctx, "TstarReconstruction"));
-
   // TStar Reco
   tstar_reco       .reset(new HighMassTstarKinReconstruction(ctx, TstarNeutrinoReconstruction, "TstarReconstruction"));
-  tstar_ttag_reco  .reset(new TstarTopTagKinReconstruction(ctx, TstarNeutrinoReconstruction, "TstarReconstruction", topjetID, 1.2));
+  tstar_ttag_reco  .reset(new TstarTopTagKinReconstruction(ctx, NeutrinoReconstruction, "TstarReconstruction", topjetID, 1.2));
 
   // Correct Match
   tstar_match      .reset(new TstarCorrectMatchDiscriminator      (ctx, "TstarReconstruction"));
   tstar_ttag_match .reset(new TstarCorrectMatchDiscriminatorTTAG  (ctx, "TstarReconstruction"));
   
-  // Top Chi2
-  top_chi2         .reset(new TopChi2Discriminator(ctx, "TstarReconstruction"));
-  top_ttag_chi2    .reset(new TopChi2DiscriminatorTTAG(ctx, "TstarReconstruction"));
-
-  // Chi2
+// Chi2
   tstar_chi2       .reset(new TstarChi2Discriminator(ctx, "TstarReconstruction"));
   tstar_ttag_chi2  .reset(new TstarChi2DiscriminatorTTAG(ctx, "TstarReconstruction"));
   
   // Hypothesis Container
   h_hyps = ctx.get_handle<std::vector<TstarReconstructionHypothesis>>("TstarReconstruction");
-  h_topHyps = ctx.get_handle<std::vector<TstarReconstructionHypothesis>>("TstarReconstruction");
-
 ////#########################################################################################################################################
 
 //*******************  Histogramms  ********************************************************************************
@@ -459,9 +443,10 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
 }
 
 
-bool TstarSelectionModule::process(uhh2::Event& event){
- // *************************************************************************************************************
-  // \brief module to produce "Selection" ntuples for the T*T*->ttbar gg semileptonic analysis
+bool TstarEleSelectionModule::process(uhh2::Event& event){
+  // *************************************************************************************************************
+  // \brief module to produce "PreSelection" ntuples for the T*T*->ttbar gg semileptonic analysis
+  //  NOTE: output ntuple contains uncleaned Jets/TopJets (no jetID cleaning, no JetLepton cleaning, no JEC/JER smearing applied!)
   // 
   //  Selections: Luminosity selections (Data only);
   //              Common Modules: (For more details see UHH2/common/include/CommonModules.h)
@@ -480,28 +465,12 @@ bool TstarSelectionModule::process(uhh2::Event& event){
   //              TopJetLeptonCleaner (0.8) ;
   //              TopJetCleaner (PtEtaCut(200., 2.4), Type2TopTag(105,220,Type2TopTag::MassType::groomed), Tau32(0.67));
   //
-  //             TTbar re-weightig for missmodelled pT
-  //                         TopPtReweight(ctx, 0.159,  -0.00141,"", "weight_ttbar", true, 0.9910819)
-  //
-  //              Scale Factors:
-  //                         Muon ID
-  //                         MuonTrigger
-  //                         b-Tag
-  //
   //              Lepton selection:
   //                         Muon channel:     exactly one muon (High Pt ID, pT>53 GeV)
   //                         Electron channel: exactly one electron (Spring16 Tight ID, pT>50 GeV)
   //
   //              Jet selection:
   //                         at least 4 jets (WP_LOOSE, pT>50 GeV) 
-  //      
-  //              HT Selection	
-  //                         Ht > 500 GeV
-  //
-  //		  b-tag medium selection 
-  //		  	     CSVBTag(CSVBTag::WP_MEDIUM)
-  //                         at least one b-tag at medium WP
-  //                      
   //
   // *************************************************************************************************************
 
@@ -514,11 +483,14 @@ bool TstarSelectionModule::process(uhh2::Event& event){
   h_input_topjet ->fill(event);
   h_input_lumi   ->fill(event);
 
-  // Scale Factors for MuonID/MuonTrigger
-  SF_muonTrigger->process(event);
-  SF_muonID->process(event);
+  // Scale Factors
+   // for MuonID/MuonTrigger
+    SF_muonTrigger->process(event);
+    SF_muonID->process(event);
 
-
+    //
+    SF_elecID->process(event);
+  
   /// ###################### Re-Weight TTbar events during miss modelled pT #############
   ttbar_reweight->process(event);
   if(debug) cout<<"Finished ttbar reweight: "<<endl;
@@ -633,6 +605,7 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 //***********************************************************************************************************
 //
 //  Fisrt Reconstruct Primary Lepton
+//  Reconstruct the FourVector of Neutrino
 //  
 //  Reconstruct full Event  
 //
@@ -645,35 +618,9 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 ////PrimeLep Reco
     reco_primlep->process(event);
     if(debug) cout<<"Primary Lepton Reconstruction"<<endl;
-
     
-
-
-////*******  Reconstruction ************************************************************** 
-
-    if(!event.isRealData){
-      tstargenprod->process(event);
-    }
-    /*
+ ////*******  Reconstruction ************************************************************** 
     bool pass_reco(false);
-    
-    if(!pass_ttagevt){     //Without Top-Tag
-      top_reco->process(event);
-    }
-    else { 
-      pass_reco = top_ttag_reco->process(event);                                //With Top-Tag
-      if(!pass_reco) {                                                            //If reco with top-tag fails,  
-	top_reco->process(event); 	//Use reco without top-tag
-      }
-    }
-    */
-    ////****************************************************************************************** 
-
-
-
-////*******  Reconstruction ************************************************************** 
-    
-   bool pass_reco(false);
     
     if(!pass_ttagevt){                                                              //Without Top-Tag
       tstar_reco->process(event);
@@ -684,14 +631,13 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	tstar_reco->process(event);                                               //Use reco without top-tag
       }
     }
-    
 ////****************************************************************************************** 
-    
+
 //*********  For MC Only! Needs Generator Information ******************************************
     if(!event.isRealData){
-      //     tstargenprod->process(event);
+      tstargenprod->process(event);
      
-      //   h_tstargenhists->fill(event);
+      //    h_tstargenhists->fill(event);
       
 
   // ****************  Matching betweeen Gen and Reco Level  ************************************************************************
@@ -701,9 +647,9 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	//Get Generator Particles
 	const auto & tstargen = event.get(h_tstargen);
 	
-	//Check if event is "matchable": pt and eta of gen objects inside the selection criteria
+	//Check if event is "matchable": pt and eta of objects inside the selection criteria
 	bool matchable_tstar(false);
-	if(tstargen.DecayChannel() == TStarGen::e_muhad){
+	if(tstargen.IsSemiLeptonicDecay()){
 	  const LorentzVector gen_jetq1_v4    = tstargen.Q1().v4();
 	  const LorentzVector gen_jetq2_v4    = tstargen.Q2().v4();
 	  const LorentzVector gen_bhad_v4     = tstargen.BHad().v4();
@@ -721,7 +667,6 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	  if(fabs(gen_lepton_v4.Eta())<2.4) eta_lepton = true;
 	  
 	  if(pt_jets && eta_jets && pt_lepton && eta_lepton) matchable_tstar = true;
-
 	}      
 	if(debug) cout<<"Matchable Event?"<<endl;
 	
@@ -748,16 +693,14 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	      tstar_match->process(event);
 	    }
 	  }
-	  
 
+	  
 	  std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);
 	  
 	  const TstarReconstructionHypothesis* hyp_c = get_best_hypothesis(hyps, "CorrectMatch");
 	  if(!hyp_c){
-	    //cout<<"Nullpointer Selection Model"<<endl; 
 	    return false;
 	  }
-	  //cout<<"Get Best Hypothesis! "<<endl;
 	  
 	  h_match_discr  ->fill(event);
 	  
@@ -770,7 +713,6 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	  
 	  //Declare Correct match for Discriminator < 3
 	  if(hyp_c->discriminator("CorrectMatch")<3){
-
 	    if(pass_ttagevt && pass_reco){
 	      h_corrmatch_ttag_discr  ->fill(event);
 	      
@@ -823,7 +765,8 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 
  //*****************************  Chi2 Hypothesis ***************************************************************************
     if(chi2_discr){
-   
+      bool pass_reco = false;
+
       if(debug) cout<<"Enter Chi2 with Top Tag"<<endl;
       
       if(!pass_ttagevt){                                                              //Without Top-Tag
@@ -837,24 +780,24 @@ bool TstarSelectionModule::process(uhh2::Event& event){
 	  tstar_ttag_chi2->process(event);
 	}
       }
-      
+ 
       //Chi2 Method for Final Reconstruction (Additional: KinFitter??)
       std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);
       
       
       const TstarReconstructionHypothesis* hyp = get_best_hypothesis(hyps, "Chi2");        //Get best Hypothesis
       
-   
       if(!hyp){ 
 	std::cout<<"Nullpointer!"<<std::endl;
 	return false;
-      }
+      } 
+      
       
       //Fill Reconstruction Hists BEFORE Discriminator Cut
       h_chi2_before ->fill(event);
       
       //Cut on Discriminator
-      if(hyp->discriminator("Chi2")<20){
+      if(hyp->discriminator("Chi2")<90){
 	
 	if(!pass_ttagevt){
 	  h_chi2min->fill(event);
@@ -912,4 +855,4 @@ bool TstarSelectionModule::process(uhh2::Event& event){
     return true;
 }
 
-UHH2_REGISTER_ANALYSIS_MODULE(TstarSelectionModule)
+UHH2_REGISTER_ANALYSIS_MODULE(TstarEleSelectionModule)

@@ -1,0 +1,113 @@
+void TwoDCut_plot()
+{
+  gStyle->SetOptStat(0);
+
+  TFile* bkg = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/PreSelection/03Feb2017_Relaunch_17Jan2018/2D_Cut_0.4_30/uhh2.AnalysisModuleRunner.MC.QCD_Mu.root", "READ");
+  TFile* sig = new TFile("/nfs/dust/cms/user/multh/RunII_80X_v3/PreSelection/03Feb2017_Relaunch_17Jan2018/2D_Cut_0.4_30/uhh2.AnalysisModuleRunner.MC.Tstar_M-700.root", "READ");
+
+
+  TH2D* hbkg = (TH2D*) bkg->Get("1Muon_Muons/deltaRmin_ptrel");
+  TH2D* hsig = (TH2D*) sig->Get("1Muon_Muons/deltaRmin_ptrel");
+
+  hbkg ->Sumw2();
+  
+
+  int n_bins_x = hbkg ->GetNbinsX();
+  int n_bins_y = hbkg ->GetNbinsY();
+
+  double Signal_integral = hsig->Integral();
+  double Signal_events_cut[n_bins_x][n_bins_y];
+
+  double QCD_integral    = hbkg->Integral();
+  double QCD_events_cut[n_bins_x][n_bins_y];
+
+  double Ratio[n_bins_x][n_bins_y];
+
+  TH2D* h_eff_QCD    = new TH2D("2D_cut_qcd","2D cut eff.", n_bins_x, 0, 2, n_bins_y, 0, 200);
+  TH2D* h_eff_signal = new TH2D("2D_cut_sig","2D cut eff.", n_bins_x, 0, 2, n_bins_y, 0, 200);
+
+  TH2D* h_ratio      = new TH2D("2D_cut_ratio","2D cut S/sqrt(B).", n_bins_x, 0, 2, n_bins_y, 0, 200);
+
+  for(int i=0; i<n_bins_x; i++){
+    for(int j=0; j<n_bins_y; j++){
+      Signal_events_cut[i][j] = hsig->Integral(0,i,0,j);
+
+      h_eff_signal->SetBinContent(i,j,Signal_events_cut[i][j]/Signal_integral);
+
+      QCD_events_cut[i][j] = hbkg->Integral(0,i,0,j);
+
+      h_eff_QCD->SetBinContent(i,j,QCD_events_cut[i][j]/QCD_integral);
+
+      Ratio[i][j] = Signal_events_cut[i][j]/sqrt(QCD_events_cut[i][j]);
+
+      h_ratio -> SetBinContent(i,j,Ratio[i][j]);
+      
+    }
+  }
+  
+  TCanvas *eff1 = new TCanvas("eff1","eff1",800,600);
+  gStyle->SetOptStat(0);
+
+  h_eff_QCD->SetMinimum(0);
+  h_eff_QCD->Draw("COLZ");
+ 
+  TCanvas *eff2 = new TCanvas("eff2","eff2",800,600);
+  gStyle->SetOptStat(0);
+  h_eff_signal->Draw("COLZ");
+  
+  TCanvas *eff3 = new TCanvas("eff3","eff3",800,600);
+  gStyle->SetOptStat(0);
+  h_ratio->Draw("COLZ");
+
+ 
+
+  TLine *line1 = new TLine(0,30,0.4,30);
+  TLine *line2 = new TLine(0.4,0,0.4,30);
+ 
+  line1->SetLineWidth(4);
+  line1->SetLineColor(kRed);
+  
+  line2->SetLineWidth(4);
+  line2->SetLineColor(kRed);
+
+  TLegend *leg1;
+  leg1 = new TLegend(0.1,0.7,0.48,0.9);//x+0.1
+  leg1->SetBorderSize(2);
+  leg1->SetTextSize(0.035);
+  leg1->SetFillColor(10);
+  leg1->SetLineColor(1);
+  leg1->SetTextFont(42);
+
+
+  //  cout << "hbkg = " << hbkg << " sig =" << hsig << endl;
+
+  hbkg->Scale(1./(hbkg->Integral()));
+  hsig->Scale(1./(hsig->Integral()));
+
+  hbkg->SetMarkerStyle(20);
+  hbkg->SetMarkerSize(1);
+  hbkg->SetMarkerColor(kBlack);
+
+  hsig->SetMarkerStyle(20);
+  hsig->SetMarkerSize(1);
+  hsig->SetMarkerColor(kAzure+1);
+
+  hsig->GetXaxis()->SetTitle("#Delta R_{min} (#mu,Jet)");
+  hsig->GetXaxis()->SetTitleSize(0.045);
+  hsig->GetYaxis()->SetTitle("p_{T}^{rel}");
+  hsig->GetYaxis()->SetTitleSize(0.045);
+  hsig->GetYaxis()->SetTitleOffset(1.1);
+
+  hsig->SetTitle("");
+
+  hsig->Draw("scat");
+  hbkg->Draw("scat same");
+ line1 ->Draw("L same");
+ line2->Draw("L same");
+
+  leg1->AddEntry(hsig, "T* (1500 GeV/c^{2})","P");
+  leg1->AddEntry(hbkg, "QCD","P");
+
+  leg1->Draw();
+  
+}

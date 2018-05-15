@@ -1,7 +1,10 @@
 #pragma once
 
+#include "UHH2/TstarSemiLeptonic/include/TstarReconstructionHypothesisDiscriminators.h"
+#include "UHH2/TstarSemiLeptonic/include/TStarGen.h"
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/TstarSemiLeptonic/include/TstarReconstructionHypothesis.h"
+#include "UHH2/TstarSemiLeptonic/include/TopReconstructionHypothesis.h"
 #include "TMinuit.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/ObjectIdUtils.h"
@@ -29,13 +32,13 @@ typedef std::function< std::vector<LorentzVector>  (const LorentzVector & lepton
  *
  * label = name of the hypotheses list in the event / output tree
  */
-class HighMassTstarReconstruction: public uhh2::AnalysisModule {
-public:
 
-    explicit HighMassTstarReconstruction(uhh2::Context & ctx, const NeutrinoReconstructionMethod & neutrinofunction, const std::string & label="HighMassTstarReconstruction");
+class HighMassTopReconstruction: public uhh2::AnalysisModule {
+public:
+    explicit HighMassTopReconstruction(uhh2::Context & ctx, const NeutrinoReconstructionMethod & neutrinofunction, const std::string & label="HighMassTopReconstruction");
 
     virtual bool process(uhh2::Event & event) override;
-    virtual ~HighMassTstarReconstruction();
+    virtual ~HighMassTopReconstruction();
 
 private:
     NeutrinoReconstructionMethod m_neutrinofunction;
@@ -43,7 +46,23 @@ private:
     uhh2::Event::Handle<FlavorParticle> h_primlep;
     uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> hypothesis;
     std::vector<TstarReconstructionHypothesis> reconstruct_TopHyps(const std::vector<Jet> & jets, const std::vector<LorentzVector> & Wleps, double cutoff_Top_min=50, double cutoff_Top_max=400);
-    
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
+    uhh2::Event::Handle<TStarGen> h_tstargen;
+    NeutrinoFit FitNeutrino;
+};
+
+class HighMassGluonReconstruction: public uhh2::AnalysisModule {
+public:
+  explicit HighMassGluonReconstruction(uhh2::Context & ctx, const std::string & label="HighMassGluonReconstruction");
+
+    virtual bool process(uhh2::Event & event) override;
+
+private:
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_recohyps;
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> hypothesis;
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_topHyps;
+    uhh2::Event::Handle<TStarGen> h_tstargen;
 };
 
 
@@ -62,19 +81,23 @@ private:
  *
  * TODO: implement, document better.
  */
-class TstarTopTagReconstruction: public uhh2::AnalysisModule {
+
+class HighMassTopReconstructionTTag: public uhh2::AnalysisModule {
  public:
-  explicit TstarTopTagReconstruction(uhh2::Context&, const NeutrinoReconstructionMethod&, const std::string& label="TstarTopTagReconstruction", TopJetId id=CMSTopTag(), float dr=1.2);
+  explicit HighMassTopReconstructionTTag(uhh2::Context&, const NeutrinoReconstructionMethod&, const std::string& label="HighMassTopReconstructionTTag", TopJetId id=CMSTopTag(), float dr=1.2);
   virtual bool process(uhh2::Event&) override;
 
  private:
   NeutrinoReconstructionMethod m_neutrinofunction;
   uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_recohyps;
   uhh2::Event::Handle<FlavorParticle> h_primlep;
-
+  
+  NeutrinoFit FitNeutrino;
   TopJetId topjetID_;
   float minDR_topjet_jet_;
 };
+
+
 
 /** \brief Make a list of ttbar reconstruction hypotheses as used in high-mass semileptonic ttbar 13 TeV analysis
  *
@@ -96,7 +119,6 @@ class TstarTopTagReconstruction: public uhh2::AnalysisModule {
 
 class HighMassTstarKinReconstruction: public uhh2::AnalysisModule {
 public:
-
     explicit HighMassTstarKinReconstruction(uhh2::Context & ctx, const NeutrinoReconstructionMethod & neutrinofunction, const std::string & label="HighMassTstarReconstruction");
 
     virtual bool process(uhh2::Event & event) override;
@@ -108,8 +130,11 @@ private:
     uhh2::Event::Handle<FlavorParticle> h_primlep;
     uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> hypothesis;
     std::vector<TstarReconstructionHypothesis> reconstruct_TopHyps(const std::vector<Jet> & jets, const std::vector<LorentzVector> & Wleps, double cutoff_Top_min=50, double cutoff_Top_max=400);
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
+
     NeutrinoFit FitNeutrino;
 };
+
 
 class TstarTopTagKinReconstruction: public uhh2::AnalysisModule {
  public:
@@ -125,7 +150,6 @@ class TstarTopTagKinReconstruction: public uhh2::AnalysisModule {
   TopJetId topjetID_;
   float minDR_topjet_jet_;
 };
-
 
 
 /** \brief Calculate the neutrino four-momentum from MET and charged lepton momenta

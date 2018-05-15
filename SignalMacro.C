@@ -5,9 +5,10 @@
 
 void SignalMacro() {
  // open a file and get a histogram
- const TString input_dir = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/Changed_Reco/Comp/";
+  const TString input_dir = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/Changed_Reco/";
+  // const TString input_dir = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/Extend_Chi2/";
   //  const TString input_dir = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Electron/";
-  const TString Hist_dir  = "chi2min__HypHists/";
+  const TString Hist_dir  = "chi2min_ttag__HypHists/";
 
   const int n_sig = 10;  
   const TString signal_file[n_sig] = {"Tstar_M-700", "Tstar_M-800", "Tstar_M-900", "Tstar_M-1000", "Tstar_M-1100", "Tstar_M-1200", "Tstar_M-1300", "Tstar_M-1400", "Tstar_M-1500", "Tstar_M-1600"};
@@ -35,8 +36,8 @@ void SignalMacro() {
 
  c1->cd(1);
 
- //h_signal_lep[0]->Scale(1/(h_signal_lep[0]->Integral()));
- h_signal_lep[0]->SetMaximum(70);
+ h_signal_lep[0]->Scale(1/(h_signal_lep[0]->Integral()));
+ h_signal_lep[0]->SetMaximum(0.16);
  h_signal_lep[0]->SetTitle("");
  h_signal_lep[0]->SetLineColor(kBlue);
  h_signal_lep[0]->SetLineStyle(1);
@@ -46,9 +47,9 @@ void SignalMacro() {
  h_signal_lep[0]->GetXaxis()->SetTitle("M_{T_{lep}^{*}} [GeV/c^{2}]");
  h_signal_lep[0]->GetXaxis()->SetTitleOffset(1.2);
  h_signal_lep[0]->Draw("hist");
- //	 h_signal[4]->Scale(1/(h_signal[4]->Integral()));
- //h_signal[4]->Draw("same");
- //h_signal_lep[4]->Scale(1/(h_signal_lep[4]->Integral()));
+
+
+ h_signal_lep[4]->Scale(1/(h_signal_lep[4]->Integral()));
  h_signal_lep[4]->SetTitle("");
  h_signal_lep[4]->SetLineColor(kRed);
  h_signal_lep[4]->SetLineStyle(1);
@@ -56,26 +57,26 @@ void SignalMacro() {
  
  h_signal_lep[4]->Draw("hist same");
 
- // h_signal_lep[8]->Scale(1/(h_signal_lep[8]->Integral()));
- h_signal_lep[8]->SetTitle("");
- h_signal_lep[8]->SetLineColor(kGreen);
- h_signal_lep[8]->SetLineStyle(1);
- h_signal_lep[8]->SetLineWidth(2);
+ h_signal_lep[9]->Scale(1/(h_signal_lep[9]->Integral()));
+ h_signal_lep[9]->SetTitle("");
+ h_signal_lep[9]->SetLineColor(kGreen);
+ h_signal_lep[9]->SetLineStyle(1);
+ h_signal_lep[9]->SetLineWidth(2);
  
- h_signal_lep[8]->Draw("hist same");
+ h_signal_lep[9]->Draw("hist same");
  
  leg = new TLegend(0.65,0.8,0.9,0.9);
  leg->AddEntry(h_signal_lep[0],"M_{T^{*}} = 700 GeV/c^{2}","l");
  leg->AddEntry(h_signal_lep[4],"M_{T^{*}} = 1100 GeV/c^{2}","l");
- leg->AddEntry(h_signal_lep[8],"M_{T^{*}} = 1500 GeV/c^{2}","l");
+ leg->AddEntry(h_signal_lep[9],"M_{T^{*}} = 1600 GeV/c^{2}","l");
  
  leg->Draw();
  
  c1->cd(2);
 
- // h_signal_had[0]->Scale(1/(h_signal_had[0]->Integral()));
+ h_signal_had[0]->Scale(1/(h_signal_had[0]->Integral()));
  h_signal_had[0]->SetTitle("");
- h_signal_had[0]->SetMaximum(70);
+ h_signal_had[0]->SetMaximum(0.16);
  h_signal_had[0]->SetLineColor(kBlue);
  h_signal_had[0]->SetLineStyle(1);
  h_signal_had[0]->SetLineWidth(2);
@@ -84,9 +85,9 @@ void SignalMacro() {
  h_signal_had[0]->GetXaxis()->SetTitle("M_{T_{had}^{*}} [GeV/c^{2}]");
  h_signal_had[0]->GetXaxis()->SetTitleOffset(1.2);
  h_signal_had[0]->Draw("hist");
- //	 h_signal[4]->Scale(1/(h_signal[4]->Integral()));
- //h_signal[4]->Draw("same");
- // h_signal_had[4]->Scale(1/(h_signal_had[4]->Integral()));
+
+
+ h_signal_had[4]->Scale(1/(h_signal_had[4]->Integral()));
  h_signal_had[4]->SetTitle("");
  h_signal_had[4]->SetLineColor(kRed);
  h_signal_had[4]->SetLineStyle(1);
@@ -94,25 +95,25 @@ void SignalMacro() {
  
  h_signal_had[4]->Draw("hist same");
 
- // h_signal_had[8]->Scale(1/(h_signal_had[8]->Integral()));
- h_signal_had[8]->SetTitle("");
- h_signal_had[8]->SetLineColor(kGreen);
- h_signal_had[8]->SetLineStyle(1);
- h_signal_had[8]->SetLineWidth(2);
+ h_signal_had[9]->Scale(1/(h_signal_had[9]->Integral()));
+ h_signal_had[9]->SetTitle("");
+ h_signal_had[9]->SetLineColor(kGreen);
+ h_signal_had[9]->SetLineStyle(1);
+ h_signal_had[9]->SetLineWidth(2);
  
- h_signal_had[8]->Draw("hist same");
+ h_signal_had[9]->Draw("hist same");
  
  leg1 = new TLegend(0.65,0.8,0.9,0.9);
  leg1->AddEntry(h_signal_had[0],"M_{T^{*}} = 700 GeV/c^{2}","l");
  leg1->AddEntry(h_signal_had[4],"M_{T^{*}} = 1100 GeV/c^{2}","l");
- leg1->AddEntry(h_signal_had[8],"M_{T^{*}} = 1500 GeV/c^{2}","l");
+ leg1->AddEntry(h_signal_had[9],"M_{T^{*}} = 1600 GeV/c^{2}","l");
  
  leg1->Draw();
 
 
  c1->cd(3);
- //h_signal_toplep[0]->Scale(1/(h_signal_toplep[0]->Integral()));
- h_signal_toplep[0]->SetMaximum(70);
+ h_signal_toplep[0]->Scale(1/(h_signal_toplep[0]->Integral()));
+ h_signal_toplep[0]->SetMaximum(0.2);
  h_signal_toplep[0]->SetTitle("");
  h_signal_toplep[0]->SetLineColor(kBlue);
  h_signal_toplep[0]->SetLineStyle(1);
@@ -122,9 +123,8 @@ void SignalMacro() {
  h_signal_toplep[0]->GetXaxis()->SetTitle("M_{top_{lep}} [GeV/c^{2}]");
  h_signal_toplep[0]->GetXaxis()->SetTitleOffset(1.2);
  h_signal_toplep[0]->Draw("hist");
- //	 h_signal[4]->Scale(1/(h_signal[4]->Integral()));
- //h_signal[4]->Draw("same");
- //h_signal_toplep[4]->Scale(1/(h_signal_toplep[4]->Integral()));
+
+ h_signal_toplep[4]->Scale(1/(h_signal_toplep[4]->Integral()));
  h_signal_toplep[4]->SetTitle("");
  h_signal_toplep[4]->SetLineColor(kRed);
  h_signal_toplep[4]->SetLineStyle(1);
@@ -132,7 +132,7 @@ void SignalMacro() {
  
  h_signal_toplep[4]->Draw("hist same");
 
- // h_signal_toplep[8]->Scale(1/(h_signal_toplep[8]->Integral()));
+ h_signal_toplep[8]->Scale(1/(h_signal_toplep[8]->Integral()));
  h_signal_toplep[8]->SetTitle("");
  h_signal_toplep[8]->SetLineColor(kGreen);
  h_signal_toplep[8]->SetLineStyle(1);
@@ -144,8 +144,8 @@ void SignalMacro() {
 
 
  c1->cd(4);
- //h_signal_tophad[0]->Scale(1/(h_signal_tophad[0]->Integral()));
- h_signal_tophad[0]->SetMaximum(70);
+ h_signal_tophad[0]->Scale(1/(h_signal_tophad[0]->Integral()));
+ h_signal_tophad[0]->SetMaximum(0.2);
  h_signal_tophad[0]->SetTitle("");
  h_signal_tophad[0]->SetLineColor(kBlue);
  h_signal_tophad[0]->SetLineStyle(1);
@@ -155,9 +155,8 @@ void SignalMacro() {
  h_signal_tophad[0]->GetXaxis()->SetTitle("M_{top_{had}} [GeV/c^{2}]");
  h_signal_tophad[0]->GetXaxis()->SetTitleOffset(1.2);
  h_signal_tophad[0]->Draw("hist");
- //	 h_signal[4]->Scale(1/(h_signal[4]->Integral()));
- //h_signal[4]->Draw("same");
- //h_signal_tophad[4]->Scale(1/(h_signal_tophad[4]->Integral()));
+
+ h_signal_tophad[4]->Scale(1/(h_signal_tophad[4]->Integral()));
  h_signal_tophad[4]->SetTitle("");
  h_signal_tophad[4]->SetLineColor(kRed);
  h_signal_tophad[4]->SetLineStyle(1);
@@ -165,7 +164,7 @@ void SignalMacro() {
  
  h_signal_tophad[4]->Draw("hist same");
 
- // h_signal_tophad[8]->Scale(1/(h_signal_tophad[8]->Integral()));
+ h_signal_tophad[8]->Scale(1/(h_signal_tophad[8]->Integral()));
  h_signal_tophad[8]->SetTitle("");
  h_signal_tophad[8]->SetLineColor(kGreen);
  h_signal_tophad[8]->SetLineStyle(1);

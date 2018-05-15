@@ -7,12 +7,26 @@
 using namespace uhh2;
 using namespace std;
 
+namespace{
+  float deltaPhi_calc(float p1, float p2){
+    float deltaPhi = 100;
+    
+    if ((p1 - p2) < 0) deltaPhi = p2 - p1;
+    else{ 
+      deltaPhi = p1 - p2;
+    }
+    return deltaPhi;
+  }
+}
+
+
 TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): Hists(ctx, dirname){
 
   DecayChannel  = book<TH1F>("Decay_Channel","Decay_Channel", 11, -0.5, 10.5);
 
-  M_TstarTstar  = book<TH1F>( "M_TstarTstar", "M_{T^{*}#bar{T}^{*}} [GeV/c^{2}]", 200, 0, 6000 ) ;   
-  Pt_TstarTstar = book< TH1F>( "Pt_TstarTstar", "P_{T,T^{*}#bar{T^{*}}} [GeV/c]", 10, -0.5, 0.5 ) ;
+  M_TstarTstar       = book<TH1F>( "M_TstarTstar", "M_{T^{*}#bar{T}^{*}} [GeV/c^{2}]", 200, 0, 6000 ) ;   
+  Pt_TstarTstar      = book<TH1F>( "Pt_TstarTstar", "P_{T,T^{*}#bar{T^{*}}} [GeV/c]", 10, -0.5, 0.5 ) ;
+  Pt_TstarTstar_Diff = book<TH1F>( "Pt_TstarTstar_Diff", "P_{T} T*T* diff [GeV/c]", 20, -1, 1 ) ;
 
   M_TstarTstar_vs_eta_Tstar     = book<TH2F>( "M_TstarTstar_vs_eta_Tstar", "M_{T*#bar{T*}} [GeV/c^{2}] vs #eta_{T*}",500,0,5000,500,-5,5); 
   M_TstarTstar_vs_eta_antiTstar = book<TH2F>( "M_TstarTstar_vs_eta_antiTstar", "M_{T*#bar{T*}} [GeV/c^{2}] vs #eta_{#bar{T*}}",500,0,5000,500,-5,5); 
@@ -57,12 +71,12 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   eta_antigluon = book<TH1F>("eta_gluon_AntiTstar","#eta_{g}",100,-5,5);
   phi_antigluon = book<TH1F>("phi_gluon_AntiTstar", "#phi_{gluon}", 100, -3.14, 3.14);
 
-  deltaPhi_gluon_antigluon   = book<TH1F>("deltaPhi_gluon_antigluon", "#Delta #phi gluon antigluon", 30,0,6);
-  deltaPhi_top_antitop       = book<TH1F>("deltaPhi_top_antitop", "#Delta #phi top antitop", 30,0,6);
-  deltaPhi_gluon_top         = book<TH1F>("deltaPhi_gluon_top", "#Delta #phi gluon top", 30,0,6);
-  deltaPhi_antigluon_antitop = book<TH1F>("deltaPhi_antigluon_antitop", "#Delta #phi antigluon antitop", 30,0,6);
-  deltaPhi_gluon_antitop     = book<TH1F>("deltaPhi_gluon_antitop", "#Delta #phi gluon antitop", 30, 0, 6);
-  deltaPhi_antigluon_top     = book<TH1F>("deltaPhi_antigluon_top", "#Delta #phi antigluon top", 30, 0, 6);
+  deltaPhi_gluon_antigluon   = book<TH1F>("deltaPhi_gluon_antigluon", "#Delta #phi gluon antigluon", 40,0,6);
+  deltaPhi_top_antitop       = book<TH1F>("deltaPhi_top_antitop", "#Delta #phi top antitop", 40,0,6);
+  deltaPhi_gluon_top         = book<TH1F>("deltaPhi_gluon_top", "#Delta #phi gluon top", 40,0,6);
+  deltaPhi_antigluon_antitop = book<TH1F>("deltaPhi_antigluon_antitop", "#Delta #phi antigluon antitop", 40,0,6);
+  deltaPhi_gluon_antitop     = book<TH1F>("deltaPhi_gluon_antitop", "#Delta #phi gluon antitop", 40, 0, 6);
+  deltaPhi_antigluon_top     = book<TH1F>("deltaPhi_antigluon_top", "#Delta #phi antigluon top", 40, 0, 6);
 
   deltaR_gluon_antigluon   = book<TH1F>("deltaR_gluon_antigluon", "#Delta R gluon antigluon", 30,0,6);
   deltaR_top_antitop       = book<TH1F>("deltaR_top_antitop", "#Delta R top antitop", 30,0,6);
@@ -70,6 +84,9 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   deltaR_antigluon_antitop = book<TH1F>("deltaR_antigluon_antitop", "#Delta R antigluon antitop", 30,0,6);
   deltaR_gluon_antitop     = book<TH1F>("deltaR_gluon_antitop", "#Delta R gluon antitop", 30, 0, 6);
   deltaR_antigluon_top     = book<TH1F>("deltaR_antigluon_top", "#Delta R antigluon top", 30, 0, 6);
+
+  Diff_deltaR_leptonic     = book<TH1F>("Diff_deltaR_leptonic", "Diff #DeltaR lep - had", 60, -6, 6);
+  Diff_deltaR_hadronic     = book<TH1F>("Diff_deltaR_hadronic", "Diff #DeltaR had - lep", 60, -6, 6);
 
   M_top   = book<TH1F>("M_top", "M_{t} [GeV/c^{2}]",50,140, 210);
   Pt_top  = book<TH1F>("Pt_top","P_{T,t} [GeV/c]",100,0,1000);
@@ -102,7 +119,8 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   Diff_Pt_antigluon_WminusDecay1 = book<TH1F>("Diff_Pt_gluon_WminusDecay1", "(p_{T}^{#bar{gluon}} - p_{T}^{#bar{top}})/(p_{T}^{#bar{gluon}} + p_{T}^{#bar{top}, q1})", 20, -1.5, 1.5);
   Diff_Pt_antigluon_WminusDecay2 = book<TH1F>("Diff_Pt_gluon_WminusDecay2", "(p_{T}^{#bar{gluon}} - p_{T}^{#bar{top}})/(p_{T}^{#bar{gluon}} + p_{T}^{#bar{top}, q2})", 20, -1.5, 1.5);
 
-
+  Diff_Pt_antigluon_gluon = book<TH1F>("Diff_Pt_antigluon_gluon", "(p_{T}^{#bar{gluon}} - p_{T}^{gluon})/(p_{T}^{#bar{gluon}} + p_{T}^{gluon})", 20,-1.5,1.5);
+  Diff_Pt_bantitop_btop   = book<TH1F>("Diff_Pt_bantitop_btop", "(p_{T}^{#bar{b}} - p_{T}^{b})/(p_{T}^{#bar{b}} + p_{T}^{b})", 20,-1.5,1.5);
 
   Pt_bottom  = book<TH1F>("Pt_bottom_antitop", "p_{T, bottom} [GeV/c]", 50, 0, 500);
   eta_bottom = book<TH1F>("eta_bottom_antitop", "#eta_{bottom}", 100, -5, 5);
@@ -138,9 +156,10 @@ void TStarGenHists::fill(const uhh2::Event & e){
   double  pttstar_gen = ( tstar + antitstar ).Pt();
   double sh = (e.genparticles->at(0).v4()+ e.genparticles->at(1).v4()).M();
 
-  M_TstarTstar  -> Fill(mtstar_gen, e.weight);
-  Pt_TstarTstar -> Fill(pttstar_gen, e.weight);
-
+  M_TstarTstar       -> Fill(mtstar_gen, e.weight);
+  Pt_TstarTstar      -> Fill(pttstar_gen, e.weight);
+  Pt_TstarTstar_Diff -> Fill((tstargen.TStar().v4().Pt() - tstargen.AntiTStar().v4().Pt())/(tstargen.TStar().v4().Pt() + tstargen.AntiTStar().v4().Pt()), e.weight);
+  
   M_TstarTstar_vs_eta_Tstar     -> Fill(mtstar_gen, tstargen.TStar().eta(), e.weight);
   M_TstarTstar_vs_eta_antiTstar -> Fill(mtstar_gen, tstargen.AntiTStar().eta(), e.weight);
   
@@ -189,12 +208,12 @@ void TStarGenHists::fill(const uhh2::Event & e){
   eta_antigluon -> Fill(tstargen.gAntiTStar().eta(), e.weight);
   phi_antigluon -> Fill(tstargen.gAntiTStar().phi(), e.weight);
 
-  deltaPhi_gluon_antigluon   -> Fill(deltaPhi(tstargen.gTStar(), tstargen.gAntiTStar()), e.weight);
-  deltaPhi_top_antitop       -> Fill(deltaPhi(tstargen.tTStar(), tstargen.tAntiTStar()), e.weight);
-  deltaPhi_gluon_top         -> Fill(deltaPhi(tstargen.gTStar(), tstargen.tTStar()), e.weight);
-  deltaPhi_antigluon_antitop -> Fill(deltaPhi(tstargen.gAntiTStar(), tstargen.tAntiTStar()), e.weight);
-  deltaPhi_antigluon_top     -> Fill(deltaPhi(tstargen.gAntiTStar(), tstargen.tTStar()), e.weight);
-  deltaPhi_gluon_antitop     -> Fill(deltaPhi(tstargen.gTStar(), tstargen.tAntiTStar()), e.weight);
+  deltaPhi_gluon_antigluon   -> Fill(deltaPhi_calc(tstargen.gTStar().phi(), tstargen.gAntiTStar().phi()), e.weight);
+  deltaPhi_top_antitop       -> Fill(deltaPhi_calc(tstargen.tTStar().phi(), tstargen.tAntiTStar().phi()), e.weight);
+  deltaPhi_gluon_top         -> Fill(deltaPhi_calc(tstargen.gTStar().phi(), tstargen.tTStar().phi()), e.weight);
+  deltaPhi_antigluon_antitop -> Fill(deltaPhi_calc(tstargen.gAntiTStar().phi(), tstargen.tAntiTStar().phi()), e.weight);
+  deltaPhi_antigluon_top     -> Fill(deltaPhi_calc(tstargen.gAntiTStar().phi(), tstargen.tTStar().phi()), e.weight);
+  deltaPhi_gluon_antitop     -> Fill(deltaPhi_calc(tstargen.gTStar().phi(), tstargen.tAntiTStar().phi()), e.weight);
 
   deltaR_gluon_antigluon   -> Fill(deltaR(tstargen.gTStar(), tstargen.gAntiTStar()), e.weight);
   deltaR_top_antitop       -> Fill(deltaR(tstargen.tTStar(), tstargen.tAntiTStar()), e.weight);
@@ -202,6 +221,9 @@ void TStarGenHists::fill(const uhh2::Event & e){
   deltaR_antigluon_antitop -> Fill(deltaR(tstargen.gAntiTStar(), tstargen.tAntiTStar()), e.weight);
   deltaR_antigluon_top     -> Fill(deltaR(tstargen.gAntiTStar(), tstargen.tTStar()), e.weight);
   deltaR_gluon_antitop     -> Fill(deltaR(tstargen.gTStar(), tstargen.tAntiTStar()), e.weight);
+
+  Diff_deltaR_leptonic     ->Fill(deltaR(tstargen.gAntiTStar(), tstargen.tTStar())-deltaR(tstargen.gAntiTStar(), tstargen.tAntiTStar()), e.weight);
+  Diff_deltaR_hadronic     ->Fill(deltaR(tstargen.gTStar(), tstargen.tAntiTStar())-deltaR(tstargen.gTStar(), tstargen.tTStar()), e.weight);
 
   LorentzVector top = tstargen.tTStar().v4();
   double deltaR_top = std::max(std::max( uhh2::deltaR(tstargen.wPlusDecay1(), tstargen.wPlusDecay2()),
@@ -247,6 +269,8 @@ void TStarGenHists::fill(const uhh2::Event & e){
   Diff_Pt_antigluon_WminusDecay1    -> Fill((tstargen.gTStar().pt()-tstargen.wMinusDecay1().pt())/(tstargen.gTStar().pt()+tstargen.wMinusDecay1().pt()), e.weight);
   Diff_Pt_antigluon_WminusDecay2    -> Fill((tstargen.gTStar().pt()-tstargen.wMinusDecay2().pt())/(tstargen.gTStar().pt()+tstargen.wMinusDecay2().pt()), e.weight);
 
+  Diff_Pt_antigluon_gluon      -> Fill((tstargen.gAntiTStar().pt()-tstargen.gTStar().pt())/(tstargen.gAntiTStar().pt()+tstargen.gTStar().pt()), e.weight);
+  Diff_Pt_bantitop_btop        -> Fill((tstargen.bAntiTStar().pt()-tstargen.bTStar().pt())/(tstargen.bAntiTStar().pt()+tstargen.bTStar().pt()), e.weight);
 
   Pt_bottom  -> Fill(tstargen.bTStar().pt(), e.weight);
   eta_bottom -> Fill(tstargen.bTStar().eta(), e.weight);

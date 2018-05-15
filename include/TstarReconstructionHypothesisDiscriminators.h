@@ -4,6 +4,7 @@
 #include "UHH2/core/include/Event.h"
 
 #include "UHH2/TstarSemiLeptonic/include/TstarReconstructionHypothesis.h"
+#include "UHH2/TstarSemiLeptonic/include/TopReconstructionHypothesis.h"
 #include "UHH2/TstarSemiLeptonic/include/TStarGen.h"
 #include "UHH2/common/include/TTbarGen.h"
 /**  @short This file defines analysis modules which add discriminator values to reconstruction hypotheses
@@ -27,6 +28,7 @@
  */
 const TstarReconstructionHypothesis * get_best_hypothesis(const std::vector<TstarReconstructionHypothesis> & hyps, const std::string & label);
 
+const TstarReconstructionHypothesis * get_best_top_hypothesis(const std::vector<TstarReconstructionHypothesis> & hyps, const std::string & label);
 
 /** \brief Calculate the chi-square reconstruction discriminator
  * 
@@ -40,6 +42,48 @@ const TstarReconstructionHypothesis * get_best_hypothesis(const std::vector<Tsta
  * For numeric values of the means and widths for the masses used see the implementation in the .cxx file;
  * they are the 8TeV values.
  */
+class TopChi2Discriminator: public uhh2::AnalysisModule {
+public:
+    struct cfg {
+        std::string discriminator_label;
+        cfg(): discriminator_label("Chi2"){}
+    };
+    
+    TopChi2Discriminator(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    virtual bool process(uhh2::Event & event) override;
+    
+private:
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
+    cfg config;
+};
+
+/** \brief Calculate the chi-square reconstruction discriminator
+ *         (only for events with a top-tagged jet; see TopTagReconstruction class)
+ * 
+ * Chi-square discriminator specific to events where the hadronic-top corresponds to one jet passing top-tagging.
+ * Class implementation follows the same structure of the Chi2Discriminator class.
+ * The chi2 term for the hadronic-top is calculated using the groomed mass of the top-tagged jet.
+ */
+
+class TopChi2DiscriminatorTTAG: public uhh2::AnalysisModule {
+public:
+    struct cfg {
+        std::string discriminator_label;
+        cfg(): discriminator_label("Chi2"){}
+    };
+    
+    TopChi2DiscriminatorTTAG(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    virtual bool process(uhh2::Event & event) override;
+    
+private:
+    uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
+    cfg config;
+};
+//******************************************************************************************************************
+
+
+
+
 class TstarChi2Discriminator: public uhh2::AnalysisModule {
 public:
     struct cfg {

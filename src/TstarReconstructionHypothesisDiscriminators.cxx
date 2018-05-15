@@ -26,12 +26,35 @@ float inv_mass(const LorentzVector & p4){
     }
 }
 }
+//***************** Search for Best Top Hypothesis **************************************************************************************************
 
+const TstarReconstructionHypothesis * get_best_top_hypothesis(const std::vector<TstarReconstructionHypothesis> & hyps, const std::string & label){
+  const TstarReconstructionHypothesis * best = nullptr;
+    float current_best_disc = numeric_limits<float>::infinity();
+
+    for(const auto & hyp : hyps){
+       if(!hyp.has_discriminator(label))
+	continue;
+
+        auto disc = hyp.discriminator(label);
+	 if(disc < current_best_disc){
+            best = &hyp;
+            current_best_disc = disc;
+        }
+    }
+    if(std::isfinite(current_best_disc)){
+        return best;
+    }
+    else{
+      std::cout<<"Nullpointer Best Hyp!"<<std::endl;
+      return nullptr;
+    }
+}
 
 //***************** Search for Best Hypothesis **************************************************************************************************
 
 const TstarReconstructionHypothesis * get_best_hypothesis(const std::vector<TstarReconstructionHypothesis> & hyps, const std::string & label){
-   const TstarReconstructionHypothesis * best = nullptr;
+  const TstarReconstructionHypothesis * best = nullptr;
     float current_best_disc = numeric_limits<float>::infinity();
 
     for(const auto & hyp : hyps){
@@ -56,6 +79,86 @@ const TstarReconstructionHypothesis * get_best_hypothesis(const std::vector<Tsta
 
 //**************** Chi2 Analysis for Events without Top-Tag *****************************************************************************************
 
+TopChi2Discriminator::TopChi2Discriminator(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
+    h_hyps = ctx.get_handle<vector<TstarReconstructionHypothesis>>(rechyps_name);
+}
+
+bool TopChi2Discriminator::process(uhh2::Event & event){
+
+    auto & hyps = event.get(h_hyps);
+
+    //Top-Quark values
+    const double mass_thad = 174.7;
+    const double mass_thad_sigma = 19.03;
+    const double mass_tlep = 171.4;
+    const double mass_tlep_sigma = 23.25;
+    
+    for(auto & hyp: hyps){
+
+        double mass_thad_rec = inv_mass(hyp.tophad_v4());
+        double mass_tlep_rec = inv_mass(hyp.toplep_v4());
+
+	//Compute Chi2 Terms 
+        double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
+        double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
+
+	//##############################################################################################
+
+        hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep); 
+	hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
+        hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
+    }  
+    return true;
+}
+////****************************************************************************************************************************************************************
+//********************* Chi2 Analysis for Events with Top-Tag ******************************************************************************************************
+
+TopChi2DiscriminatorTTAG::TopChi2DiscriminatorTTAG(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
+  h_hyps = ctx.get_handle<vector<TstarReconstructionHypothesis>>(rechyps_name);
+}
+
+bool TopChi2DiscriminatorTTAG::process(uhh2::Event& event){
+auto & hyps = event.get(h_hyps);
+
+//Top-Quark values
+  const double mass_thad       = 194.0;
+  const double mass_thad_sigma =  20.13;
+  const double mass_tlep       = 169.0;
+  const double mass_tlep_sigma =  23.97;
+
+ 
+  //Run over all Hypothesis 
+  for(auto & hyp: hyps){
+    if(!hyp.tophad_topjet_ptr())
+      throw std::runtime_error("Chi2DiscriminatorTTAG::process -- null pointer for TopJet associated to hadronic-top");
+
+ 
+    //Top-Quark Lorentz-Vector
+    LorentzVector tjet_subjet_sum;
+    for(const auto& subj : hyp.tophad_topjet_ptr()->subjets()) tjet_subjet_sum += subj.v4();
+
+    const double mass_tlep_rec = inv_mass(hyp.toplep_v4());
+    const double mass_thad_rec = inv_mass(tjet_subjet_sum);
+
+    //Compute Chi2 Terms   
+    double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
+    double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
+    
+    //###############################################################################################
+    
+    hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep); 
+    hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
+        hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
+  }
+  return true;
+}
+//************************************************************************************************************************************************************************
+
+
+
+
+//**************** Chi2 Analysis for Events without Top-Tag *****************************************************************************************
+
 TstarChi2Discriminator::TstarChi2Discriminator(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
     h_hyps = ctx.get_handle<vector<TstarReconstructionHypothesis>>(rechyps_name);
 }
@@ -65,61 +168,71 @@ bool TstarChi2Discriminator::process(uhh2::Event & event){
     auto & hyps = event.get(h_hyps);
 
     //Top-Quark values
-    const double mass_thad = 173.4;
-    const double mass_thad_sigma = 20.23;
-    const double mass_tlep = 170.8;
-    const double mass_tlep_sigma = 23.68;
-    
+    const double mass_thad = 177.8;
+    const double mass_thad_sigma = 18.81;
+    const double mass_tlep = 170.3;
+    const double mass_tlep_sigma = 23.09;
+
+    //Pt values
+    /* 
+    const double pt_gluontop_lep = 0;
+    const double pt_gluontop_lep_sigma = 0.3;
+    const double pt_gluontop_had = 0;
+    const double pt_gluontop_had_sigma = 0.3;
+    */
+
     //T* values (Masspoint independend)
-    const double mass_Tstar_diff_rel = 0.0026; //Average CorrectMatch
-    const double mass_Tstar_diff_rel_sigma = 0.051; //
+    const double mass_Tstar_diff_rel = 0.001; //Average CorrectMatch
+    const double mass_Tstar_diff_rel_sigma = 0.056; //Original: 0.056
 
     //Make use of topology
-    const double deltaPhi_Tstar = 3.139;
-    const double deltaPhi_sigma = 0.084;
+    const double deltaPhi_Tstar = 3.14;
+    const double deltaPhi_sigma = 0.039;
 
 
     for(auto & hyp: hyps){
-/*
-        auto gluonlep_jets = hyp.gluonlep_jets();
-        auto gluonhad_jets = hyp.gluonhad_jets();
-   
-        if(gluonhad_jets.size() != 1 || gluonlep_jets.size() != 1){
-    	   hyp.set_discriminator(config.discriminator_label, 100);
-	   hyp.set_discriminator(config.discriminator_label + "_tlep", 100);
-           hyp.set_discriminator(config.discriminator_label + "_thad", 100);
-           hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", 100);
-           hyp.set_discriminator(config.discriminator_label + "_deltaPhi", 100);
-           continue;
- 	}
-*/
+      
+      double mass_thad_rec = inv_mass(hyp.tophad_v4());
+      double mass_tlep_rec = inv_mass(hyp.toplep_v4());
 
-        double mass_thad_rec = inv_mass(hyp.tophad_v4());
-        double mass_tlep_rec = inv_mass(hyp.toplep_v4());
+      /*
+      double pt_gluontop_lep_rec = ((hyp.gluonlep_v4().pt()-hyp.toplep_v4().pt())/hyp.gluonlep_v4().pt());
+      double pt_gluontop_had_rec = ((hyp.gluonhad_v4().pt()-hyp.tophad_v4().pt())/hyp.gluonhad_v4().pt());
+      */
 
-	double mass_Tstar_had_rec = inv_mass(hyp.Tstarhad_v4());
-	double mass_Tstar_lep_rec = inv_mass(hyp.Tstarlep_v4());
-	double mass_Tstar_mean_rec = (mass_Tstar_had_rec + mass_Tstar_lep_rec);
+      double mass_Tstar_had_rec = inv_mass(hyp.Tstarhad_v4());
+      double mass_Tstar_lep_rec = inv_mass(hyp.Tstarlep_v4());
+      double mass_Tstar_mean_rec = (mass_Tstar_had_rec + mass_Tstar_lep_rec);
+      
+      double deltaPhi_Tstar_rec   = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
+      
+      
+      //Compute Chi2 Terms 
+      double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
+      double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
 
-	double deltaPhi_Tstar_rec     = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
+      /*
+      double chi2_pt_lep          = pow((pt_gluontop_lep_rec - pt_gluontop_lep) / pt_gluontop_lep_sigma, 2);
+      double chi2_pt_had          = pow((pt_gluontop_had_rec - pt_gluontop_had) / pt_gluontop_had_sigma, 2);
+      */
 
+      double chi2_Tstarhad_rec    = pow((mass_Tstar_had_rec - 900)/120, 2);
+      double chi2_Tstarlep_rec    = pow((mass_Tstar_lep_rec - 900)/120, 2);
 
-	//Compute Chi2 Terms 
-        double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
-        double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
-	double chi2_MTstar_diff_rel = pow(((mass_Tstar_had_rec - mass_Tstar_lep_rec)/mass_Tstar_mean_rec - mass_Tstar_diff_rel) / mass_Tstar_diff_rel_sigma, 2);
-	double chi2_deltaPhi        = pow((deltaPhi_Tstar_rec - deltaPhi_Tstar)/deltaPhi_sigma ,2);
-
-	//##############################################################################################
-
-        hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep +chi2_MTstar_diff_rel + chi2_deltaPhi); 
-	hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
-        hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
-	hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", chi2_MTstar_diff_rel);
-	hyp.set_discriminator(config.discriminator_label + "_deltaPhi", chi2_deltaPhi);
+      double chi2_MTstar_diff_rel = pow(((mass_Tstar_had_rec - mass_Tstar_lep_rec)/mass_Tstar_mean_rec - mass_Tstar_diff_rel) / mass_Tstar_diff_rel_sigma, 2);
+      double chi2_deltaPhi        = pow((deltaPhi_Tstar_rec - deltaPhi_Tstar)/deltaPhi_sigma ,2);
+      
+      //##############################################################################################
+      
+      hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi);// chi2_MTstar_diff_rel + chi2_deltaPhi); //+ chi2_pt_lep + chi2_pt_had + chi2_deltaPhi
+      hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
+      hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
+      hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", chi2_MTstar_diff_rel);
+      hyp.set_discriminator(config.discriminator_label + "_deltaPhi", chi2_deltaPhi);
     }  
     return true;
 }
+
 ////****************************************************************************************************************************************************************
 
 
@@ -134,10 +247,10 @@ bool TstarChi2DiscriminatorTTAG::process(uhh2::Event& event){
 auto & hyps = event.get(h_hyps);
 
 //Top-Quark values
-  const double mass_thad       = 194.9;
-  const double mass_thad_sigma =  21.34;
-  const double mass_tlep       = 169.3;
-  const double mass_tlep_sigma =  24.05;
+  const double mass_thad       = 194.0;
+  const double mass_thad_sigma =  20.13;
+  const double mass_tlep       = 169.0;
+  const double mass_tlep_sigma =  23.97;
 
   //T* values
   const double mass_Tstar_diff_rel = 0.012; //How to get
@@ -145,13 +258,15 @@ auto & hyps = event.get(h_hyps);
 
   //Topology
   const double deltaPhi_Tstar = 3.147;
-  const double deltaPhi_sigma = 0.09;
+  const double deltaPhi_sigma = 0.098;
 
+ 
   //Run over all Hypothesis 
   for(auto & hyp: hyps){
     if(!hyp.tophad_topjet_ptr())
       throw std::runtime_error("Chi2DiscriminatorTTAG::process -- null pointer for TopJet associated to hadronic-top");
 
+ 
     //Top-Quark Lorentz-Vector
     LorentzVector tjet_subjet_sum;
     for(const auto& subj : hyp.tophad_topjet_ptr()->subjets()) tjet_subjet_sum += subj.v4();
@@ -163,18 +278,17 @@ auto & hyps = event.get(h_hyps);
     double mass_Tstar_lep_rec = inv_mass(hyp.Tstarlep_v4());
     double mass_Tstar_mean_rec = (mass_Tstar_had_rec + mass_Tstar_lep_rec);
 
-    double deltaPhi_Tstar_rec     = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
-
-
+    double deltaPhi_Tstar_rec   = (hyp.Tstarhad_v4().phi()-hyp.Tstarlep_v4().phi());
+ 
     //Compute Chi2 Terms   
     double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
     double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
     double chi2_MTstar_diff_rel = pow(((mass_Tstar_had_rec - mass_Tstar_lep_rec)/mass_Tstar_mean_rec - mass_Tstar_diff_rel) / mass_Tstar_diff_rel_sigma, 2);
     double chi2_deltaPhi        = pow((deltaPhi_Tstar_rec - deltaPhi_Tstar)/deltaPhi_sigma ,2);
- 
+
     //###############################################################################################
 
-    hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel); // + chi2_deltaPhi); 
+    hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi); 
 	hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
         hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
 	hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", chi2_MTstar_diff_rel);
@@ -235,7 +349,7 @@ float match_dr_gluon(const Particle & p, const std::vector<T> & jets, int& index
   for(unsigned int i=0; i<jets.size(); ++i){
     float dR = deltaR(p, jets.at(i));
     float pt = abs(1- (p.v4().pt()/jets.at(i).pt()));
-    if( dR <0.1 && dR<mindr) {//  dR <0.4
+    if( dR <0.2 && dR<mindr) {//  dR <0.4
       //    cout<<"Enter mindr: Found dR AND pT match! "<<endl;
       //   cout<<"pt match (jet "<<i<<"): "<<pt<<endl;
       mindr=dR;
@@ -424,7 +538,7 @@ bool TstarCorrectMatchDiscriminatorTTAG::process(uhh2::Event & event){
     
     auto tophad = hyp.tophad_v4();
     
-    if(deltaR(tstargen.TopHad(), tophad) > 0.8) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
+    if(deltaR(tstargen.TopHad(), tophad) > 0.5) {hyp.set_discriminator(config.discriminator_label, 999999); continue;}
     
     
     auto lept_jets = hyp.toplep_jets();
