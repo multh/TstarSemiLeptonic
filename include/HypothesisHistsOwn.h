@@ -23,7 +23,7 @@ protected:
     TH1F * Pt_TstarTstar, *Pt_TstarTstar_diff,*Pt_Tstar_lep_over_M_TstarTstar, *Pt_Tstar_had_over_M_TstarTstar;
 
     TH1F *Pt_Diff_gluonhad_tophad, *Pt_Diff_gluonlep_toplep, *Pt_Diff_gluonhad_bhad, *Pt_Diff_gluonlep_blep, *Pt_Diff_gluonhad_blep, *Pt_Diff_gluonlep_bhad, *Pt_Diff_gluonlep_Wlep, *Pt_Diff_gluonlep_gluonhad, *Pt_Diff_bhad_blep;
-    TH1F *Pt_Diff_top, *Pt_Ratio_top, *Pt_Diff_gluon_top_had, *Pt_Ratio_gluonhad_tophad, *Pt_Diff_gluon_top_lep, *Pt_Ratio_gluonlep_toplep;
+    TH1F *Pt_Diff_top, *Pt_Ratio_top, *Pt_Diff_gluon_top_had, *Pt_Ratio_gluonhad_tophad, *Pt_Diff_gluon_top_lep, *Pt_Ratio_gluonlep_toplep,*Pt_Ratio_blep_toplep,*Pt_Ratio_bhad_tophad;
 
     TH1F * DeltaPhi_TstarhadTstarlep, *DeltaPhi_TophadGluonhad, *DeltaPhi_ToplepGluonlep, *DeltaPhi_TophadToplep,  *DeltaPhi_GluonGluon;
     
@@ -37,10 +37,9 @@ protected:
     
     TH2F * M_TstarAntiTstar_gen_vs_M_TstarhadTstarlep_rec, *M_Top_gen_vs_M_Top_rec, *M_Tstar_gen_vs_M_Tstar_rec;
     
-    TH2F * CSV_vs_dR_blep, *CSV_vs_dR_bhad;
+    TH2F * CSV_vs_dR_blep, *CSV_vs_dR_bhad, *CSV_vs_dR_gluonlep, *CSV_vs_dR_gluonhad;
 
-    TH1F * M_TstarLep_bMatch_gluonSwitch, *M_TstarHad_bMatch_gluonSwitch, *M_TstarLep_bhad_gluonlepSwitch, *M_TstarHad_bhad_gluonlepSwitch, *M_TstarLep_bhad_gluonhadSwitch, *M_TstarHad_bhad_gluonhadSwitch, *M_TstarLep_Match_All, *M_TstarHad_Match_All, *M_TstarLep_Match_Non, *M_TstarHad_Match_Non;
-
+    TH1F * M_TstarLep_gluon_switch,*M_TstarHad_gluon_switch,*M_TstarLep_gluon_match, *M_TstarHad_gluon_match,*M_TstarLep_gluon_semimatch,*M_TstarHad_gluon_semimatch,*M_TstarLep_gluon_nomatch,*M_TstarHad_gluon_nomatch;
     
     uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
     uhh2::Event::Handle<TStarGen> h_tstargen;

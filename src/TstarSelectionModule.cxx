@@ -207,7 +207,7 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
 
   //########################## Boolean and Common Module ##########################################################################
     is_mc              = ctx.get("dataset_type") == "MC";
-    debug              = false;
+    debug              = true;
 
     do_scale_variation = (ctx.get("ScaleVariationMuR") == "up" || ctx.get("ScaleVariationMuR") == "down") || (ctx.get("ScaleVariationMuF") == "up" || ctx.get("ScaleVariationMuF") == "down");
     do_pdf_variations  =  ctx.get("b_PDFUncertainties") == "true";
@@ -572,15 +572,19 @@ bool TstarSelectionModule::process(uhh2::Event& event){
   if(pass_bTag_tight){
     h_btag_tight        ->fill(event);
   }
-
-  BTagEffHists->fill(event);            //Run First Time without b-Tag and ScaleFactors (SF_btag)
+  if(debug) cout<<"After fill hists: "<<endl;
   
+  BTagEffHists->fill(event);            //Run First Time without b-Tag and ScaleFactors (SF_btag)
+  if(debug) cout<<"After Efficiency Hists: "<<endl;
+
   /// b-Tag 
   const bool pass_bTag = b_tag_medium_sel->passes(event);
+  if(debug) cout<<"Medium b-Tag?: "<<pass_bTag<<endl;
   if(!pass_bTag) return false;
   
-  SF_btag       ->process(event);     //Scale Factor for b-Tagging                        
-  
+  //  SF_btag       ->process(event);     //Scale Factor for b-Tagging                        
+  if(debug) cout<<"After SF B-Tag: "<<endl;
+
   h_btag        ->fill(event);
   h_btag_event  ->fill(event);
   h_btag_jet    ->fill(event);
