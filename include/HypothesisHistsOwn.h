@@ -31,7 +31,7 @@ protected:
     
     TH1F *  DeltaEta_TstarhadTstarlep, *DeltaEta_TstarAntiTstar_gen, *DeltaEta_TophadGluonhad, *DeltaEta_ToplepGluonlep, *DeltaEta_TophadToplep,  *DeltaEta_GluonGluon, *DeltaEta_TopGluon_gen, *DeltaEta_AntiTopAntiGluon_gen, *DeltaEta_TopAntiTop_gen,  *DeltaEta_GluonGluon_gen, *DeltaR_blep, *DeltaR_bhad, *DeltaR_bhad_gluon,*DeltaR_bhad_gluonlep, *DeltaR_GluonHad_BHad, *DeltaR_GluonLep_BLep, *DeltaR_gluon_lep, *DeltaR_gluon_had;
 
-    TH1F * DeltaR_GluonGluon, *DeltaR_TopTop, *DeltaR_GluonTop_lep, *DeltaR_GluonTop_had, *DeltaR_GluonLep_TopHad, *DeltaR_GluonHad_TopLep, *deltaR_toplep_decays, *deltaR_tophad_decays;
+    TH1F * DeltaR_GluonGluon, *DeltaR_TopTop, * DeltaR_TopHad_BLep, *DeltaR_GluonTop_lep, *DeltaR_GluonTop_had, *DeltaR_GluonLep_TopHad, *DeltaR_GluonHad_TopLep, *DeltaR_GluonHad_BLep, *deltaR_toplep_decays, *deltaR_tophad_decays;
     
     TH1F *  CSV_bLep, *CSV_bHad, *CSV_gluonHad, *CSV_gluonLep,*CSV_gluonHad_2, *CSV_gluonLep_2,*CSV_Lep_Background, *CSV_Had_Background; 
     
@@ -39,10 +39,19 @@ protected:
     
     TH2F * CSV_vs_dR_blep, *CSV_vs_dR_bhad, *CSV_vs_dR_gluonlep, *CSV_vs_dR_gluonhad;
 
-    TH1F * M_TstarLep_gluon_switch,*M_TstarHad_gluon_switch,*M_TstarLep_gluon_match, *M_TstarHad_gluon_match,*M_TstarLep_gluon_semimatch,*M_TstarHad_gluon_semimatch,*M_TstarLep_gluon_nomatch,*M_TstarHad_gluon_nomatch;
+    TH1F * Pt_Ratio_gluonhad_subjets,*Pt_Ratio_gluonlep_subjets,*DeltaR_gluonhad_subjets,*DeltaR_gluonlep_subjets;
+    TH2F * Pt_vs_DeltaR_gluonhad_subjets,*Pt_vs_DeltaR_gluonlep_subjets;
+
+    TH2F * M_Tstarlep_vs_DeltaR_GluonLep_TopHad, *M_Tstarlep_vs_DeltaR_GluonHad_TopLep, *M_Tstarhad_vs_DeltaR_GluonLep_TopHad, *M_Tstarhad_vs_DeltaR_GluonHad_TopLep, *M_Tstarlep_vs_DeltaR_GluonGluon, *M_Tstarhad_vs_DeltaR_GluonGluon,*M_Tstarlep_vs_DeltaR_TopTop, *M_Tstarhad_vs_DeltaR_TopTop,*M_Tstarhad_vs_Pt_Ratio_gluonlep_subjets,*M_Tstarlep_vs_Pt_Ratio_gluonlep_subjets,*M_Tstarhad_vs_Pt_Ratio_gluonhad_subjets,*M_Tstarlep_vs_Pt_Ratio_gluonhad_subjets,*M_Tstarlep_vs_Pt_Diff_gluon_top_had,*M_Tstarhad_vs_Pt_Diff_gluon_top_had,*M_Tstarlep_vs_Pt_Diff_gluon_top_lep,*M_Tstarhad_vs_Pt_Diff_gluon_top_lep;
+
+    TH2F * M_Tstarlep_vs_DeltaR_GluonHad_BLep, *M_Tstarhad_vs_DeltaR_GluonHad_BLep, *DeltaR_GluonLep_TopHad_vs_GluonHad_TopLep, *M_Tstarlep_vs_Discriminator_sum,*M_gluonhad_vs_DeltaR_gluontop_had,*M_gluonlep_vs_DeltaR_gluontop_lep,*M_Tstarlep_vs_M_gluonhad_rec,* M_Tstarhad_vs_M_gluonhad_rec,*M_Tstarlep_vs_M_gluonlep_rec,* M_Tstarhad_vs_M_gluonlep_rec, *M_Tstarlep_vs_Pt_gluonlep,*M_Tstarhad_vs_Pt_gluonlep, *M_Tstarlep_vs_Pt_gluonhad,*M_Tstarhad_vs_Pt_gluonhad;
     
+    TH1F * M_Tstar_ratio, *Pt_Tstar_ratio, *M_gluonlep_rec, *M_gluonhad_rec, *Pt_gluonlep_rec, *Pt_gluonhad_rec, *M_gluon_ratio, *Pt_gluon_ratio;
+
+
     uhh2::Event::Handle<std::vector<TstarReconstructionHypothesis>> h_hyps;
     uhh2::Event::Handle<TStarGen> h_tstargen;
     std::string m_discriminator_name;
+    uhh2::Event::Handle<int>                h_flag_toptagevent;
     
 };

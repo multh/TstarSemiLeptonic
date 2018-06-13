@@ -692,7 +692,7 @@ bool HighMassTstarKinReconstruction::process(uhh2::Event & event) {
 	    bool leptonic_kin(false);
 	    
 	    if(blep_idx != -1){ 
-	      if(unused_jets.size()>0 && gluonlep_jets >0 && toplep_jet.size()>0){  //((gluonlep_v4.pt()-toplep_jet.at(blep_idx).pt())/(toplep_jet.at(blep_idx).pt()+gluonlep_v4.pt()))>0 && 	
+	      if(unused_jets.size()>0 && gluonlep_jets >0  && toplep_jet.size()>0){  //((gluonlep_v4.pt()-toplep_jet.at(blep_idx).pt())/(toplep_jet.at(blep_idx).pt()+gluonlep_v4.pt()))>0 && 	
 		leptonic_kin = true;
 	      }
 	    }
@@ -787,19 +787,25 @@ bool HighMassTstarKinReconstruction::process(uhh2::Event & event) {
 	      if(deltaR(gluonlep_v4, hyp.bhad_v4())<0.4) continue;
 	      
 	      /*
-	      if(hyp.blep_jets().at(0).btag_combinedSecondaryVertex()<0.4) continue;
-	      if(hyp.bhad_jets().at(0).btag_combinedSecondaryVertex()<0.4) continue;
-	      if(hyp.gluonlep_jets().at(0).btag_combinedSecondaryVertex()>0.8) continue;
-	      if(hyp.gluonhad_jets().at(0).btag_combinedSecondaryVertex()>0.8) continue;
+	    if(deltaR(toplep_v4, gluonhad_v4)<2.5) continue;
+	    if(deltaR(tophad_v4, gluonlep_v4)<2.5) continue;
+	      */
+	    //   if(deltaR(toplep_v4, tophad_v4)<2.5) continue;
+	    //if(hyp.blep_jets().at(0).btag_combinedSecondaryVertex()<0.8) continue;
+	      //if(hyp.bhad_jets().at(0).btag_combinedSecondaryVertex()<0.8) continue;
 	      
-	      if(gluonhad_jets>1){
-		if(hyp.gluonhad_jets().at(1).btag_combinedSecondaryVertex()>0.8) continue;
-	      }    
-	      if(gluonlep_jets>1){
-	      	if(hyp.gluonlep_jets().at(1).btag_combinedSecondaryVertex()>0.8) continue;
+	      /*	   	   
+	      if(hyp.gluonhad_jets().size()>1){
+		if(hyp.gluonhad_jets().at(1).v4().Pt()/hyp.gluonhad_jets().at(0).v4().Pt() > 0.7) continue;
 	      }
 	      */
-	   	   
+	      /*
+	      if(hyp.gluonlep_jets().size()>1){
+		if(hyp.gluonlep_jets().at(1).v4().Pt()/hyp.gluonlep_jets().at(0).v4().Pt() > 0.5) continue;
+	      }
+	      */
+	     if((gluonlep_jets>1 && gluonlep_v4.M()>650) || (gluonhad_jets>1 && gluonhad_v4.M()>650) )continue;
+
 	      if( hadjets>0 && gluonhad_jets>0) { 
 		hyp.set_tophad_v4(tophad_v4);
 		hyp.set_gluonhad_v4(gluonhad_v4);
@@ -923,7 +929,7 @@ bool TstarTopTagKinReconstruction::process(uhh2::Event & event) {
 	if(blep_idx != -1){ 
 	  hyp.set_blep_v4(hyp.toplep_jets().at(blep_idx).v4()); //Handle Jet with highest pt as leptonic b-Jets
 	  hyp.add_blep_jet(hyp.toplep_jets().at(blep_idx));
-	  if(hyp.toplep_jets().at(blep_idx).pt()<gluonlep_v4.pt() && gluonhadjets>0 && gluonlepjets>0){
+	  if(hyp.toplep_jets().at(blep_idx).pt()<gluonlep_v4.pt() && gluonhadjets>0 && gluonlepjets>0){ //((gluonlep_v4.pt() - hyp.toplep_jets().at(blep_idx).pt())/(gluonlep_v4.pt() + hyp.toplep_jets().at(blep_idx).pt()))> 0.3
 	    leptonic_kin = true;
 	  }
 	}
@@ -951,33 +957,36 @@ bool TstarTopTagKinReconstruction::process(uhh2::Event & event) {
 	if(deltaR(gluonhad_v4, toplep_v4)<0.4) continue;
 	if(deltaR(gluonlep_v4, tophad_v4)<0.4) continue;
 	if(deltaR(gluonhad_v4, gluonlep_v4)<0.4) continue;
+	
+	//	if(deltaR(toplep_v4, gluonhad_v4)<3 && deltaR(tophad_v4, gluonlep_v4)<2.25) continue;
+	//	if(deltaR(toplep_v4, gluonlep_v4)>2.5 || deltaR(tophad_v4, gluonhad_v4)>3) continue;
+	//if(hyp.blep_jets().at(0).btag_combinedSecondaryVertex()<0.8) continue;
+
+	if((gluonlepjets>1 && gluonlep_v4.M()>650) || (gluonhadjets>1 && gluonhad_v4.M()>650) )continue;
 
 	/*
-	if(hyp.blep_jets().at(0).btag_combinedSecondaryVertex()<0.4) continue;
-	if(hyp.gluonlep_jets().at(0).btag_combinedSecondaryVertex()>0.8) continue;
-	if(hyp.gluonhad_jets().at(0).btag_combinedSecondaryVertex()>0.8) continue;
-	
-	if(gluonhadjets>1){
-	  if(hyp.gluonhad_jets().at(1).btag_combinedSecondaryVertex()>0.8) continue;
-	}    
-	if(gluonlepjets>1){
-	  if(hyp.gluonlep_jets().at(1).btag_combinedSecondaryVertex()>0.8) continue;
+	if(hyp.gluonhad_jets().size()>1){
+	  if(hyp.gluonhad_jets().at(1).v4().Pt()/hyp.gluonhad_jets().at(0).v4().Pt() > 0.5) continue;
 	}
 	*/
-
-	//	if(deltaR(gluonhad_v4, gluonlep_v4)<2.5 || deltaR(gluonhad_v4, gluonlep_v4)>3.5) continue;
+	/*
+	if(hyp.gluonlep_jets().size()>1){
+	  if(hyp.gluonlep_jets().at(1).v4().Pt()/hyp.gluonlep_jets().at(0).v4().Pt() > 0.5) continue;
+	}
+	*/
+	//	if(deltaR(gluonlep_v4, hyp.toplep_jets().at(blep_idx))>2.25) continue;
 
 	////Fill Hypothese
-	if(lepjets>0 && gluonhadjets >0 && gluonlepjets >0) {
+	if(lepjets>0 && gluonhadjets >0 && gluonlepjets >0) {// && gluonhadjets <3 && gluonlepjets <3
 	  hyp.set_tophad_v4(tophad_v4);
 	  hyp.set_toplep_v4(toplep_v4);
 	  hyp.set_gluonhad_v4(gluonhad_v4);
 	  hyp.set_gluonlep_v4(gluonlep_v4);
 	  recoHyps.emplace_back(std::move(hyp));
 	}
-      }
-    }
-  }
+      }//jets
+    }//neutrinos
+  }//top-jet
 
   event.set(h_recohyps, std::move(recoHyps));
   return true;

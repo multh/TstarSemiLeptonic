@@ -174,12 +174,9 @@ bool TstarChi2Discriminator::process(uhh2::Event & event){
     const double mass_tlep_sigma = 23.09;
 
     //Pt values
-    /* 
-    const double pt_gluontop_lep = 0;
-    const double pt_gluontop_lep_sigma = 0.3;
-    const double pt_gluontop_had = 0;
-    const double pt_gluontop_had_sigma = 0.3;
-    */
+    //   const double pt_TstarAntiTstar_ratio = 0;
+    const double pt_TstarAntiTstar_ratio_sigma = 0.2;
+ 
 
     //T* values (Masspoint independend)
     const double mass_Tstar_diff_rel = 0.001; //Average CorrectMatch
@@ -211,20 +208,14 @@ bool TstarChi2Discriminator::process(uhh2::Event & event){
       double chi2_thad            = pow((mass_thad_rec - mass_thad) / mass_thad_sigma, 2);
       double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
 
-      /*
-      double chi2_pt_lep          = pow((pt_gluontop_lep_rec - pt_gluontop_lep) / pt_gluontop_lep_sigma, 2);
-      double chi2_pt_had          = pow((pt_gluontop_had_rec - pt_gluontop_had) / pt_gluontop_had_sigma, 2);
-      */
-
-      double chi2_Tstarhad_rec    = pow((mass_Tstar_had_rec - 900)/120, 2);
-      double chi2_Tstarlep_rec    = pow((mass_Tstar_lep_rec - 900)/120, 2);
-
+      double chi2_pt_TstarAntiTstar_ratio          = pow(((hyp.Tstarhad_v4().pt()/hyp.Tstarlep_v4().pt()) -1) / pt_TstarAntiTstar_ratio_sigma, 2);
+   
       double chi2_MTstar_diff_rel = pow(((mass_Tstar_had_rec - mass_Tstar_lep_rec)/mass_Tstar_mean_rec - mass_Tstar_diff_rel) / mass_Tstar_diff_rel_sigma, 2);
       double chi2_deltaPhi        = pow((deltaPhi_Tstar_rec - deltaPhi_Tstar)/deltaPhi_sigma ,2);
       
       //##############################################################################################
       
-      hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi);// chi2_MTstar_diff_rel + chi2_deltaPhi); //+ chi2_pt_lep + chi2_pt_had + chi2_deltaPhi
+      hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi + chi2_pt_TstarAntiTstar_ratio);// chi2_MTstar_diff_rel + chi2_deltaPhi); //+ chi2_pt_lep + chi2_pt_had + chi2_deltaPhi
       hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
       hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
       hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", chi2_MTstar_diff_rel);
@@ -247,8 +238,17 @@ bool TstarChi2DiscriminatorTTAG::process(uhh2::Event& event){
 auto & hyps = event.get(h_hyps);
 
 //Top-Quark values
+  const double mass_thad       = 174.0;
+  const double mass_thad_sigma =  18;
+  /*
   const double mass_thad       = 194.0;
   const double mass_thad_sigma =  20.13;
+  */
+
+  //Pt values
+    //   const double pt_TstarAntiTstar_ratio = 0;
+    const double pt_TstarAntiTstar_ratio_sigma = 0.05;
+
   const double mass_tlep       = 169.0;
   const double mass_tlep_sigma =  23.97;
 
@@ -285,10 +285,10 @@ auto & hyps = event.get(h_hyps);
     double chi2_tlep            = pow((mass_tlep_rec - mass_tlep) / mass_tlep_sigma, 2);
     double chi2_MTstar_diff_rel = pow(((mass_Tstar_had_rec - mass_Tstar_lep_rec)/mass_Tstar_mean_rec - mass_Tstar_diff_rel) / mass_Tstar_diff_rel_sigma, 2);
     double chi2_deltaPhi        = pow((deltaPhi_Tstar_rec - deltaPhi_Tstar)/deltaPhi_sigma ,2);
-
+    double chi2_pt_TstarAntiTstar_ratio          = pow(((hyp.Tstarhad_v4().pt()/hyp.Tstarlep_v4().pt()) -1) / pt_TstarAntiTstar_ratio_sigma, 2);
     //###############################################################################################
 
-    hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi); 
+    hyp.set_discriminator(config.discriminator_label, chi2_thad + chi2_tlep + chi2_MTstar_diff_rel + chi2_deltaPhi + chi2_pt_TstarAntiTstar_ratio); 
 	hyp.set_discriminator(config.discriminator_label + "_tlep", chi2_tlep);
         hyp.set_discriminator(config.discriminator_label + "_thad", chi2_thad);
 	hyp.set_discriminator(config.discriminator_label + "_MTstar_rel", chi2_MTstar_diff_rel);

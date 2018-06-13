@@ -41,6 +41,9 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   eta_antiTstar = book< TH1F>("eta_AntiTstar", "#eta_{#bar{T}^{*}}", 100, -5.19, 5.19 ) ;
   phi_antiTstar = book< TH1F>("phi_AntiTstar", "#phi_{#bar{T}^{*}}", 100, -3.14, 3.14 ) ;
 
+  M_TstarAntiTstar_ratio   = book< TH1F>("M_TstarAntiTstar_ratio",   "M_{T^{*}}/M_{#bar{T}^{*}} -1  [GeV/c^{2}]", 30, -1,1) ;
+  Pt_TstarAntiTstar_ratio   = book< TH1F>("Pt_TstarAntiTstar_ratio",   "pT_{T^{*}}/pT_{#bar{T}^{*}} -1  [GeV/c^{2}]", 30, -1,1) ;
+
   Pt_Tstar_over_M_TstarTstar     = book< TH1F>("Pt_Tstar_over_M_TstarTstar", "P_{T,T*}/M_{T*#bar{T*}}", 100, 0, 1 );
   Pt_antiTstar_over_M_TstarTstar = book< TH1F>("Pt_antiTstar_over_M_TstarTstar", "P_{T,#bar{T*}}/M_{T*#bar{T*}}", 100, 0, 1 );
   Pt_Tstar_over_shat             = book< TH1F>("Pt_Tstar_over_shat", "P_{T,T*}/#hat{s}", 100, 0, 1 ) ;
@@ -62,14 +65,18 @@ TStarGenHists::TStarGenHists(uhh2::Context & ctx, const std::string & dirname): 
   
   M_Tstar_reco     = book< TH1F>("M_Tstar_reco", "M_{top+g} [GeV/c^{2}]", 185, 150, 2000) ;
   M_antiTstar_reco = book< TH1F>("M_AntiTstar_reco", "M_{#bar{t}+ g} [GeV/c^{2}]", 185, 150, 2000) ;
-  
-  Pt_gluon  = book<TH1F>("Pt_gluon_Tstar","P_{T,gluon} [GeV/c]",100,0,1000);
+
+  M_gluon   = book<TH1F>("M_gluon", "M_{t} [GeV/c^{2}]",30,0, 2000);
+  Pt_gluon  = book<TH1F>("Pt_gluon_Tstar","P_{T,gluon} [GeV/c]",100,0,2000);
   eta_gluon = book<TH1F>("eta_gluon_Tstar","#eta_{gluon}",100,-5,5);
   phi_gluon = book<TH1F>("phi_gluon_Tstar", "#phi_{gluon}", 100, -3.14, 3.14);
-
+  
+  M_antigluon   = book<TH1F>("M_antigluon", "M_{t} [GeV/c^{2}]",30,0, 2000);
   Pt_antigluon  = book<TH1F>("Pt_gluon_AntiTstar","P_{T,g} [GeV/c]",200,0,2000);
   eta_antigluon = book<TH1F>("eta_gluon_AntiTstar","#eta_{g}",100,-5,5);
   phi_antigluon = book<TH1F>("phi_gluon_AntiTstar", "#phi_{gluon}", 100, -3.14, 3.14);
+
+  Pt_gluonAntigluon_ratio   = book< TH1F>("Pt_gluonAntigluon_ratio",   "pT_{gluon}/pT_{#bar{gluon} -1  [GeV/c^{2}]", 30, -1,1) ;
 
   deltaPhi_gluon_antigluon   = book<TH1F>("deltaPhi_gluon_antigluon", "#Delta #phi gluon antigluon", 40,0,6);
   deltaPhi_top_antitop       = book<TH1F>("deltaPhi_top_antitop", "#Delta #phi top antitop", 40,0,6);
@@ -173,6 +180,10 @@ void TStarGenHists::fill(const uhh2::Event & e){
   eta_antiTstar-> Fill(tstargen.AntiTStar().eta(), e.weight);
   phi_antiTstar-> Fill(tstargen.AntiTStar().phi(), e.weight);
 
+  M_TstarAntiTstar_ratio ->Fill((tstargen.AntiTStar().v4().M()/tstargen.TStar().v4().M())-1, e.weight);
+  Pt_TstarAntiTstar_ratio ->Fill((tstargen.AntiTStar().v4().Pt()/tstargen.TStar().v4().Pt())-1, e.weight);
+  Pt_gluonAntigluon_ratio  ->Fill((tstargen.gAntiTStar().v4().Pt()/tstargen.gTStar().v4().Pt())-1, e.weight);
+
   Pt_Tstar_over_M_TstarTstar     -> Fill(tstar.Pt()/mtstar_gen, e.weight);
   Pt_antiTstar_over_M_TstarTstar -> Fill(antitstar.Pt()/mtstar_gen, e.weight);
   Pt_Tstar_over_shat             -> Fill(tstar.Pt()/sh, e.weight);
@@ -234,6 +245,9 @@ void TStarGenHists::fill(const uhh2::Event & e){
   Pt_top  -> Fill(tstargen.tTStar().pt(), e.weight);
   eta_top -> Fill(tstargen.tTStar().eta(), e.weight);
   phi_top -> Fill(tstargen.tTStar().phi(), e.weight);
+
+
+
   deltaR_top_decays     -> Fill(deltaR_top,e.weight);
  
   double mtstar_reco = (top+gluon).M();
@@ -251,6 +265,16 @@ void TStarGenHists::fill(const uhh2::Event & e){
   phi_antitop -> Fill(tstargen.tAntiTStar().phi(), e.weight);
   deltaR_antitop_decays -> Fill(deltaR_antitop,e.weight);
   
+  M_gluon   -> Fill(tstargen.gTStar().v4().M(), e.weight);
+  Pt_gluon  -> Fill(tstargen.gTStar().pt(), e.weight);
+  eta_gluon -> Fill(tstargen.gTStar().eta(), e.weight);
+  phi_gluon -> Fill(tstargen.gTStar().phi(), e.weight);
+
+  M_antigluon   -> Fill(tstargen.gAntiTStar().v4().M(), e.weight);
+  Pt_antigluon  -> Fill(tstargen.gAntiTStar().pt(), e.weight);  
+  eta_antigluon -> Fill(tstargen.gAntiTStar().eta(), e.weight); 
+  phi_antigluon -> Fill(tstargen.gAntiTStar().phi(), e.weight);
+
   double mantitstar_reco = (antitop+antigluon).M();
   M_antiTstar_reco->Fill( mantitstar_reco,e.weight);
  

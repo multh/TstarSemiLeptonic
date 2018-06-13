@@ -4,14 +4,14 @@
 
 
 void ShapeComp() {
-  const TString signal1_input = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/CSV_Study/No_Cuts/";
-  const TString signal2_input = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/CSV_Study/Cuts/";
+  const TString signal1_input = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/Kinematic_Study/";
+  const TString signal2_input = "/nfs/dust/cms/user/multh/RunII_80X_v3/Selection/Nominal/03Feb2017_Relaunch_17Jan2018/Muons/Kinematic_Study/";
 
   const TString chi2_dir  = "chi2min__HypHists/";
   const TString ttag_dir  = "chi2min_ttag__HypHists/";
 
-  const int n_sig = 2;  
-  const TString signal_file[n_sig] = {"Tstar_M-900","Tstar_M-1500"};
+  const int n_sig = 1;  
+  const TString signal_file[n_sig] = {"Tstar_M-1300"};
 
   TFile *signal1[n_sig];
   TFile *signal2[n_sig];
@@ -31,7 +31,7 @@ void ShapeComp() {
 
   for(int i =0; i<n_sig; i++){
     signal1[i]   = new TFile(signal1_input+"uhh2.AnalysisModuleRunner.MC."+signal_file[i]+".root");
-    signal2[i]   = new TFile(signal2_input+"uhh2.AnalysisModuleRunner.MC."+signal_file[i]+".root");
+    signal2[i]   = new TFile(signal2_input+"uhh2.AnalysisModuleRunner.MC."+signal_file[i]+"_noGluonMassCut.root");
 
     h_Tstarlep_signal1[i] = (TH1F*)signal1[i]->Get(chi2_dir+"M_Tstarlep_rec");
     h_Tstarlep_signal1[i] ->Scale(1/(h_Tstarlep_signal1[i]->Integral()));
@@ -79,17 +79,18 @@ void ShapeComp() {
   TCanvas *c2 = new TCanvas("c2", "",700,600);
   gStyle->SetOptStat(0);
 
-  h_Tstarlep_signal1[1] -> SetLineColor(kBlue);
-  h_Tstarlep_signal1[1] -> SetLineWidth(3);
-  h_Tstarlep_signal1[1] -> SetMaximum(0.14);
-  h_Tstarlep_signal1[1] -> GetYaxis() -> SetTitle("#Delta N/N");
-  h_Tstarlep_signal1[1] -> GetXaxis() -> SetTitle("M_{T_{lep}^{*}} [GeV/c^{2}]");
-  h_Tstarlep_signal1[1] -> Draw("hist");
-  h_Tstarlep_signal2[1] -> SetLineWidth(3);
-  h_Tstarlep_signal2[1] -> SetLineColor(kRed);
-  h_Tstarlep_signal2[1] -> Draw("hist, SAME");
+  h_Tstarhad_signal1[0] -> SetLineColor(kBlue);
+  h_Tstarhad_signal1[0] -> SetLineWidth(3);
+  h_Tstarhad_signal1[0] -> SetMaximum(0.14);
+  h_Tstarhad_signal1[0] -> GetYaxis() -> SetTitle("#Delta N/N");
+  h_Tstarhad_signal1[0] -> GetXaxis() -> SetTitle("M_{T_{had}^{*}} [GeV/c^{2}]");
+  h_Tstarhad_signal1[0] -> Draw("hist");
+  h_Tstarhad_signal2[0] -> SetLineWidth(3);
+  h_Tstarhad_signal2[0] -> SetLineColor(kRed);
+  h_Tstarhad_signal2[0] -> Draw("hist, SAME");
 
-  c2->Print("/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/Signal_Shape_lep_"+signal_file[1]+".pdf");
+  c2->Print("/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/Signal_Shape_had_"+signal_file[0]+".pdf");
+  
 
   TCanvas *c3 = new TCanvas("c3", "",700,600);
   gStyle->SetOptStat(0);
@@ -106,21 +107,21 @@ void ShapeComp() {
 
   c3->Print("/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/Signal_Shape_lep_ttag_"+signal_file[0]+".pdf");
 
-  
+    
   TCanvas *c4 = new TCanvas("c4", "",700,600);
   gStyle->SetOptStat(0);
 
-  h_Tstarlep_ttag_signal1[1] -> SetLineColor(kBlue);
-  h_Tstarlep_ttag_signal1[1] -> SetLineWidth(3);
-  h_Tstarlep_ttag_signal1[1] -> SetMaximum(0.2);
-  h_Tstarlep_ttag_signal1[1] -> GetYaxis() -> SetTitle("#Delta N/N");
-  h_Tstarlep_ttag_signal1[1] -> GetXaxis() -> SetTitle("M_{T_{lep}^{*}} [GeV/c^{2}]");
-  h_Tstarlep_ttag_signal1[1] -> Draw("hist");
-  h_Tstarlep_ttag_signal2[1] -> SetLineWidth(3);
-  h_Tstarlep_ttag_signal2[1] -> SetLineColor(kRed);
-  h_Tstarlep_ttag_signal2[1] -> Draw("hist, SAME");
+  h_Tstarhad_ttag_signal1[0] -> SetLineColor(kBlue);
+  h_Tstarhad_ttag_signal1[0] -> SetLineWidth(3);
+  h_Tstarhad_ttag_signal1[0] -> SetMaximum(0.2);
+  h_Tstarhad_ttag_signal1[0] -> GetYaxis() -> SetTitle("#Delta N/N");
+  h_Tstarhad_ttag_signal1[0] -> GetXaxis() -> SetTitle("M_{T_{had}^{*}} [GeV/c^{2}]");
+  h_Tstarhad_ttag_signal1[0] -> Draw("hist");
+  h_Tstarhad_ttag_signal2[0] -> SetLineWidth(3);
+  h_Tstarhad_ttag_signal2[0] -> SetLineColor(kRed);
+  h_Tstarhad_ttag_signal2[0] -> Draw("hist, SAME");
 
-  c4->Print("/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/Signal_Shape_lep_ttag_"+signal_file[1]+".pdf");
-
+  c4->Print("/nfs/dust/cms/user/multh/CMSSW_8_0_26_patch2/src/UHH2/TstarSemiLeptonic/Signal_Shape_had_ttag_"+signal_file[0]+".pdf");
+  
   
 }

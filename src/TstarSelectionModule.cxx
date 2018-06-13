@@ -155,6 +155,8 @@ private:
   unique_ptr<Hists> h_chi2min;
   unique_ptr<Hists> h_no_chi2min;
   unique_ptr<Hists> h_chi2_before;
+  unique_ptr<Hists> h_chi2_gluon_match, h_chi2_gluonlep_semimatch, h_chi2_gluonhad_semimatch, h_chi2_gluon_switch, h_chi2_gluon_nomatch;
+  unique_ptr<Hists>  h_chi2_1v1_gluon, h_chi2_2v1_gluonhad, h_chi2_1v2_gluonlep, h_chi2_2v2_gluon;
   unique_ptr<Hists> h_chi2min_ttag;
   unique_ptr<Hists> h_chi2min_ttag_comb;
   //*****************************************************************************************************************************************************  
@@ -207,7 +209,7 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
 
   //########################## Boolean and Common Module ##########################################################################
     is_mc              = ctx.get("dataset_type") == "MC";
-    debug              = true;
+    debug              = false;
 
     do_scale_variation = (ctx.get("ScaleVariationMuR") == "up" || ctx.get("ScaleVariationMuR") == "down") || (ctx.get("ScaleVariationMuF") == "up" || ctx.get("ScaleVariationMuF") == "down");
     do_pdf_variations  =  ctx.get("b_PDFUncertainties") == "true";
@@ -443,7 +445,18 @@ TstarSelectionModule::TstarSelectionModule(uhh2::Context& ctx){
     h_no_chi2_lumi            .reset(new LuminosityHists(ctx, "chi2_no_Lumi"));
 
     //Hists for Reconstruction
-    h_chi2_before       .reset(new HypothesisHistsOwn(ctx, "chi2before__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_before                        .reset(new HypothesisHistsOwn(ctx, "chi2before__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_gluon_match              .reset(new HypothesisHistsOwn(ctx, "chi2_gluon_match__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_gluonlep_semimatch  .reset(new HypothesisHistsOwn(ctx, "chi2_gluonlep_semimatch__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_gluonhad_semimatch .reset(new HypothesisHistsOwn(ctx, "chi2_gluonhad_semimatch__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_gluon_switch              .reset(new HypothesisHistsOwn(ctx, "chi2_gluon_switch__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_gluon_nomatch          .reset(new HypothesisHistsOwn(ctx, "chi2_gluon_nomatch__HypHists", "TstarReconstruction", "Chi2")); 
+
+    h_chi2_1v1_gluon          .reset(new HypothesisHistsOwn(ctx, "chi2_1v1_gluon__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_2v1_gluonhad    .reset(new HypothesisHistsOwn(ctx, "chi2_2v1_gluonhad__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_1v2_gluonlep    .reset(new HypothesisHistsOwn(ctx, "chi2_1v2_gluonlep__HypHists", "TstarReconstruction", "Chi2")); 
+    h_chi2_2v2_gluon          .reset(new HypothesisHistsOwn(ctx, "chi2_2v2_gluon__HypHists", "TstarReconstruction", "Chi2")); 
+
     h_chi2min           .reset(new HypothesisHistsOwn(ctx, "chi2min__HypHists", "TstarReconstruction", "Chi2")); 
     h_chi2min_ttag      .reset(new HypothesisHistsOwn(ctx, "chi2min_ttag__HypHists", "TstarReconstruction", "Chi2")); 
     h_chi2min_ttag_comb .reset(new HypothesisHistsOwn(ctx, "chi2min_ttag_comb__HypHists","TstarReconstruction", "Chi2"));
@@ -582,7 +595,7 @@ bool TstarSelectionModule::process(uhh2::Event& event){
   if(debug) cout<<"Medium b-Tag?: "<<pass_bTag<<endl;
   if(!pass_bTag) return false;
   
-  //  SF_btag       ->process(event);     //Scale Factor for b-Tagging                        
+  SF_btag       ->process(event);     //Scale Factor for b-Tagging                        
   if(debug) cout<<"After SF B-Tag: "<<endl;
 
   h_btag        ->fill(event);
@@ -693,13 +706,13 @@ bool TstarSelectionModule::process(uhh2::Event& event){
     
 //*********  For MC Only! Needs Generator Information ******************************************
     if(!event.isRealData){
-      //     tstargenprod->process(event);
+       tstargenprod->process(event);
      
-      //   h_tstargenhists->fill(event);
-      
+      h_tstargenhists->fill(event);
+    }
 
   // ****************  Matching betweeen Gen and Reco Level  ************************************************************************
-
+    if(!event.isRealData){
       if(matching){
 	if(debug) cout<<"Do Matching!"<<endl;
 	//Get Generator Particles
@@ -845,26 +858,78 @@ bool TstarSelectionModule::process(uhh2::Event& event){
       //Chi2 Method for Final Reconstruction (Additional: KinFitter??)
       std::vector<TstarReconstructionHypothesis>& hyps = event.get(h_hyps);
       
-      
       const TstarReconstructionHypothesis* hyp = get_best_hypothesis(hyps, "Chi2");        //Get best Hypothesis
       
    
       if(!hyp){ 
-	std::cout<<"Nullpointer!"<<std::endl;
+	//	std::cout<<"Nullpointer!"<<std::endl;
 	return false;
       }
       
       //Fill Reconstruction Hists BEFORE Discriminator Cut
       h_chi2_before ->fill(event);
-      
+
+      if(event.is_valid(h_tstargen) && pass_ttagevt){
+	const auto & tstargen = event.get(h_tstargen);
+	auto dec = tstargen.DecayChannel();
+	bool matchable_tstar(false);
+	if(dec == TStarGen::e_muhad){
+	  const LorentzVector gen_jetq1_v4    = tstargen.Q1().v4();
+	  const LorentzVector gen_jetq2_v4    = tstargen.Q2().v4();
+	  const LorentzVector gen_bhad_v4     = tstargen.BHad().v4();
+	  const LorentzVector gen_blep_v4     = tstargen.BLep().v4();
+	  const LorentzVector gen_lepton_v4   = tstargen.ChargedLepton().v4();
+	  const LorentzVector gen_gluonhad_v4 = tstargen.GluonHad().v4();
+	  const LorentzVector gen_gluonlep_v4 = tstargen.GluonLep().v4();
+	  
+	  bool pt_jets(false), eta_jets(false);
+	  if(gen_jetq1_v4.Pt()>50. && gen_jetq2_v4.Pt()>50. && gen_bhad_v4.Pt()>50. && gen_blep_v4.Pt()>50. && gen_gluonhad_v4.Pt()>50 && gen_gluonlep_v4.Pt()>50) pt_jets = true;
+	  if(fabs(gen_jetq1_v4.Eta())<2.4 && fabs(gen_jetq2_v4.Eta())<2.4 && fabs(gen_bhad_v4.Eta())<2.4 && fabs(gen_blep_v4.Eta())<2.4 && fabs(gen_gluonhad_v4.Eta())<2.4 && fabs(gen_gluonlep_v4.Eta())<2.4 ) eta_jets = true;
+	  
+	  bool pt_lepton(false), eta_lepton(false);
+	  if(gen_lepton_v4.Pt()>53.) pt_lepton = true;
+	  if(fabs(gen_lepton_v4.Eta())<2.4) eta_lepton = true;
+	  
+	  if(pt_jets && eta_jets && pt_lepton && eta_lepton) matchable_tstar = true;
+
+	  if(matchable_tstar && deltaR(tstargen.TopHad(), hyp->tophad_v4())<0.8 && deltaR(tstargen.BLep(), hyp->blep_v4())<0.4){     
+
+	    if(deltaR(tstargen.GluonLep(), hyp->gluonlep_v4())<0.4 && deltaR(tstargen.GluonHad(), hyp->gluonhad_v4())<0.4){
+	      h_chi2_gluon_match ->fill(event);	
+	    }
+	    else if(deltaR(tstargen.GluonHad(), hyp->gluonhad_v4())<0.4 || deltaR(tstargen.GluonLep(), hyp->gluonlep_v4())<0.4){
+	      h_chi2_gluonhad_semimatch ->fill(event);	
+	    }
+	    else if(deltaR(tstargen.GluonLep(), hyp->gluonhad_v4())<0.4 && deltaR(tstargen.GluonHad(), hyp->gluonlep_v4())<0.4 ){
+	      h_chi2_gluon_switch ->fill(event);	
+	    }
+	    else if(deltaR(tstargen.GluonLep(), hyp->gluonhad_v4())<0.4 || deltaR(tstargen.GluonHad(), hyp->gluonlep_v4())<0.4){
+	      h_chi2_gluonlep_semimatch ->fill(event);	
+	    }
+	    else{
+	      h_chi2_gluon_nomatch ->fill(event);
+	    }
+	  }
+	}
+      }
+
+
+
       //Cut on Discriminator
-      if(hyp->discriminator("Chi2")<20){
+      if(hyp->discriminator("Chi2")<10){
 	
 	if(!pass_ttagevt){
 	  h_chi2min->fill(event);
 	}
 	else{
-	  h_chi2min_ttag->fill(event);
+	  if(hyp->discriminator("Chi2")<7){
+	    h_chi2min_ttag->fill(event);
+
+	  if(hyp->gluonhad_jets().size()==1 && hyp->gluonlep_jets().size()==1)  h_chi2_1v1_gluon         ->fill(event);
+	  if(hyp->gluonhad_jets().size()>1 && hyp->gluonlep_jets().size()==1)    h_chi2_2v1_gluonhad   ->fill(event);
+	  if(hyp->gluonhad_jets().size()==1 && hyp->gluonlep_jets().size()>1)    h_chi2_1v2_gluonlep   ->fill(event);
+	  if(hyp->gluonhad_jets().size()>1 && hyp->gluonlep_jets().size()>1)       h_chi2_2v2_gluon       ->fill(event);
+	  }
 	}
 	h_chi2min_ttag_comb->fill(event);
 	
